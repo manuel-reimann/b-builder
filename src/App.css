@@ -1,42 +1,84 @@
+/* Reset basic margins */
+body,
+html,
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Mulish", sans-serif;
+  color: #222; /* Dark font color globally */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Global App Layout */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100vw;
+  background-color: #f4f4f4; /* light background to highlight the menu */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Floating Header (menu bar) */
+.header {
+  background-color: white;
+  padding: 1rem 2rem;
+  margin: 1rem auto 2rem auto;
+  width: fit-content;
+  min-width: 300px;
+  border-radius: 2rem; /* Round edges */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Deeper, softer shadow */
+  position: relative;
+  z-index: 10;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Navigation inside header */
+.nav ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
-.card {
-  padding: 2em;
+.nav li {
+  cursor: pointer;
+  transition: color 0.3s;
 }
 
-.read-the-docs {
-  color: #888;
+.nav li:hover {
+  color: #0077ff; /* slight blue highlight on hover */
+}
+
+/* Main content area */
+.main {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+
+/* Sidebar left */
+.sidebar {
+  width: 20%;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  overflow-y: auto;
+  border-right: 1px solid #e0e0e0;
+}
+
+/* Canvas center */
+.canvas-area {
+  flex: 1;
+  background-color: #ffffff;
+  padding: 1rem;
+}
+
+/* Summary right */
+.summary {
+  width: 20%;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  overflow-y: auto;
+  border-left: 1px solid #e0e0e0;
 }
