@@ -4,7 +4,7 @@ import Sidebar from "./components/sidebar";
 import Canvas from "./components/canvas";
 
 function App() {
-  const [canvasItems, setCanvasItems] = useState<any[]>([]); // <– das fehlte
+  const [canvasItems, setCanvasItems] = useState<any[]>([]);
 
   return (
     <div className="app h-screen flex flex-col">
@@ -18,17 +18,17 @@ function App() {
         </nav>
       </header>
 
-      <main className="main flex flex-1">
-        <aside className="sidebar w-1/4 bg-gray-100 p-4 overflow-y-auto">
+      <main className="main flex flex-1 overflow-hidden">
+        <aside className="sidebar w-1/4 max-w-xs bg-gray-100 p-4 overflow-y-auto">
           <h2 className="text-xl font-semibold mb-4">Assets</h2>
           <Sidebar setCanvasItems={setCanvasItems} />
         </aside>
 
-        <section className="canvas-area flex-1 bg-white p-4">
+        <section className="canvas-area flex-grow bg-white p-4 overflow-auto">
           <Canvas items={canvasItems} setCanvasItems={setCanvasItems} />
         </section>
 
-        <aside className="summary w-1/4 bg-gray-50 p-4">
+        <aside className="summary w-1/4 max-w-xs bg-gray-50 p-4 overflow-y-auto">
           <h2 className="text-xl font-semibold">Summary</h2>
         </aside>
       </main>
