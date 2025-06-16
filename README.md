@@ -1,54 +1,47 @@
-# React + TypeScript + Vite
+Bouquet Builder – Web-App für fotorealistische Strass-Gestaltung
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projekt: Bachelorarbeit Web Development (SAE Zürich 2025)
+Autor: Manuel Reimann
+Unternehmen: agrotropic AG
+Technologien: React, TypeScript, Vite, Tailwind, Konva, DnD Kit, Flux.1 Kontext (vermutlich)
 
-Currently, two official plugins are available:
+⸻
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+✨ Zielsetzung
 
-## Expanding the ESLint configuration
+Der Bouquet Builder ist eine Web-App, mit der Mitarbeitende und B2B-Kund\*innen der agrotropic AG Blumensträusse (Bouquets) digital gestalten können. Mithilfe von Drag-and-Drop-Elementen wird die florale Komposition in einer 2D-Ansicht erstellt und anschliessend in ein fotorealistisches Bild überführt – durch Anbindung an eine generative Bild-KI.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Warum?
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Der aktuelle Offertierungsprozess (physisches Arrangieren, Fotografieren, Retuschieren) ist zeitintensiv, kostspielig und schwer reproduzierbar. Das Projekt zielt auf eine erhebliche Prozessoptimierung durch digitale Tools.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+⸻
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+⚖️ Features
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Editor-Funktionen
+• Drag & Drop von Blumen (Assets) auf ein Canvas
+• Floristische Kategorien via Akkordeon
+• Nicht-dragbares Sleeve-Element im Hintergrund (Papiermanschette)
+• Rechte Seitenleiste mit Layer-Panel (Reihenfolge per Drag-and-Drop veränderbar)
+• Reversibles Z-Index-System: neueste Elemente oben, Sleeve immer unten
+
+Generative KI
+• Anbindung an Flux.1 Kontext
+• Steuerung von Bildinhalt via Referenzbild statt Prompt
+• Evaluierung der Bildqualität per Punktesystem
+
+⸻
+
+⚙️ Tech Stack
+
+Bereich Technologie
+Framework React + TypeScript
+Build Tool Vite
+Styling Tailwind CSS
+Canvas Engine Konva
+Drag & Drop @dnd-kit
+Bild-KI vermutlich Flux.1 Kontext
+Zustand React useState
+
+⸻
