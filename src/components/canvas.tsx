@@ -19,12 +19,18 @@ export interface CanvasItem {
 export default function Canvas({
   items,
   setCanvasItems,
+  selectedItemId,
+  setSelectedItemId,
+  canvasContainerRef, // ✅ NEU
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
+  selectedItemId: string | null;
+  setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
+  canvasContainerRef: React.RefObject<HTMLDivElement>; // ✅ NEU
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null); // ref für den Container
+  const containerRef = canvasContainerRef;
   const stageRef = useRef<any>(null);
 
   const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
@@ -50,12 +56,23 @@ export default function Canvas({
   }, []);
 
   const handleDelete = (e: KeyboardEvent) => {
+    console.log("Taste gedrückt:", e.key); // ← prüft ob Event überhaupt ausgelöst wird
+
     if (e.key === "Delete" && selectedId) {
-      setCanvasItems(items.filter((item) => item.id !== selectedId));
-      setSelectedId(null);
+      const itemToDelete = items.find((item) => item.id === selectedId);
+      console.log("Ausgewähltes Element:", itemToDelete); // ← prüft ob etwas ausgewählt ist
+
+      if (itemToDelete?.type !== "sleeve") {
+        const filtered = items.filter((item) => item.id !== selectedId);
+        console.log("Gefilterte Liste:", filtered); // ← zeigt neue Liste
+
+        setCanvasItems(filtered);
+        setSelectedId(null);
+      } else {
+        console.log("Löschen nicht erlaubt für sleeve.");
+      }
     }
   };
-
   useEffect(() => {
     window.addEventListener("keydown", handleDelete);
     return () => {
@@ -76,8 +93,8 @@ export default function Canvas({
             <CanvasImage
               key={item.id}
               item={item}
-              isSelected={item.id === selectedId}
-              onSelect={() => setSelectedId(item.id)}
+              isSelected={item.id === selectedItemId}
+              onSelect={(id) => setSelectedItemId(id)}
               onChange={(newAttrs) => {
                 const updated = items.map((it) =>
                   it.id === item.id ? { ...it, ...newAttrs } : it

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./App.css";
 import SidebarLeft from "./components/sidebar-left";
 import SidebarRight from "./components/sidebar-right";
@@ -19,7 +19,8 @@ function App() {
       type: "sleeve", // sehr wichtig: verhindert späteres Löschen
     },
   ]);
-
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
   return (
     <div className="app h-screen flex flex-col">
       <header className="header bg-green-500 text-black p-4">
@@ -35,15 +36,30 @@ function App() {
       <main className="main flex flex-1 overflow-hidden">
         <aside className="sidebar-left w-1/4 max-w-xs bg-gray-100 p-4 overflow-y-auto">
           <h2 className="text-xl font-semibold mb-4">Assets</h2>
-          <SidebarLeft setCanvasItems={setCanvasItems} />
+          <SidebarLeft
+            setCanvasItems={setCanvasItems}
+            canvasRef={canvasContainerRef}
+            canvasContainerRef={canvasContainerRef}
+          />
         </aside>
 
         <section className="canvas-area flex-grow bg-white overflow-hidden flex items-center justify-center">
-          <Canvas items={canvasItems} setCanvasItems={setCanvasItems} />
+          <Canvas
+            items={canvasItems}
+            setCanvasItems={setCanvasItems}
+            selectedItemId={selectedItemId}
+            setSelectedItemId={setSelectedItemId}
+            canvasContainerRef={canvasContainerRef}
+          />
         </section>
 
         <aside className="sidebar-right w-1/4 max-w-xs bg-gray-50 p-4 overflow-y-auto">
-          <SidebarRight items={canvasItems} setCanvasItems={setCanvasItems} />
+          <SidebarRight
+            items={canvasItems}
+            setCanvasItems={setCanvasItems}
+            selectedItemId={selectedItemId}
+            setSelectedItemId={setSelectedItemId}
+          />
         </aside>
       </main>
     </div>

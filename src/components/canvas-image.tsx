@@ -11,7 +11,7 @@ export default function CanvasImage({
 }: {
   item: CanvasItem;
   isSelected: boolean;
-  onSelect: () => void;
+  onSelect: (id: string) => void; // ← anpassen
   onChange: (attrs: Partial<CanvasItem>) => void;
 }) {
   const shapeRef = useRef<any>(null);
@@ -47,8 +47,8 @@ export default function CanvasImage({
         rotation={item.rotation}
         draggable
         ref={shapeRef}
-        onClick={onSelect}
-        onTap={onSelect}
+        onClick={() => onSelect(item.id)}
+        onTap={() => onSelect(item.id)}
         onDragEnd={(e) => {
           onChange({ x: e.target.x(), y: e.target.y() });
         }}

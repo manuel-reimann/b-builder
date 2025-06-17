@@ -25,27 +25,36 @@ const data = {
   ],
 };
 
-export default function Sidebar({
+export default function SidebarLeft({
   setCanvasItems,
+  canvasContainerRef,
 }: {
   setCanvasItems: Function;
+  canvasContainerRef: React.RefObject<HTMLDivElement>;
 }) {
   const handleAddImage = (src: string) => {
     const img = new window.Image();
     img.src = src;
+
     img.onload = () => {
       const maxHeight = 150;
       const scale = Math.min(1, maxHeight / img.height);
+
+      // einfache zufällige Position rund um die Bildmitte (ca. 400x400)
+      const randomOffset = () => Math.floor(Math.random() * 300) - 150;
+
       const newItem = {
         id: uuidv4(),
         src,
-        x: 100,
-        y: 100,
+        x: 400 + randomOffset(),
+        y: 300 + randomOffset(),
         rotation: 0,
         scale,
         maxWidth: maxHeight,
         maxHeight,
+        type: "element",
       };
+
       setCanvasItems((prev: any[]) => [...prev, newItem]);
     };
   };

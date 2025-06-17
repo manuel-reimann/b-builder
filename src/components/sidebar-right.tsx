@@ -18,12 +18,15 @@ import { useEffect, useState } from "react";
 export default function SidebarRight({
   items,
   setCanvasItems,
+  selectedItemId,
+  setSelectedItemId,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
+  selectedItemId: string | null;
+  setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
   const sensors = useSensors(useSensor(PointerSensor));
-
   const sleeveItem = items.find((item) => item.type === "sleeve");
   const elementItems = items.filter((item) => item.type !== "sleeve");
   const reversedElementItems = [...elementItems].reverse(); // neueste oben
@@ -60,18 +63,33 @@ export default function SidebarRight({
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={reversedElementItems.map((item) => item.id)}
+          items={dragItems.map((item) => item.id)}
           strategy={verticalListSortingStrategy}
         >
           <div className="flex flex-col gap-2">
-            {reversedElementItems.map((item) => (
-              <SortableItem key={item.id} item={item} />
-            ))}
-
-            {sleeveItem && (
-              <div className="bg-gray-100 text-gray-500 border border-gray-300 px-3 py-2 rounded shadow-sm">
-                {sleeveItem.src.split("/").pop()} (nicht verschiebbar)
-              </div>
+            {dragItems.map((item) =>
+              item.type === "sleeve" ? (
+                <div
+                  key={item.id}
+                  className="bg-gray-100 text-gray-500 border border-gray-300 px-3 py-2 rounded shadow-sm"
+                >
+                  {item.src
+                    .split("/")
+                    .pop()
+                    ?.replace(/\.[^/.]+$/, "")}{" "}
+                  (unterste Ebene)
+                </div>
+              ) : (
+                <SortableItem
+                  key={item.id}
+                  item={item}
+                  onDelete={(id) =>
+                    setCanvasItems((prev) => prev.filter((el) => el.id !== id))
+                  }
+                  selectedItemId={selectedItemId}
+                  setSelectedItemId={setSelectedItemId}
+                />
+              )
             )}
           </div>
         </SortableContext>
@@ -80,7 +98,19 @@ export default function SidebarRight({
   );
 }
 
-function SortableItem({ item }: { item: CanvasItem }) {
+// Typanpassung & Übergabe der Löschfunktion
+function SortableItem({
+  item,
+  onDelete,
+  selectedItemId,
+  setSelectedItemId,
+}: {
+  item: CanvasItem;
+  onDelete: (id: string) => void;
+  selectedItemId: string | null;
+  setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
+}) {
+  // useSortable liefert Props für Drag&Drop, die du auf den Hauptcontainer packen musst
   const {
     attributes,
     listeners,
@@ -90,10 +120,12 @@ function SortableItem({ item }: { item: CanvasItem }) {
     isDragging,
   } = useSortable({ id: item.id });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
+  // Setze transform/transition für Drag Animation
+  const style: React.CSSProperties = {
+    transform: transform ? CSS.Transform.toString(transform) : undefined,
     transition,
     opacity: isDragging ? 0.5 : 1,
+    pointerEvents: "auto", // jetzt korrekt getypt
   };
 
   return (
@@ -102,9 +134,30 @@ function SortableItem({ item }: { item: CanvasItem }) {
       {...attributes}
       {...listeners}
       style={style}
-      className="bg-white border border-gray-300 px-3 py-2 rounded shadow-sm cursor-move flex justify-between items-center"
+      onClick={() => setSelectedItemId(item.id)}
+      className={`bg-white border border-gray-300 px-3 py-2 rounded shadow-sm flex justify-between items-center cursor-pointer ${
+        selectedItemId === item.id ? "ring-2 ring-blue-400" : ""
+      }`}
     >
-      <span className="text-sm truncate">{item.src.split("/").pop()}</span>
+      <span className="text-sm truncate">
+        {item.src
+          .split("/")
+          .pop()
+          ?.replace(/\.[^/.]+$/, "")}
+      </span>
+
+      {/* Button, der Drag-Events stoppt und somit klickbar bleibt */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation(); // verhindern, dass Klick den Drag triggert
+          onDelete(item.id);
+        }}
+        onPointerDown={(e) => e.stopPropagation()} // verhindert Drag-Start auf Button
+        type="button"
+        className="ml-2 text-red-600 hover:text-red-800 bg-transparent border-0 text-xl p-0 cursor-pointer"
+      >
+        🗑️
+      </button>
     </div>
   );
 }
