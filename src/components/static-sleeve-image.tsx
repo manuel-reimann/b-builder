@@ -9,7 +9,7 @@ export default function StaticSleeveImage({
   canvasWidth: number;
   canvasHeight: number;
 }) {
-  const [image] = useImage("/public/img/Sleeve Braun.png");
+  const [image] = useImage("/public/img/sleeve1.png");
   const imageRef = useRef<any>(null);
 
   useEffect(() => {

@@ -7,21 +7,38 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 const data = {
+  Sleeves: [
+    { label: "Kraft Tüte", src: "/img/sleeve1.png" },
+    { label: "Transparent", src: "/img/sleeve2.png" },
+    { label: "Pastell Rosa", src: "/img/sleeve3.png" },
+  ],
   Rosen: [
-    { label: "Rose rot", src: "/img/rose-rot.png" },
-    { label: "Rose weiss", src: "/img/rose-weiss.png" },
+    { label: "Red Naomi", src: "/img/rose-rot.png" },
+    { label: "White Avalanche", src: "/img/rose-weiss.png" },
   ],
   Sprayrosen: [
-    { label: "Sprayrosa", src: "/img/sprayrosa.png" },
-    { label: "Spraygelb", src: "/img/spraygelb.png" },
+    { label: "Spray Rosa", src: "/img/sprayrosa.png" },
+    { label: "Spray Gelb", src: "/img/spraygelb.png" },
   ],
-  "Sri Lanka Grün": [
+  Gypsophilla: [
+    { label: "Gypsophilla Weiss", src: "/img/gypsophilla.png" },
+    { label: "Gypsophilla Rosa", src: "/img/gypsophilla-rosa.png" },
+  ],
+  "Sri Lanka": [
     { label: "Palmblatt", src: "/img/palmblatt.png" },
     { label: "Monstera", src: "/img/monstera.png" },
   ],
-  Spezielles: [
-    { label: "Trockenblume", src: "/img/trockenblume.png" },
-    { label: "Federn", src: "/img/federn.png" },
+  Stecker: [
+    { label: "Herzstecker", src: "/img/herzstecker.png" },
+    { label: "Happy Birthday", src: "/img/stecker-hb.png" },
+  ],
+  Chrysanthemen: [
+    { label: "Santini Green", src: "/img/santini-green.png" },
+    { label: "Santini White", src: "/img/santini-white.png" },
+  ],
+  Filler: [
+    { label: "Eucalyptus", src: "/img/eukalyptus.png" },
+    { label: "Limonium", src: "/img/limonium.png" },
   ],
 };
 
@@ -71,15 +88,20 @@ export default function SidebarLeft({
             {category}
           </AccordionTrigger>
           <AccordionContent>
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="grid grid-cols-2 gap-3 mt-2">
               {items.map(({ label, src }) => (
-                <button
+                <div
                   key={label}
                   onClick={() => handleAddImage(src)}
-                  className="bg-green-300 text-white px-3 py-2 rounded hover:bg-green-400 transition"
+                  className="cursor-pointer rounded border hover:shadow-md p-2 bg-white flex flex-col items-center text-center hover:bg-green-50"
                 >
-                  {label}
-                </button>
+                  <img
+                    src={src}
+                    alt={label}
+                    className="w-16 h-16 object-contain mb-1"
+                  />
+                  <span className="text-sm">{label.replace(/\.png$/, "")}</span>
+                </div>
               ))}
             </div>
           </AccordionContent>
