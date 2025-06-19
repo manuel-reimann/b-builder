@@ -6,21 +6,24 @@ import Canvas from "./components/canvas";
 import LayerPanel from "./components/layer-panel";
 
 function App() {
+  const [sleeveSrc, setSleeveSrc] = useState("/img/sleeve1.png");
   const [canvasItems, setCanvasItems] = useState<any[]>([
     {
       id: "sleeve",
-      src: "/img/sleeve1.png", // deine erste Sleeve-Grafik
-      x: 100, // Startposition auf dem Canvas
+      src: sleeveSrc,
+      x: 100,
       y: 100,
-      maxWidth: 800, // kannst du anpassen
+      maxWidth: 800,
       maxHeight: 800,
       rotation: 0,
       scale: 1,
-      type: "sleeve", // sehr wichtig: verhindert späteres Löschen
+      type: "sleeve",
+      label: "Kraft Tüte",
     },
   ]);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-  const canvasContainerRef = useRef<HTMLDivElement>(null);
+  const canvasContainerRef = useRef<HTMLDivElement | null>(null);
+
   return (
     <div className="app h-screen flex flex-col">
       <header className="header bg-green-500 text-black p-4">
@@ -38,8 +41,8 @@ function App() {
           <h2 className="text-xl font-semibold mb-4">Assets</h2>
           <SidebarLeft
             setCanvasItems={setCanvasItems}
-            canvasRef={canvasContainerRef}
             canvasContainerRef={canvasContainerRef}
+            setSleeveSrc={setSleeveSrc} // ← NEU!
           />
         </aside>
 
@@ -50,6 +53,7 @@ function App() {
             selectedItemId={selectedItemId}
             setSelectedItemId={setSelectedItemId}
             canvasContainerRef={canvasContainerRef}
+            sleeveSrc={sleeveSrc} // ← hier!
           />
         </section>
 

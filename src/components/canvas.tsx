@@ -14,6 +14,8 @@ export interface CanvasItem {
   rotation: number;
   scale: number;
   type?: "sleeve" | "element";
+  sleeveSrc: string;
+  label?: string;
 }
 
 export default function Canvas({
@@ -21,13 +23,15 @@ export default function Canvas({
   setCanvasItems,
   selectedItemId,
   setSelectedItemId,
-  canvasContainerRef, // ✅ NEU
+  canvasContainerRef,
+  sleeveSrc, // ← hier hinzufügen
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
   selectedItemId: string | null;
   setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
-  canvasContainerRef: React.RefObject<HTMLDivElement>; // ✅ NEU
+  canvasContainerRef: React.RefObject<HTMLDivElement | null>;
+  sleeveSrc: string; // ← hier ebenfalls ergänzen
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const containerRef = canvasContainerRef;
@@ -87,6 +91,7 @@ export default function Canvas({
           <StaticSleeveImage
             canvasWidth={dimensions.width}
             canvasHeight={dimensions.height}
+            sleeveSrc={sleeveSrc}
           />
 
           {items.map((item) => (

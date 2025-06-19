@@ -6,73 +6,94 @@ import {
 } from "@radix-ui/react-accordion";
 import { v4 as uuidv4 } from "uuid";
 
-const data = {
+type ItemType = "element" | "sleeve";
+type DataItem = { label: string; src: string; type: ItemType };
+type Data = Record<string, DataItem[]>;
+
+const data: Data = {
   Sleeves: [
-    { label: "Kraft Tüte", src: "/img/sleeve1.png" },
-    { label: "Transparent", src: "/img/sleeve2.png" },
-    { label: "Pastell Rosa", src: "/img/sleeve3.png" },
+    { label: "Kraft Tüte", src: "/img/sleeve1.png", type: "sleeve" },
+    { label: "Transparent", src: "/img/sleeve2.png", type: "sleeve" },
+    { label: "Pastell Rosa", src: "/img/sleeve3.png", type: "sleeve" },
   ],
   Rosen: [
-    { label: "Red Naomi", src: "/img/rose-rot.png" },
-    { label: "White Avalanche", src: "/img/rose-weiss.png" },
+    { label: "Red Naomi", src: "/img/rose-rot.png", type: "element" },
+    { label: "White Avalanche", src: "/img/rose-weiss.png", type: "element" },
   ],
   Sprayrosen: [
-    { label: "Spray Rosa", src: "/img/sprayrosa.png" },
-    { label: "Spray Gelb", src: "/img/spraygelb.png" },
+    { label: "Spray Rosa", src: "/img/sprayrosa.png", type: "element" },
+    { label: "Spray Gelb", src: "/img/spraygelb.png", type: "element" },
   ],
   Gypsophilla: [
-    { label: "Gypsophilla Weiss", src: "/img/gypsophilla.png" },
-    { label: "Gypsophilla Rosa", src: "/img/gypsophilla-rosa.png" },
+    {
+      label: "Gypsophilla Weiss",
+      src: "/img/gypsophilla.png",
+      type: "element",
+    },
+    {
+      label: "Gypsophilla Rosa",
+      src: "/img/gypsophilla-rosa.png",
+      type: "element",
+    },
   ],
   "Sri Lanka": [
-    { label: "Palmblatt", src: "/img/palmblatt.png" },
-    { label: "Monstera", src: "/img/monstera.png" },
+    { label: "Palmblatt", src: "/img/palmblatt.png", type: "element" },
+    { label: "Monstera", src: "/img/monstera.png", type: "element" },
   ],
   Stecker: [
-    { label: "Herzstecker", src: "/img/herzstecker.png" },
-    { label: "Happy Birthday", src: "/img/stecker-hb.png" },
+    { label: "Herzstecker", src: "/img/herzstecker.png", type: "element" },
+    { label: "Happy Birthday", src: "/img/stecker-hb.png", type: "element" },
   ],
   Chrysanthemen: [
-    { label: "Santini Green", src: "/img/santini-green.png" },
-    { label: "Santini White", src: "/img/santini-white.png" },
+    { label: "Santini Green", src: "/img/santini-green.png", type: "element" },
+    { label: "Santini White", src: "/img/santini-white.png", type: "element" },
   ],
   Filler: [
-    { label: "Eucalyptus", src: "/img/eukalyptus.png" },
-    { label: "Limonium", src: "/img/limonium.png" },
+    { label: "Eucalyptus", src: "/img/eukalyptus.png", type: "element" },
+    { label: "Limonium", src: "/img/limonium.png", type: "element" },
   ],
 };
 
 export default function SidebarLeft({
   setCanvasItems,
+  setSleeveSrc, // NEU
   canvasContainerRef,
 }: {
   setCanvasItems: Function;
-  canvasContainerRef: React.RefObject<HTMLDivElement>;
+  setSleeveSrc: React.Dispatch<React.SetStateAction<string>>; // NEU
+  canvasContainerRef: React.RefObject<HTMLDivElement | null>;
 }) {
-  const handleAddImage = (src: string) => {
+  const handleAddImage = (
+    src: string,
+    label: string,
+    type: "element" | "sleeve" = "element"
+  ) => {
     const img = new window.Image();
     img.src = src;
 
     img.onload = () => {
       const maxHeight = 150;
       const scale = Math.min(1, maxHeight / img.height);
-
-      // einfache zufällige Position rund um die Bildmitte (ca. 400x400)
       const randomOffset = () => Math.floor(Math.random() * 300) - 150;
 
       const newItem = {
         id: uuidv4(),
         src,
+        label, // ← WICHTIG: muss hier übergeben werden
         x: 400 + randomOffset(),
         y: 300 + randomOffset(),
         rotation: 0,
         scale,
         maxWidth: maxHeight,
         maxHeight,
-        type: "element",
+        type,
       };
 
-      setCanvasItems((prev: any[]) => [...prev, newItem]);
+      if (type === "sleeve") {
+        setSleeveSrc(src); // oder was auch immer du für StaticSleeveImage verwendest
+      } else {
+        setCanvasItems((prev: any[]) => [...prev, newItem]);
+      }
     };
   };
 
@@ -89,10 +110,10 @@ export default function SidebarLeft({
           </AccordionTrigger>
           <AccordionContent>
             <div className="grid grid-cols-2 gap-3 mt-2">
-              {items.map(({ label, src }) => (
+              {items.map(({ label, src, type }) => (
                 <div
                   key={label}
-                  onClick={() => handleAddImage(src)}
+                  onClick={() => handleAddImage(src, label, type)}
                   className="cursor-pointer rounded border hover:shadow-md p-2 bg-white flex flex-col items-center text-center hover:bg-green-50"
                 >
                   <img

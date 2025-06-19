@@ -63,41 +63,38 @@ export default function SidebarRight({
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={dragItems.map((item) => item.id)}
+          items={reversedElementItems.map((item) => item.id)} // Nur verschiebbare Items
           strategy={verticalListSortingStrategy}
         >
           <div className="flex flex-col gap-2">
-            {dragItems.map((item) =>
-              item.type === "sleeve" ? (
-                <div
-                  key={item.id}
-                  className="bg-gray-100 text-gray-500 border border-gray-300 px-3 py-2 rounded shadow-sm"
-                >
-                  {item.src
-                    .split("/")
-                    .pop()
-                    ?.replace(/\.[^/.]+$/, "")}{" "}
-                  (unterste Ebene)
-                </div>
-              ) : (
-                <SortableItem
-                  key={item.id}
-                  item={item}
-                  onDelete={(id) =>
-                    setCanvasItems((prev) => prev.filter((el) => el.id !== id))
-                  }
-                  selectedItemId={selectedItemId}
-                  setSelectedItemId={setSelectedItemId}
-                />
-              )
-            )}
+            {/* Alle Sortable Items */}
+            {reversedElementItems.map((item) => (
+              <SortableItem
+                key={item.id}
+                item={item}
+                onDelete={(id) =>
+                  setCanvasItems((prev) => prev.filter((el) => el.id !== id))
+                }
+                selectedItemId={selectedItemId}
+                setSelectedItemId={setSelectedItemId}
+              />
+            ))}
           </div>
         </SortableContext>
       </DndContext>
+
+      {/* ❗ Sleeve-Element immer separat ganz unten */}
+      {sleeveItem && (
+        <div
+          key={sleeveItem.id}
+          className="mt-4 bg-gray-100 text-gray-500 border border-gray-300 px-3 py-2 rounded shadow-sm"
+        >
+          {sleeveItem.label} (unterste Ebene)
+        </div>
+      )}
     </div>
   );
 }
-
 // Typanpassung & Übergabe der Löschfunktion
 function SortableItem({
   item,
@@ -140,10 +137,11 @@ function SortableItem({
       }`}
     >
       <span className="text-sm truncate">
-        {item.src
-          .split("/")
-          .pop()
-          ?.replace(/\.[^/.]+$/, "")}
+        {item.label ||
+          item.src
+            .split("/")
+            .pop()
+            ?.replace(/\.[^/.]+$/, "")}
       </span>
 
       {/* Button, der Drag-Events stoppt und somit klickbar bleibt */}

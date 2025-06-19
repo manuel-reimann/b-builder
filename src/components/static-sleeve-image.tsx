@@ -5,11 +5,13 @@ import useImage from "use-image";
 export default function StaticSleeveImage({
   canvasWidth,
   canvasHeight,
+  sleeveSrc,
 }: {
   canvasWidth: number;
   canvasHeight: number;
+  sleeveSrc: string;
 }) {
-  const [image] = useImage("/public/img/sleeve1.png");
+  const [image] = useImage(sleeveSrc);
   const imageRef = useRef<any>(null);
 
   useEffect(() => {
