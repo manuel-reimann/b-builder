@@ -90,7 +90,17 @@ export default function SidebarLeft({
       };
 
       if (type === "sleeve") {
-        setSleeveSrc(src); // oder was auch immer du für StaticSleeveImage verwendest
+        // Bild im Hintergrund ersetzen
+        setSleeveSrc(src);
+
+        // Gleichzeitig auch den sleeve im canvasItems aktualisieren:
+        setCanvasItems((prev: any[]) =>
+          prev.map((item) =>
+            item.type === "sleeve"
+              ? { ...item, src, label } // 🔁 src & label ersetzen
+              : item
+          )
+        );
       } else {
         setCanvasItems((prev: any[]) => [...prev, newItem]);
       }
