@@ -60,15 +60,11 @@ export default function Canvas({
   }, []);
 
   const handleDelete = (e: KeyboardEvent) => {
-    console.log("Taste gedrückt:", e.key); // ← prüft ob Event überhaupt ausgelöst wird
-
     if (e.key === "Delete" && selectedId) {
       const itemToDelete = items.find((item) => item.id === selectedId);
-      console.log("Ausgewähltes Element:", itemToDelete); // ← prüft ob etwas ausgewählt ist
 
       if (itemToDelete?.type !== "sleeve") {
         const filtered = items.filter((item) => item.id !== selectedId);
-        console.log("Gefilterte Liste:", filtered); // ← zeigt neue Liste
 
         setCanvasItems(filtered);
         setSelectedId(null);

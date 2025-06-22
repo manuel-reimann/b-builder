@@ -5,7 +5,9 @@ import SidebarRight from "./components/sidebar-right";
 import Canvas from "./components/canvas";
 import LayerPanel from "./components/layer-panel";
 import LoginModal from "./components/loginModal";
+import SignupModal from "./components/signupModal";
 import { createClient } from "@supabase/supabase-js";
+import UserMenuModal from "./components/userMenuModal";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -31,12 +33,25 @@ function App() {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const canvasContainerRef = useRef<HTMLDivElement>(null!);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     // Check on page load if a user is already logged in
     supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user); // Set the user state
+      const user = data.user;
+      if (user) {
+        setUser({
+          ...user,
+          user_metadata: {
+            name:
+              user.user_metadata?.name ??
+              user.user_metadata?.full_name ??
+              "User",
+          },
+        });
+      }
     });
 
     // Listen for login/logout events (e.g. loginModal, or external events)
@@ -61,11 +76,39 @@ function App() {
             <li>My Designs</li>
             <li>
               {user ? (
-                <span className="text-sm text-green-800">
+                <button
+                  onClick={() => setShowUserMenu(true)}
+                  className="hover:underline"
+                >
                   👋 Hello, {user.user_metadata?.name || "User"}
-                </span>
+                </button>
               ) : (
                 <button onClick={() => setShowLoginModal(true)}>Login</button>
+              )}
+              {showUserMenu && (
+                <UserMenuModal
+                  user={user}
+                  onClose={() => setShowUserMenu(false)}
+                  onLogout={async () => {
+                    await supabase.auth.signOut();
+                    setUser(null);
+                    setShowUserMenu(false);
+                  }}
+                  refreshUser={async () => {
+                    const { data } = await supabase.auth.getUser();
+                    if (data.user) {
+                      setUser({
+                        ...data.user,
+                        user_metadata: {
+                          name:
+                            data.user.user_metadata?.name ??
+                            data.user.user_metadata?.full_name ??
+                            "User",
+                        },
+                      });
+                    }
+                  }}
+                />
               )}
             </li>
           </ul>
@@ -105,7 +148,21 @@ function App() {
       {showLoginModal && (
         <LoginModal
           onClose={() => setShowLoginModal(false)}
-          onLogin={setUser}
+          onLogin={(user) => setUser(user)}
+          onSwitchToSignup={() => {
+            setShowLoginModal(false);
+            setShowSignupModal(true);
+          }}
+        />
+      )}
+      {showSignupModal && (
+        <SignupModal
+          onClose={() => setShowSignupModal(false)}
+          onSignup={(user) => setUser(user)}
+          onSwitchToLogin={() => {
+            setShowSignupModal(false);
+            setShowLoginModal(true);
+          }}
         />
       )}
     </div>
