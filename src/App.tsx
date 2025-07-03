@@ -3,19 +3,16 @@ import "./App.css";
 import SidebarLeft from "./components/sidebar-left";
 import SidebarRight from "./components/sidebar-right";
 import Canvas from "./components/canvas";
-import LayerPanel from "./components/layer-panel";
-import LoginModal from "./components/loginModal";
-import SignupModal from "./components/signupModal";
+import LoginModal from "./components/login-modal";
+import SignupModal from "./components/signup-modal";
 import { createClient } from "@supabase/supabase-js";
-import UserMenuModal from "./components/userMenuModal";
+import UserMenuModal from "./components/user-menu-modal";
+import MyDesignsModal from "./components/my-designs";
 
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
+const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 function App() {
-  const [sleeveSrc, setSleeveSrc] = useState("/img/sleeve1.png");
+  const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1.webp");
   const [canvasItems, setCanvasItems] = useState<any[]>([
     {
       id: "sleeve",
@@ -27,7 +24,7 @@ function App() {
       rotation: 0,
       scale: 1,
       type: "sleeve",
-      label: "Kraft Tüte",
+      label: "Braun",
     },
   ]);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
@@ -35,6 +32,7 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMyDesigns, setShowMyDesigns] = useState(false);
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -45,21 +43,16 @@ function App() {
         setUser({
           ...user,
           user_metadata: {
-            name:
-              user.user_metadata?.name ??
-              user.user_metadata?.full_name ??
-              "User",
+            name: user.user_metadata?.name ?? user.user_metadata?.full_name ?? "User",
           },
         });
       }
     });
 
     // Listen for login/logout events (e.g. loginModal, or external events)
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null); // Update state or clear it on logout
-      }
-    );
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null); // Update state or clear it on logout
+    });
 
     // Cleanup listener on unmount
     return () => {
@@ -68,23 +61,25 @@ function App() {
   }, []);
 
   return (
-    <div className="app h-screen flex flex-col">
-      <header className="header bg-green-500 text-black p-4">
+    <div className="flex flex-col h-screen app">
+      <header className="p-4 text-black bg-green-500 header">
         <nav className="nav">
-          <ul className="flex space-x-6 items-center">
+          <ul className="flex items-center space-x-6">
             <li>Start</li>
-            <li>My Designs</li>
+            <li onClick={() => setShowMyDesigns(true)} className="cursor-pointer hover:underline">
+              My Designs
+            </li>
             <li>
               {user ? (
-                <button
-                  onClick={() => setShowUserMenu(true)}
-                  className="hover:underline"
-                >
+                <span onClick={() => setShowUserMenu(true)} className="cursor-pointer " role="button" tabIndex={0}>
                   👋 Hello, {user.user_metadata?.name || "User"}
-                </button>
+                </span>
               ) : (
-                <button onClick={() => setShowLoginModal(true)}>Login</button>
+                <span onClick={() => setShowLoginModal(true)} className="cursor-pointer " role="button" tabIndex={0}>
+                  Login
+                </span>
               )}
+
               {showUserMenu && (
                 <UserMenuModal
                   user={user}
@@ -100,10 +95,7 @@ function App() {
                       setUser({
                         ...data.user,
                         user_metadata: {
-                          name:
-                            data.user.user_metadata?.name ??
-                            data.user.user_metadata?.full_name ??
-                            "User",
+                          name: data.user.user_metadata?.name ?? data.user.user_metadata?.full_name ?? "User",
                         },
                       });
                     }
@@ -115,9 +107,9 @@ function App() {
         </nav>
       </header>
 
-      <main className="main flex flex-1 overflow-hidden">
-        <aside className="sidebar-left w-1/4 max-w-xs bg-gray-100 p-4 overflow-y-auto">
-          <h2 className="text-xl font-semibold mb-4">Assets</h2>
+      <main className="flex flex-1 overflow-hidden main">
+        <aside className="w-1/4 max-w-xs p-4 overflow-y-auto bg-gray-100 sidebar-left">
+          <h2 className="mb-4 text-xl font-semibold">Assets</h2>
           <SidebarLeft
             setCanvasItems={setCanvasItems}
             canvasContainerRef={canvasContainerRef}
@@ -125,7 +117,7 @@ function App() {
           />
         </aside>
 
-        <section className="canvas-area flex-grow bg-white overflow-hidden flex items-center justify-center">
+        <section className="flex items-center justify-center flex-grow overflow-hidden bg-white canvas-area">
           <Canvas
             items={canvasItems}
             setCanvasItems={setCanvasItems}
@@ -136,7 +128,7 @@ function App() {
           />
         </section>
 
-        <aside className="sidebar-right w-1/4 max-w-xs bg-gray-50 p-4 overflow-y-auto">
+        <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-right bg-gray-50">
           <SidebarRight
             items={canvasItems}
             setCanvasItems={setCanvasItems}
@@ -165,6 +157,7 @@ function App() {
           }}
         />
       )}
+      {user && showMyDesigns && <MyDesignsModal userId={user.id} onClose={() => setShowMyDesigns(false)} />}
     </div>
   );
 }

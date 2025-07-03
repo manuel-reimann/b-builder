@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Image as KonvaImage, Transformer } from "react-konva";
 import useImage from "use-image";
-import { CanvasItem } from "./canvas"; // oder separat exportieren, wenn du möchtest
+import { CanvasItem } from "./canvas";
 
 export default function CanvasImage({
   item,

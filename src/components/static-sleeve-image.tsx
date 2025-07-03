@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
 
@@ -17,10 +17,7 @@ export default function StaticSleeveImage({
   useEffect(() => {
     if (!image || !imageRef.current) return;
 
-    const scale = Math.min(
-      (canvasWidth * 0.95) / image.width,
-      (canvasHeight * 0.95) / image.height
-    );
+    const scale = Math.min((canvasWidth * 0.95) / image.width, (canvasHeight * 0.95) / image.height);
 
     imageRef.current.scale({ x: scale, y: scale });
     imageRef.current.position({

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Stage, Layer, Image as KonvaImage, Transformer } from "react-konva";
-import useImage from "use-image";
+import { Stage, Layer } from "react-konva";
 import StaticSleeveImage from "./static-sleeve-image";
 import CanvasImage from "./canvas-image";
 
@@ -84,11 +83,7 @@ export default function Canvas({
     <div ref={containerRef} className="w-full h-full">
       <Stage width={dimensions.width} height={dimensions.height} ref={stageRef}>
         <Layer>
-          <StaticSleeveImage
-            canvasWidth={dimensions.width}
-            canvasHeight={dimensions.height}
-            sleeveSrc={sleeveSrc}
-          />
+          <StaticSleeveImage canvasWidth={dimensions.width} canvasHeight={dimensions.height} sleeveSrc={sleeveSrc} />
 
           {items.map((item) => (
             <CanvasImage
@@ -97,9 +92,7 @@ export default function Canvas({
               isSelected={item.id === selectedItemId}
               onSelect={(id) => setSelectedItemId(id)}
               onChange={(newAttrs) => {
-                const updated = items.map((it) =>
-                  it.id === item.id ? { ...it, ...newAttrs } : it
-                );
+                const updated = items.map((it) => (it.id === item.id ? { ...it, ...newAttrs } : it));
                 setCanvasItems(updated);
               }}
             />
