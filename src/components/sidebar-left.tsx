@@ -51,20 +51,21 @@ const data: Data = {
     { label: "Gypsophilla Rosa", src: "/img/gypsophilla-rosa.webp", type: "element" },
   ],
   "Sri Lanka": [
-    { label: "Palmblatt", src: "/img/palmblatt.webp", type: "element" },
-    { label: "Monstera", src: "/img/monstera.webp", type: "element" },
+    { label: "Palmblatt", src: "/img/srilanka/palmblatt.webp", type: "element" },
+    { label: "Monstera", src: "/img/srilanka/monstera.webp", type: "element" },
   ],
   Stecker: [
-    { label: "Herzstecker", src: "/img/herzstecker.webp", type: "element" },
-    { label: "Happy Birthday", src: "/img/stecker-hb.webp", type: "element" },
+    { label: "Herzstecker", src: "/img/stecker/herzstecker.webp", type: "element" },
+    { label: "Happy Birthday", src: "/img/stecker/stecker-hb.webp", type: "element" },
   ],
   Chrysanthemen: [
-    { label: "Santini Green", src: "/img/santini-green.webp", type: "element" },
-    { label: "Santini White", src: "/img/santini-white.webp", type: "element" },
+    { label: "Santini Green", src: "/img/chrysanthemen/santini-green.webp", type: "element" },
+    { label: "Santini White", src: "/img/chrysanthemen/santini-white.webp", type: "element" },
   ],
   Filler: [
-    { label: "Eucalyptus", src: "/img/eukalyptus.webp", type: "element" },
-    { label: "Limonium", src: "/img/limonium.webp", type: "element" },
+    { label: "Eucalyptus", src: "/img/filler/eucalyptus.webp", type: "element" },
+    { label: "Limonium", src: "/img/filler/limonium.webp", type: "element" },
+    { label: "Lillie", src: "/img/filler/lillie.webp", type: "element" },
   ],
 };
 

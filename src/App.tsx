@@ -7,12 +7,19 @@ import LoginModal from "./components/login-modal";
 import SignupModal from "./components/signup-modal";
 import { createClient } from "@supabase/supabase-js";
 import UserMenuModal from "./components/user-menu-modal";
-import MyDesignsModal from "./components/my-designs";
+import MyDesignsModal from "./components/designs";
+import { saveDraftToSupabase } from "./lib/saveDraftToSupabase";
+import DraftsModal from "./components/drafts-modal";
+import SaveDraftModal from "./components/save-draft-modal";
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 function App() {
   const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1.webp");
+  const [showDraftsModal, setShowDraftsModal] = useState(false);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [showSaveDraftModal, setShowSaveDraftModal] = useState(false);
   const [canvasItems, setCanvasItems] = useState<any[]>([
     {
       id: "sleeve",
@@ -28,13 +35,74 @@ function App() {
     },
   ]);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [selectedDraftId, setSelectedDraftId] = useState<string | null>(null);
   const canvasContainerRef = useRef<HTMLDivElement>(null!);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMyDesigns, setShowMyDesigns] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
+  const [currentDraftTitle, setCurrentDraftTitle] = useState<string | null>(null);
 
+  const saveDraft = async (titleOverride?: string): Promise<void> => {
+    if (!user || !canvasItems.length) return;
+
+    const sleeveItem = canvasItems.find((item) => item.type === "sleeve");
+    if (!sleeveItem) {
+      console.error("No sleeve element found, aborting.");
+      return;
+    }
+
+    try {
+      const result = await saveDraftToSupabase(
+        user.id,
+        canvasItems,
+        sleeveItem.src,
+        titleOverride ?? undefined,
+        currentDraftId ?? undefined
+      );
+
+      if (result && result.success) {
+        if (!currentDraftId && !titleOverride) {
+          setShowSaveDraftModal(true);
+        } else {
+          setShowSaveDraftModal(false);
+        }
+
+        if (result.newDraftId) {
+          setCurrentDraftId(result.newDraftId);
+        }
+      } else {
+        console.error("Saving draft failed.");
+      }
+    } catch (error) {
+      console.error("Unexpected error saving draft:", error);
+    }
+  };
+  const handleUpdateDraft = async () => {
+    if (!user) return;
+
+    const itemsToSave = canvasItems.filter((item) => item.type !== "sleeve");
+    const sleeveToSave = canvasItems.find((item) => item.type === "sleeve");
+
+    if (!currentDraftId) return;
+
+    const { error } = await supabase
+      .from("user_drafts")
+      .update({
+        elements: itemsToSave,
+        sleeve: sleeveToSave?.src || "",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", currentDraftId);
+
+    if (error) {
+      console.error("Error updating draft:", error);
+    } else {
+      console.log("Draft updated successfully.");
+    }
+  };
   useEffect(() => {
     // Check on page load if a user is already logged in
     supabase.auth.getUser().then(({ data }) => {
@@ -60,14 +128,33 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    setCanvasItems((prevItems) => {
+      const updatedItems = prevItems.map((item) => {
+        if (item.type === "sleeve") {
+          return { ...item, src: sleeveSrc };
+        }
+        return item;
+      });
+      return updatedItems;
+    });
+  }, [sleeveSrc]);
+
   return (
     <div className="flex flex-col h-screen app">
       <header className="p-4 text-black bg-green-500 header">
         <nav className="nav">
           <ul className="flex items-center space-x-6">
-            <li>Start</li>
-            <li onClick={() => setShowMyDesigns(true)} className="cursor-pointer hover:underline">
-              My Designs
+            <li onClick={() => window.location.reload()} className="cursor-pointer">
+              Start new
+            </li>
+            <li>
+              <span onClick={() => setShowDraftsModal(true)} className="cursor-pointer ">
+                Drafts
+              </span>
+            </li>
+            <li onClick={() => setShowMyDesigns(true)} className="cursor-pointer">
+              Designs
             </li>
             <li>
               {user ? (
@@ -124,7 +211,11 @@ function App() {
             selectedItemId={selectedItemId}
             setSelectedItemId={setSelectedItemId}
             canvasContainerRef={canvasContainerRef}
-            sleeveSrc={sleeveSrc} // ← hier!
+            sleeveSrc={sleeveSrc}
+            saveDraft={saveDraft}
+            showSaveDraftModal={() => setShowSaveDraftModal(true)}
+            currentDraftId={currentDraftId}
+            currentDraftTitle={currentDraftTitle}
           />
         </section>
 
@@ -158,6 +249,25 @@ function App() {
         />
       )}
       {user && showMyDesigns && <MyDesignsModal userId={user.id} onClose={() => setShowMyDesigns(false)} />}
+      {user && showDraftsModal && (
+        <DraftsModal
+          userId={user.id}
+          onClose={() => setShowDraftsModal(false)}
+          onLoadDraft={(items: any[], sleeveSrc?: string, draftId?: string, draftTitle?: string) => {
+            setCanvasItems(items);
+            setSelectedItemId(null);
+            if (sleeveSrc !== undefined) {
+              setSleeveSrc(sleeveSrc);
+            }
+            setCurrentDraftId(draftId ?? null);
+            setCurrentDraftTitle(draftTitle ?? null); // ← NEU
+          }}
+          setSleeveSrc={setSleeveSrc}
+          onSelectDraftId={(draftId: string | null | undefined) => setCurrentDraftId(draftId ?? null)}
+        />
+      )}
+
+      {showSaveDraftModal && <SaveDraftModal onClose={() => setShowSaveDraftModal(false)} onSave={saveDraft} />}
     </div>
   );
 }
