@@ -7,26 +7,58 @@ html,
   height: 100%;
   font-family: "Century Gothic", Arial, sans-serif;
   font-weight: 300;
-  color: #222; /* Dark font color globally */
+  color: #30384b; /* Dark font color globally */
 }
-
 /* Global App Layout */
 .app {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100vw;
-  background-color: #f4f4f4; /* light background to highlight the menu */
+  overflow: hidden;
+  background-color: #fdfdfd;
+}
+
+.app::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle at 30% 30%, #30384b, #848484, #4d9a85);
+  animation: blobMotion 30s ease-in-out infinite;
+  z-index: 0;
+  filter: blur(100px);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@keyframes blobMotion {
+  0% {
+    transform: translate(0%, 0%) scale(1);
+  }
+  33% {
+    transform: translate(10%, -5%) scale(1.05);
+  }
+  66% {
+    transform: translate(-5%, 10%) scale(0.95);
+  }
+  100% {
+    transform: translate(0%, 0%) scale(1);
+  }
 }
 
 /* Floating Header (menu bar) */
 .header {
   background-color: white;
+  color: #30384b;
   padding: 1rem 2rem;
   margin: 1rem auto 2rem auto;
   width: fit-content;
   min-width: 300px;
-  border-radius: 2rem; /* Round edges */
+  border-radius: 2rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Deeper, softer shadow */
   position: relative;
   z-index: 10;
@@ -49,7 +81,7 @@ html,
 }
 
 .nav li:hover {
-  color: #0077ff; /* slight blue highlight on hover */
+  color: #4d9a85; /* slight blue highlight on hover */
 }
 
 /* Main content area */
@@ -57,6 +89,8 @@ html,
   display: flex;
   flex: 1;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 /* Sidebar left */
@@ -66,6 +100,8 @@ html,
   padding: 1rem;
   overflow-y: auto;
   border-right: 1px solid #e0e0e0;
+  position: relative;
+  z-index: 1;
 }
 
 /* Canvas center */
@@ -73,6 +109,11 @@ html,
   flex: 1;
   background-color: #ffffff;
   padding: 1rem;
+  border-radius: 15px;
+  max-height: calc(100vh - 150px); /* Limit height to avoid touching the bottom */
+  overflow-y: auto; /* Ensure scroll if content overflows */
+  position: relative;
+  z-index: 1;
 }
 
 /* Summary right */
@@ -82,4 +123,6 @@ html,
   padding: 1rem;
   overflow-y: auto;
   border-left: 1px solid #e0e0e0;
+  position: relative;
+  z-index: 1;
 }

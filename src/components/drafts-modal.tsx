@@ -60,55 +60,57 @@ export default function DraftsModal({
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {drafts.map((draft) => (
               <div key={draft.id} className="flex flex-col items-center p-4 border rounded shadow">
-                <p className="mb-1 text-sm font-medium text-center">{draft.title || "(Ohne Titel)"}</p>
-                <p className="mb-2 text-xs text-gray-500">{new Date(draft.created_at).toLocaleString()}</p>
-                <button
-                  onClick={() => {
-                    // Hinweis: Ein Canvas-Screenshot pro Draft wäre visuell nützlich, erfordert aber separate Speicherung als Bild in Supabase.
-                    // Neue Struktur: draft.elements enthält das Array, draft.sleeve ist der String
-                    try {
-                      onSelectDraftId("");
+                <p className="mb-1 text-lg font-semibold text-center">{draft.title || "(Ohne Titel)"}</p>
+                <p className="mb-4 text-sm text-gray-600">{new Date(draft.created_at).toLocaleString()}</p>
+                <div className="flex flex-row gap-2 mt-2">
+                  <button
+                    onClick={() => {
+                      // Hinweis: Ein Canvas-Screenshot pro Draft wäre visuell nützlich, erfordert aber separate Speicherung als Bild in Supabase.
+                      // Neue Struktur: draft.elements enthält das Array, draft.sleeve ist der String
+                      try {
+                        onSelectDraftId("");
 
-                      if (!draft.elements || !Array.isArray(draft.elements)) {
-                        throw new Error("Draft data is empty or not an array");
+                        if (!draft.elements || !Array.isArray(draft.elements)) {
+                          throw new Error("Draft data is empty or not an array");
+                        }
+
+                        const itemsArray: CanvasItem[] = draft.elements;
+                        const sleeveSrc: string = draft.sleeve || "";
+
+                        setSleeveSrc(sleeveSrc);
+                        onLoadDraft(itemsArray, sleeveSrc, draft.id, draft.title);
+                        toast.success("Entwurf geladen");
+                        onSelectDraftId(draft.id);
+                        onClose();
+                      } catch (err) {
+                        console.error("Error at parsing of the draft:", err);
                       }
+                    }}
+                    className="px-4 py-2 text-sm text-white rounded bg-agrotropic-blue hover:brightness-110"
+                  >
+                    Laden
+                  </button>
+                  <button
+                    onClick={async () => {
+                      try {
+                        const { error } = await supabase.from("user_drafts").delete().eq("id", draft.id);
 
-                      const itemsArray: CanvasItem[] = draft.elements;
-                      const sleeveSrc: string = draft.sleeve || "";
+                        if (error) {
+                          throw error;
+                        }
 
-                      setSleeveSrc(sleeveSrc);
-                      onLoadDraft(itemsArray, sleeveSrc, draft.id, draft.title);
-                      toast.success("Entwurf geladen");
-                      onSelectDraftId(draft.id);
-                      onClose();
-                    } catch (err) {
-                      console.error("Error at parsing of the draft:", err);
-                    }
-                  }}
-                  className="px-4 py-2 text-sm text-white bg-green-500 rounded hover:bg-green-600"
-                >
-                  Laden
-                </button>
-                <button
-                  onClick={async () => {
-                    try {
-                      const { error } = await supabase.from("user_drafts").delete().eq("id", draft.id);
-
-                      if (error) {
-                        throw error;
+                        setDrafts((prev) => prev.filter((d) => d.id !== draft.id));
+                        toast.success("Entwurf gelöscht");
+                      } catch (err) {
+                        console.error("Fehler beim Löschen des Entwurfs:", err);
+                        toast.error("Fehler beim Löschen");
                       }
-
-                      setDrafts((prev) => prev.filter((d) => d.id !== draft.id));
-                      toast.success("Entwurf gelöscht");
-                    } catch (err) {
-                      console.error("Fehler beim Löschen des Entwurfs:", err);
-                      toast.error("Fehler beim Löschen");
-                    }
-                  }}
-                  className="px-4 py-2 mt-2 text-sm text-white bg-red-500 rounded hover:bg-red-600"
-                >
-                  Löschen
-                </button>
+                    }}
+                    className="px-4 py-2 text-sm text-white bg-red-500 rounded hover:bg-red-600"
+                  >
+                    Löschen
+                  </button>
+                </div>
               </div>
             ))}
           </div>

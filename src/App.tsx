@@ -11,14 +11,15 @@ import MyDesignsModal from "./components/designs";
 import { saveDraftToSupabase } from "./lib/saveDraftToSupabase";
 import DraftsModal from "./components/drafts-modal";
 import SaveDraftModal from "./components/save-draft-modal";
+import { ToastContainer } from "react-toastify";
+import { showToastOnceStrict } from "./lib/toastutils";
+import "react-toastify/dist/ReactToastify.css";
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 function App() {
   const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1.webp");
   const [showDraftsModal, setShowDraftsModal] = useState(false);
-  const [showSaveModal, setShowSaveModal] = useState(false);
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [showSaveDraftModal, setShowSaveDraftModal] = useState(false);
   const [canvasItems, setCanvasItems] = useState<any[]>([
     {
@@ -104,9 +105,8 @@ function App() {
     }
   };
   useEffect(() => {
-    // Check on page load if a user is already logged in
-    supabase.auth.getUser().then(({ data }) => {
-      const user = data.user;
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const user = session?.user;
       if (user) {
         setUser({
           ...user,
@@ -114,6 +114,8 @@ function App() {
             name: user.user_metadata?.name ?? user.user_metadata?.full_name ?? "User",
           },
         });
+      } else {
+        setUser(null); // Kein Session-Token? -> nicht eingeloggt
       }
     });
 
@@ -142,52 +144,59 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen app">
-      <header className="p-4 text-black bg-green-500 header">
-        <nav className="nav">
+      <header className="p-4 text-white header">
+        <nav className="nav backdrop-blur-sm ">
           <ul className="flex items-center space-x-6">
-            <li onClick={() => window.location.reload()} className="cursor-pointer">
+            <li onClick={() => window.location.reload()} className="transition-colors duration-200 cursor-pointer ">
               Start new
             </li>
             <li>
-              <span onClick={() => setShowDraftsModal(true)} className="cursor-pointer ">
+              <span
+                onClick={() => {
+                  if (user) {
+                    setShowDraftsModal(true);
+                  } else {
+                    showToastOnceStrict("login-required", "Please login first", "info");
+                    setShowLoginModal(true);
+                  }
+                }}
+                className="transition-colors duration-200 cursor-pointer"
+              >
                 Drafts
               </span>
             </li>
-            <li onClick={() => setShowMyDesigns(true)} className="cursor-pointer">
+            <li
+              onClick={() => {
+                if (user) {
+                  setShowMyDesigns(true);
+                } else {
+                  showToastOnceStrict("login-required", "Please login first", "info");
+                  setShowLoginModal(true);
+                }
+              }}
+              className="transition-colors duration-200 cursor-pointer"
+            >
               Designs
             </li>
             <li>
               {user ? (
-                <span onClick={() => setShowUserMenu(true)} className="cursor-pointer " role="button" tabIndex={0}>
+                <span
+                  onClick={() => setShowUserMenu(true)}
+                  className="transition-colors duration-200 cursor-pointer"
+                  role="button"
+                  tabIndex={0}
+                >
                   👋 Hello, {user.user_metadata?.name || "User"}
                 </span>
               ) : (
-                <span onClick={() => setShowLoginModal(true)} className="cursor-pointer " role="button" tabIndex={0}>
+                <span
+                  onClick={() => setShowLoginModal(true)}
+                  className="transition-colors duration-200 cursor-pointer"
+                  role="button"
+                  tabIndex={0}
+                >
                   Login
                 </span>
-              )}
-
-              {showUserMenu && (
-                <UserMenuModal
-                  user={user}
-                  onClose={() => setShowUserMenu(false)}
-                  onLogout={async () => {
-                    await supabase.auth.signOut();
-                    setUser(null);
-                    setShowUserMenu(false);
-                  }}
-                  refreshUser={async () => {
-                    const { data } = await supabase.auth.getUser();
-                    if (data.user) {
-                      setUser({
-                        ...data.user,
-                        user_metadata: {
-                          name: data.user.user_metadata?.name ?? data.user.user_metadata?.full_name ?? "User",
-                        },
-                      });
-                    }
-                  }}
-                />
               )}
             </li>
           </ul>
@@ -195,7 +204,7 @@ function App() {
       </header>
 
       <main className="flex flex-1 overflow-hidden main">
-        <aside className="w-1/4 max-w-xs p-4 overflow-y-auto bg-gray-100 sidebar-left">
+        <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-left">
           <h2 className="mb-4 text-xl font-semibold">Assets</h2>
           <SidebarLeft
             setCanvasItems={setCanvasItems}
@@ -219,7 +228,7 @@ function App() {
           />
         </section>
 
-        <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-right bg-gray-50">
+        <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-right">
           <SidebarRight
             items={canvasItems}
             setCanvasItems={setCanvasItems}
@@ -268,6 +277,41 @@ function App() {
       )}
 
       {showSaveDraftModal && <SaveDraftModal onClose={() => setShowSaveDraftModal(false)} onSave={saveDraft} />}
+      {/* ToastContainer: Displays notification toasts */}
+      <ToastContainer
+        limit={3}
+        position="bottom-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        closeOnClick
+        draggable
+        pauseOnHover
+        closeButton={true}
+        newestOnTop
+      />
+
+      {user && showUserMenu && (
+        <UserMenuModal
+          user={user}
+          onClose={() => setShowUserMenu(false)}
+          onLogout={async () => {
+            await supabase.auth.signOut();
+            setUser(null);
+            setShowUserMenu(false);
+          }}
+          refreshUser={async () => {
+            const { data } = await supabase.auth.getUser();
+            if (data.user) {
+              setUser({
+                ...data.user,
+                user_metadata: {
+                  name: data.user.user_metadata?.name ?? data.user.user_metadata?.full_name ?? "User",
+                },
+              });
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

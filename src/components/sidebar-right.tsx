@@ -1,19 +1,30 @@
-import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CanvasItem } from "./canvas";
-import { useEffect, useState } from "react";
+
+function iconForType(type: string): string {
+  switch (type) {
+    case "sleeve":
+      return "📦";
+    case "flower":
+      return "🌹";
+    case "sprayrose":
+      return "💐";
+    case "gypsophilla":
+      return "🌾";
+    case "srilanka":
+      return "🌿";
+    case "plug":
+      return "🔖";
+    case "chrysanthemum":
+      return "🌼";
+    case "filler":
+      return "🍃";
+    default:
+      return " ";
+  }
+}
 
 export default function SidebarRight({
   items,
@@ -30,24 +41,15 @@ export default function SidebarRight({
   const sleeveItem = items.find((item) => item.type === "sleeve");
   const elementItems = items.filter((item) => item.type !== "sleeve");
   const reversedElementItems = [...elementItems].reverse(); // neueste oben
-  const dragItems = sleeveItem
-    ? [...reversedElementItems, sleeveItem]
-    : reversedElementItems;
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
 
     if (active.id !== over?.id) {
-      const oldIndex = reversedElementItems.findIndex(
-        (i) => i.id === active.id
-      );
+      const oldIndex = reversedElementItems.findIndex((i) => i.id === active.id);
       const newIndex = reversedElementItems.findIndex((i) => i.id === over?.id);
 
-      const reordered = arrayMove(
-        reversedElementItems,
-        oldIndex,
-        newIndex
-      ).reverse();
+      const reordered = arrayMove(reversedElementItems, oldIndex, newIndex).reverse();
       const updated = sleeveItem ? [sleeveItem, ...reordered] : reordered;
       setCanvasItems(updated);
     }
@@ -55,13 +57,9 @@ export default function SidebarRight({
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-2">Layers</h2>
+      <h2 className="mb-2 text-xl font-semibold">Layers</h2>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext
           items={reversedElementItems.map((item) => item.id)} // Nur verschiebbare Items
           strategy={verticalListSortingStrategy}
@@ -72,9 +70,7 @@ export default function SidebarRight({
               <SortableItem
                 key={item.id}
                 item={item}
-                onDelete={(id) =>
-                  setCanvasItems((prev) => prev.filter((el) => el.id !== id))
-                }
+                onDelete={(id) => setCanvasItems((prev) => prev.filter((el) => el.id !== id))}
                 selectedItemId={selectedItemId}
                 setSelectedItemId={setSelectedItemId}
               />
@@ -83,19 +79,19 @@ export default function SidebarRight({
         </SortableContext>
       </DndContext>
 
-      {/* ❗ Sleeve-Element immer separat ganz unten */}
+      {/* sleeve item is always at the bottom and the last element */}
       {sleeveItem && (
         <div
           key={sleeveItem.id}
-          className="mt-4 bg-gray-100 text-gray-500 border border-gray-300 px-3 py-2 rounded shadow-sm"
+          className="px-3 py-2 mt-4 text-gray-500 bg-gray-100 border border-gray-300 rounded shadow-sm"
         >
-          {sleeveItem.label} (unterste Ebene)
+          📦 {sleeveItem.label} (unterste Ebene)
         </div>
       )}
     </div>
   );
 }
-// Typanpassung & Übergabe der Löschfunktion
+// change of type & handover of delete function
 function SortableItem({
   item,
   onDelete,
@@ -108,14 +104,7 @@ function SortableItem({
   setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
   // useSortable liefert Props für Drag&Drop, die du auf den Hauptcontainer packen musst
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: item.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
 
   // Setze transform/transition für Drag Animation
   const style: React.CSSProperties = {
@@ -136,7 +125,8 @@ function SortableItem({
         selectedItemId === item.id ? "ring-2 ring-blue-400" : ""
       }`}
     >
-      <span className="text-sm truncate">
+      <span className="flex items-center gap-2 text-sm truncate">
+        <span>{iconForType(item.type)}</span>
         {item.label ||
           item.src
             .split("/")
@@ -152,7 +142,7 @@ function SortableItem({
         }}
         onPointerDown={(e) => e.stopPropagation()} // verhindert Drag-Start auf Button
         type="button"
-        className="ml-2 text-red-600 hover:text-red-800 bg-transparent border-0 text-xl p-0 cursor-pointer"
+        className="p-0 ml-2 text-xl text-red-600 bg-transparent border-0 cursor-pointer hover:text-red-800"
       >
         🗑️
       </button>

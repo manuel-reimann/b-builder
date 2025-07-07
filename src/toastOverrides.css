@@ -1,0 +1,7 @@
+.custom-toast {
+  pointer-events: all;
+}
+
+.toast-body {
+  font-size: 14px;
+}

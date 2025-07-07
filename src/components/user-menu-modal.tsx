@@ -3,10 +3,7 @@ import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import leoProfanity from "leo-profanity";
 
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL!,
-  import.meta.env.VITE_SUPABASE_ANON_KEY!
-);
+const supabase = createClient(import.meta.env.VITE_SUPABASE_URL!, import.meta.env.VITE_SUPABASE_ANON_KEY!);
 
 export default function UserMenuModal({
   user,
@@ -26,15 +23,7 @@ export default function UserMenuModal({
   const handleUpdate = async () => {
     setLoading(true);
     leoProfanity.loadDictionary("de");
-    leoProfanity.add([
-      "arsch",
-      "hurensohn",
-      "wichser",
-      "ficker",
-      "scheisse",
-      "fotze",
-      "bastard",
-    ]);
+    leoProfanity.add(["arsch", "arschloch", "hurensohn", "wichser", "ficker", "scheisse", "fotze", "bastard"]);
     if (leoProfanity.check(name)) {
       setMessage("Bitte verwende keine unangebrachten Begriffe.");
       setLoading(false);
@@ -49,45 +38,39 @@ export default function UserMenuModal({
       setMessage("Update failed");
     } else {
       setMessage("Name updated");
-      refreshUser(); // hole neue Userdaten
+      refreshUser(); // get new userdate
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg w-96">
-        <h2 className="text-lg font-semibold mb-4">Your Profile</h2>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
+      <div className="bg-white w-96 max-h-[80vh] overflow-y-auto p-6 rounded shadow-lg relative">
+        <h2 className="mb-4 text-lg font-semibold">Your Profile</h2>
 
         <label className="block mb-2 text-sm font-medium">Name</label>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full border px-3 py-2 mb-4 rounded"
+          className="w-full px-3 py-2 mb-4 border rounded"
           placeholder="Enter name"
         />
 
-        {message && <p className="text-sm mb-2">{message}</p>}
+        {message && <p className="mb-2 text-sm">{message}</p>}
 
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <button
             onClick={handleUpdate}
             disabled={loading}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
           >
             {loading ? "Updating..." : "Update Name"}
           </button>
 
-          <button
-            onClick={onLogout}
-            className="text-red-600 hover:underline text-sm"
-          >
+          <button onClick={onLogout} className="text-sm text-red-600 hover:underline">
             Logout
           </button>
 
-          <button
-            onClick={onClose}
-            className="text-gray-600 hover:underline text-sm"
-          >
+          <button onClick={onClose} className="text-sm text-gray-600 hover:underline">
             Close
           </button>
         </div>
