@@ -7,13 +7,11 @@ type Data = Record<string, DataItem[]>;
 
 const data: Data = {
   Sleeves: [
-    { label: "Braun", src: "/img/sleeves/sleeve1.webp", type: "sleeve" },
-    { label: "Blau", src: "/img/sleeves/sleeve2.webp", type: "sleeve" },
-    { label: "Pink", src: "/img/sleeves/sleeve3.webp", type: "sleeve" },
-    { label: "VM 961", src: "/img/sleeves/vm961.webp", type: "sleeve" },
-    { label: "VM 968", src: "/img/sleeves/vm968.webp", type: "sleeve" },
-    { label: "VM 1029", src: "/img/sleeves/vm1029.webp", type: "sleeve" },
-    { label: "VM 1033", src: "/img/sleeves/vm1033.webp", type: "sleeve" },
+    { label: "Braun", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve" },
+    { label: "VM 961", src: "/img/sleeves/vm961_v2.webp", type: "sleeve" },
+    { label: "VM 968", src: "/img/sleeves/vm968_v2.webp", type: "sleeve" },
+    { label: "VM 1029", src: "/img/sleeves/vm1029_v2.webp", type: "sleeve" },
+    { label: "VM 1033", src: "/img/sleeves/vm1033_v2.webp", type: "sleeve" },
   ],
   Roses: [
     { label: "Aly", src: "/img/roses/aly.webp", type: "flower" },
@@ -47,25 +45,29 @@ const data: Data = {
     { label: "Sweet Dreams", src: "/img/sprayroses/sweet_dreams.webp", type: "sprayrose" },
   ],
   Gypsophilla: [
-    { label: "Gypsophilla Weiss", src: "/img/gypsophilla.webp", type: "gypsophilla" },
-    { label: "Gypsophilla Rosa", src: "/img/gypsophilla-rosa.webp", type: "gypsophilla" },
+    { label: "Gypsophilla Weiss", src: "/img/gyps/white.webp", type: "gypsophilla" },
+    { label: "Gypsophilla Rosa", src: "/img/gyps/pink.webp", type: "gypsophilla" },
   ],
   "Sri Lanka": [
-    { label: "Palmblatt", src: "/img/srilanka/palmblatt.webp", type: "srilanka" },
-    { label: "Monstera", src: "/img/srilanka/monstera.webp", type: "srilanka" },
+    { label: "Hypericum", src: "/img/srilanka/hypericum.webp", type: "srilanka" },
+    { label: "Roter Wedel", src: "/img/srilanka/rot.webp", type: "srilanka" },
+    { label: "Sanseverie", src: "/img/srilanka/sanseverie.webp", type: "srilanka" },
   ],
   "Flower Plugs": [
-    { label: "Herzstecker", src: "/img/stecker/herzstecker.webp", type: "plug" },
-    { label: "Happy Birthday", src: "/img/stecker/stecker-hb.webp", type: "plug" },
+    { label: "Herzstecker", src: "/img/flowerplugs/herz_glaenzend.webp", type: "plug" },
+    { label: "Osterhase", src: "/img/flowerplugs/ostern.webp", type: "plug" },
+    { label: "Silvester", src: "/img/flowerplugs/silvester.webp", type: "plug" },
+    { label: "Silvester 2", src: "/img/flowerplugs/silvester2.webp", type: "plug" },
   ],
   Chrysanthemums: [
-    { label: "Santini Green", src: "/img/chrysanthemen/santini-green.webp", type: "chrysanthemum" },
-    { label: "Santini White", src: "/img/chrysanthemen/santini-white.webp", type: "chrysanthemum" },
+    { label: "Chrysanthemums White", src: "/img/chrysanthemums/chrysanthemums_white.webp", type: "chrysanthemum" },
+    { label: "Chrysanthemums Purple", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum" },
   ],
   Filler: [
     { label: "Eucalyptus", src: "/img/filler/eucalyptus.webp", type: "filler" },
-    { label: "Limonium", src: "/img/filler/limonium.webp", type: "filler" },
+    { label: "Delphinium", src: "/img/filler/delphinium.webp", type: "filler" },
     { label: "Lillie", src: "/img/filler/lillie.webp", type: "filler" },
+    { label: "Veronica", src: "/img/filler/veronica.webp", type: "filler" },
   ],
 };
 

@@ -22,11 +22,11 @@ export default function SaveDraftModal({ onClose, onSave }: SaveDraftModalProps)
           onChange={(e) => setTitle(e.target.value)}
         />
         <div className="flex justify-end space-x-2">
-          <button className="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600" onClick={onClose}>
+          <button className="px-4 py-2 text-white bg-red-400 rounded hover:bg-red-500" onClick={onClose}>
             Abbrechen
           </button>
           <button
-            className="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700"
+            className="px-4 py-2 text-white rounded bg-agrotropic-blue hover:bg-gray-800"
             onClick={() => {
               onSave(title);
               toast.success("Entwurf gespeichert!");

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+// Root of the app: manages layout and state for the entire application
 import "./App.css";
 import SidebarLeft from "./components/sidebar-left";
 import SidebarRight from "./components/sidebar-right";
@@ -12,15 +13,20 @@ import { saveDraftToSupabase } from "./lib/saveDraftToSupabase";
 import DraftsModal from "./components/drafts-modal";
 import SaveDraftModal from "./components/save-draft-modal";
 import { ToastContainer } from "react-toastify";
-import { showToastOnceStrict } from "./lib/toastutils";
+import { showToastOnceStrict } from "./lib/toastUtils";
 import "react-toastify/dist/ReactToastify.css";
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 function App() {
-  const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1.webp");
+  // Sleeve image source state
+  const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1_v2.webp");
+
+  // Modal visibility states
   const [showDraftsModal, setShowDraftsModal] = useState(false);
   const [showSaveDraftModal, setShowSaveDraftModal] = useState(false);
+
+  // Canvas items state (elements on the canvas)
   const [canvasItems, setCanvasItems] = useState<any[]>([
     {
       id: "sleeve",
@@ -35,14 +41,24 @@ function App() {
       label: "Braun",
     },
   ]);
+
+  // Selected item and draft IDs
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [selectedDraftId, setSelectedDraftId] = useState<string | null>(null);
+
+  // Ref for canvas container DOM element
   const canvasContainerRef = useRef<HTMLDivElement>(null!);
+
+  // Modal visibility states for login/signup/user menu/my designs
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMyDesigns, setShowMyDesigns] = useState(false);
+
+  // User state
   const [user, setUser] = useState<any>(null);
+
+  // Current draft ID and title state
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
   const [currentDraftTitle, setCurrentDraftTitle] = useState<string | null>(null);
 
@@ -104,6 +120,8 @@ function App() {
       console.log("Draft updated successfully.");
     }
   };
+
+  // Effect to fetch and listen for user session/auth changes
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       const user = session?.user;
@@ -130,6 +148,7 @@ function App() {
     };
   }, []);
 
+  // Effect to sync sleeveSrc changes to canvas items
   useEffect(() => {
     setCanvasItems((prevItems) => {
       const updatedItems = prevItems.map((item) => {
@@ -142,6 +161,7 @@ function App() {
     });
   }, [sleeveSrc]);
 
+  // Main layout structure: header, main content (sidebars and canvas), and modals
   return (
     <div className="flex flex-col h-screen app">
       <header className="p-4 text-white header">
@@ -204,7 +224,8 @@ function App() {
       </header>
 
       <main className="flex flex-1 overflow-hidden main">
-        <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-left">
+        {/* Sidebar Left: asset selection and sleeve source control */}
+        <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-left scrollbar-none">
           <h2 className="mb-4 text-xl font-semibold">Assets</h2>
           <SidebarLeft
             setCanvasItems={setCanvasItems}
@@ -213,6 +234,7 @@ function App() {
           />
         </aside>
 
+        {/* Canvas area: main design canvas */}
         <section className="flex items-center justify-center flex-grow overflow-hidden bg-white canvas-area">
           <Canvas
             items={canvasItems}
@@ -228,6 +250,7 @@ function App() {
           />
         </section>
 
+        {/* Sidebar Right: properties and controls for selected canvas items */}
         <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-right">
           <SidebarRight
             items={canvasItems}
@@ -269,10 +292,11 @@ function App() {
               setSleeveSrc(sleeveSrc);
             }
             setCurrentDraftId(draftId ?? null);
-            setCurrentDraftTitle(draftTitle ?? null); // ← NEU
+            setCurrentDraftTitle(draftTitle ?? null);
           }}
           setSleeveSrc={setSleeveSrc}
           onSelectDraftId={(draftId: string | null | undefined) => setCurrentDraftId(draftId ?? null)}
+          currentDraftId={currentDraftId}
         />
       )}
 

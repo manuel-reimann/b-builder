@@ -50,6 +50,19 @@ html,
   }
 }
 
+/* Hide scrollbar for sidebar */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+input {
+  background: #d7d7d7;
+  color: black;
+}
 /* Floating Header (menu bar) */
 .header {
   background-color: white;
@@ -108,7 +121,6 @@ html,
 .canvas-area {
   flex: 1;
   background-color: #ffffff;
-  padding: 1rem;
   border-radius: 15px;
   max-height: calc(100vh - 150px); /* Limit height to avoid touching the bottom */
   overflow-y: auto; /* Ensure scroll if content overflows */

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer } from "react-konva";
 import StaticSleeveImage from "./static-sleeve-image";
 import CanvasImage from "./canvas-image";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Defines the structure of each item placed on the canvas
@@ -179,7 +179,7 @@ export default function Canvas({
               onClick={() => {
                 showSaveDraftModal();
               }}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-yellow-700 bg-green-100 hover:bg-green-200 rounded-md"
+              className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-blue hover:bg-gray-500 rounded-md"
             >
               💾 <span>Save draft</span>
             </button>
@@ -192,7 +192,7 @@ export default function Canvas({
               setSelectedItemId(null);
               toast.info("Canvas wurde zurückgesetzt");
             }}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-yellow-700 bg-yellow-100 hover:bg-yellow-200 rounded-md"
+            className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-gray hover:bg-gray-400 rounded-md"
           >
             ♻️ <span>Reset</span>
           </button>
@@ -201,7 +201,7 @@ export default function Canvas({
             onClick={() => {
               console.log("Generate clicked");
             }}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-green-700 bg-green-100 hover:bg-green-200 rounded-md"
+            className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-green hover:bg-green-900 rounded-md"
           >
             🎨 <span>Generate</span>
           </button>

@@ -29,7 +29,7 @@ export async function saveDraftToSupabase(
     // user_id, title, elements, sleeve
     const payload = {
       user_id: userId,
-      title: title ?? "Untitled",
+      title: title?.trim() || "Untitled",
       elements: JSON.parse(JSON.stringify(items)), // Avoid circular references
       sleeve: sleeveSrc,
     };
