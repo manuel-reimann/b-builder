@@ -1,6 +1,4 @@
-// save-draft-modal.tsx
 import { useState } from "react";
-import { toast } from "react-toastify";
 
 type SaveDraftModalProps = {
   onClose: () => void;
@@ -28,8 +26,11 @@ export default function SaveDraftModal({ onClose, onSave }: SaveDraftModalProps)
           <button
             className="px-4 py-2 text-white rounded bg-agrotropic-blue hover:bg-gray-800"
             onClick={() => {
-              onSave(title);
-              toast.success("Entwurf gespeichert!");
+              const trimmedTitle = title.trim();
+              if (trimmedTitle) {
+                onSave(trimmedTitle);
+                onClose(); // Close modal immediately after save
+              }
             }}
             disabled={!title.trim()}
           >

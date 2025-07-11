@@ -41,6 +41,8 @@ export default function Canvas({
   showSaveDraftModal,
   currentDraftId,
   currentDraftTitle,
+  hoveredItemId,
+  setHoveredItemId,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
@@ -52,9 +54,12 @@ export default function Canvas({
   showSaveDraftModal: () => void;
   currentDraftId: string | null;
   currentDraftTitle: string | null;
+  hoveredItemId: string | null;
+  setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
   // Tracks the currently selected item ID within the canvas
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
   // Fixed design dimensions for the canvas
   const DESIGN_WIDTH = 800;
   const DESIGN_HEIGHT = 800;
@@ -96,7 +101,7 @@ export default function Canvas({
         setCanvasItems(filtered);
         setSelectedId(null);
       } else {
-        console.log("Löschen nicht erlaubt für sleeve.");
+        console.log("Deleting sleeve items is not allowed.");
       }
     }
   };
@@ -108,7 +113,7 @@ export default function Canvas({
     };
   }, [selectedId, items]);
 
-  // Calculate scaling factors to keep canvas content proportional and centered
+  // Calculate scaling to keep canvas content proportional and centered
   const scaleX = dimensions.width / DESIGN_WIDTH;
   const scaleY = dimensions.height / DESIGN_HEIGHT;
   const scale = Math.min(scaleX, scaleY);
@@ -125,7 +130,58 @@ export default function Canvas({
 
   // JSX structure of the canvas and control buttons
   return (
-    <div ref={containerRef} className="relative w-full h-full">
+    <div
+      ref={containerRef}
+      className="relative w-full h-full"
+      onDragOver={(e) => e.preventDefault()} // Allow drop
+      onDrop={(e) => {
+        e.preventDefault();
+        const data = e.dataTransfer.getData("application/json");
+        if (!data) return;
+
+        const { src, label, type } = JSON.parse(data);
+
+        const boundingRect = containerRef.current?.getBoundingClientRect();
+        if (!boundingRect) return;
+
+        // Use a transparent ghost image to suppress browser default previews
+        const transparentImg = new Image();
+        transparentImg.src =
+          "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
+        document.body.appendChild(transparentImg);
+        e.dataTransfer.setDragImage(transparentImg, 0, 0);
+        setTimeout(() => {
+          document.body.removeChild(transparentImg);
+        }, 0);
+
+        const x = (e.clientX - boundingRect.left - (dimensions.width - DESIGN_WIDTH * scale) / 2) / scale;
+        const y = (e.clientY - boundingRect.top - (dimensions.height - DESIGN_HEIGHT * scale) / 2) / scale;
+
+        const img = new window.Image();
+        img.src = src;
+
+        img.onload = () => {
+          const maxHeight = 150;
+          const scaleFactor = Math.min(1, maxHeight / img.height);
+
+          const newItem: CanvasItem = {
+            id: crypto.randomUUID(),
+            src,
+            label,
+            x,
+            y,
+            rotation: 0,
+            scale: scaleFactor,
+            maxWidth: maxHeight,
+            maxHeight,
+            type,
+            sleeveSrc: "",
+          };
+
+          setCanvasItems((prev) => [...prev, newItem]);
+        };
+      }}
+    >
       {/* Displays the current draft name if available */}
       {currentDraftTitle && (
         <div className="fixed z-20 px-3 py-1 text-sm text-gray-700 rounded shadow top-4 left-4 bg-white/80">
@@ -142,8 +198,14 @@ export default function Canvas({
         x={(dimensions.width - DESIGN_WIDTH * scale) / 2}
         y={(dimensions.height - DESIGN_HEIGHT * scale) / 2}
         ref={stageRef}
+        onMouseDown={(e) => {
+          // Deselect if background or StaticSleeveImage ("sleeve") is clicked
+          if (e.target === e.target.getStage() || e.target.name() === "sleeve") {
+            setSelectedItemId(null);
+          }
+        }}
       >
-        {/* Konva Layer: Layer to hold all canvas items */}
+        {/* Konva Layer: Holds all canvas elements including sleeve and draggable items */}
         <Layer>
           {/* StaticSleeveImage: Renders the background sleeve image */}
           <StaticSleeveImage sleeveSrc={sleeveSrc} />
@@ -153,7 +215,10 @@ export default function Canvas({
               key={item.id}
               item={item}
               isSelected={item.id === selectedItemId}
+              isHovered={item.id === hoveredItemId && selectedItemId === null}
               onSelect={(id) => setSelectedItemId(id)}
+              onHover={(id) => setHoveredItemId(id)}
+              onUnhover={() => setHoveredItemId(null)}
               onChange={(newAttrs) => {
                 const updated = items.map((it) => (it.id === item.id ? { ...it, ...newAttrs } : it));
                 setCanvasItems(updated);
@@ -190,7 +255,7 @@ export default function Canvas({
               const filtered = items.filter((item) => item.type === "sleeve");
               setCanvasItems(filtered);
               setSelectedItemId(null);
-              toast.info("Canvas wurde zurückgesetzt");
+              toast.info("Canvas was reset");
             }}
             className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-gray hover:bg-gray-400 rounded-md"
           >

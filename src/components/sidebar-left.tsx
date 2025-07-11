@@ -17,7 +17,6 @@ const data: Data = {
     { label: "Aly", src: "/img/roses/aly.webp", type: "flower" },
     { label: "Aurora", src: "/img/roses/aurora.webp", type: "flower" },
     { label: "Bit More", src: "/img/roses/bit_more.webp", type: "flower" },
-    { label: "Candy Cane", src: "/img/roses/candy_cane.webp", type: "flower" },
     { label: "Devotion", src: "/img/roses/devotion.webp", type: "flower" },
     { label: "Esperance", src: "/img/roses/esperance.webp", type: "flower" },
     { label: "Fascination", src: "/img/roses/fascination.webp", type: "flower" },
@@ -152,6 +151,22 @@ export default function SidebarLeft({
                   <div
                     key={label}
                     onClick={() => handleAddImage(src, label, type)}
+                    draggable
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData("application/json", JSON.stringify({ src, label, type }));
+
+                      // Use transparent ghost to suppress drag preview
+                      const img = new Image();
+                      img.src =
+                        "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
+                      img.style.position = "absolute";
+                      img.style.top = "-1000px";
+                      document.body.appendChild(img);
+                      e.dataTransfer.setDragImage(img, 0, 0);
+                      setTimeout(() => {
+                        document.body.removeChild(img);
+                      }, 0);
+                    }}
                     className="flex flex-col items-center w-full p-3 text-center transition-all duration-300 rounded-lg cursor-pointer hover:bg-gray-100 hover:backdrop-blur-sm"
                   >
                     <img src={src} alt={label} className="object-contain w-16 h-16 mb-1" />

@@ -46,6 +46,9 @@ function App() {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [selectedDraftId, setSelectedDraftId] = useState<string | null>(null);
 
+  // Hovered item state
+  const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
+
   // Ref for canvas container DOM element
   const canvasContainerRef = useRef<HTMLDivElement>(null!);
 
@@ -230,7 +233,7 @@ function App() {
           <SidebarLeft
             setCanvasItems={setCanvasItems}
             canvasContainerRef={canvasContainerRef}
-            setSleeveSrc={setSleeveSrc} // ← NEU!
+            setSleeveSrc={setSleeveSrc}
           />
         </aside>
 
@@ -247,6 +250,8 @@ function App() {
             showSaveDraftModal={() => setShowSaveDraftModal(true)}
             currentDraftId={currentDraftId}
             currentDraftTitle={currentDraftTitle}
+            hoveredItemId={hoveredItemId}
+            setHoveredItemId={setHoveredItemId}
           />
         </section>
 
@@ -257,6 +262,7 @@ function App() {
             setCanvasItems={setCanvasItems}
             selectedItemId={selectedItemId}
             setSelectedItemId={setSelectedItemId}
+            hoveredItemId={hoveredItemId}
           />
         </aside>
       </main>

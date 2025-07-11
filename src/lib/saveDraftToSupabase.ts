@@ -27,19 +27,28 @@ export async function saveDraftToSupabase(
   try {
     // Only include fields that exist in the Supabase schema for user_drafts:
     // user_id, title, elements, sleeve
-    const payload = {
+    const basePayload = {
       user_id: userId,
-      title: title?.trim() || "Untitled",
-      elements: JSON.parse(JSON.stringify(items)), // Avoid circular references
+      elements: JSON.parse(JSON.stringify(items)),
       sleeve: sleeveSrc,
+    };
+
+    const insertPayload = {
+      ...basePayload,
+      title: title?.trim() || "Untitled",
+    };
+
+    const updatePayload = {
+      ...basePayload,
+      ...(title && title.trim() ? { title: title.trim() } : {}),
     };
 
     let response;
 
     if (draftId) {
-      response = await supabase.from("user_drafts").update(payload).eq("id", draftId).eq("user_id", userId);
+      response = await supabase.from("user_drafts").update(updatePayload).eq("id", draftId).eq("user_id", userId);
     } else {
-      response = await supabase.from("user_drafts").insert(payload).select("id").single();
+      response = await supabase.from("user_drafts").insert(insertPayload).select("id").single();
     }
 
     if (response.error) {

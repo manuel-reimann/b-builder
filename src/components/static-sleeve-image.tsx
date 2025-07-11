@@ -12,10 +12,10 @@ export default function StaticSleeveImage({ sleeveSrc }: { sleeveSrc: string }) 
   useEffect(() => {
     if (!image || !imageRef.current) return;
 
-    // Skaliere Sleeve innerhalb des festen virtuellen Bereichs
-    const scale = Math.min((DESIGN_WIDTH * 0.95) / image.width, (DESIGN_HEIGHT * 0.95) / image.height);
+    // Scale the sleeve image to fit within a virtual area
+    const scale = Math.min((DESIGN_WIDTH * 0.9) / image.width, (DESIGN_HEIGHT * 0.95) / image.height);
 
-    // Zentriere innerhalb des virtuellen Bereichs
+    // Center the sleeve image within the virtual canvas
     imageRef.current.scale({ x: scale, y: scale });
     imageRef.current.position({
       x: (DESIGN_WIDTH - image.width * scale) / 2,
@@ -25,5 +25,6 @@ export default function StaticSleeveImage({ sleeveSrc }: { sleeveSrc: string }) 
 
   if (!image) return null;
 
-  return <KonvaImage image={image} ref={imageRef} />;
+  // Render the static sleeve image and set a name for interaction logic
+  return <KonvaImage image={image} ref={imageRef} name="sleeve" />;
 }

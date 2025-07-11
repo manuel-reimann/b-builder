@@ -6,12 +6,18 @@ import { CanvasItem } from "./canvas";
 export default function CanvasImage({
   item,
   isSelected,
+  isHovered,
   onSelect,
+  onHover,
+  onUnhover,
   onChange,
 }: {
   item: CanvasItem;
   isSelected: boolean;
-  onSelect: (id: string) => void; // ← anpassen
+  isHovered: boolean;
+  onSelect: (id: string) => void;
+  onHover: (id: string) => void;
+  onUnhover: () => void;
   onChange: (attrs: Partial<CanvasItem>) => void;
 }) {
   const shapeRef = useRef<any>(null);
@@ -28,11 +34,11 @@ export default function CanvasImage({
       onChange({ scale: scaleFactor });
     }
 
-    if (isSelected && trRef.current && shapeRef.current) {
+    if ((isSelected || isHovered) && trRef.current && shapeRef.current) {
       trRef.current.nodes([shapeRef.current]);
       trRef.current.getLayer()?.batchDraw();
     }
-  }, [image, isSelected]);
+  }, [image, isSelected, isHovered]);
 
   if (item.type === "sleeve") return null;
 
@@ -50,6 +56,7 @@ export default function CanvasImage({
         onClick={() => onSelect(item.id)}
         onTap={() => onSelect(item.id)}
         onDragEnd={(e) => {
+          onSelect(item.id);
           onChange({ x: e.target.x(), y: e.target.y() });
         }}
         onTransformEnd={() => {
@@ -59,8 +66,16 @@ export default function CanvasImage({
             rotation: node.rotation(),
           });
         }}
+        onMouseEnter={() => {
+          onHover(item.id);
+        }}
+        onMouseLeave={() => {
+          onUnhover();
+        }}
+        stroke="red"
+        strokeWidth={0.5}
       />
-      {isSelected && <Transformer ref={trRef} rotateEnabled={true} />}
+      {(isSelected || isHovered) && <Transformer ref={trRef} rotateEnabled={true} />}
     </>
   );
 }

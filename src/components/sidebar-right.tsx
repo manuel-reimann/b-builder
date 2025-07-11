@@ -31,11 +31,13 @@ export default function SidebarRight({
   setCanvasItems,
   selectedItemId,
   setSelectedItemId,
+  hoveredItemId,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
   selectedItemId: string | null;
   setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
+  hoveredItemId: string | null;
 }) {
   const sensors = useSensors(useSensor(PointerSensor));
   const sleeveItem = items.find((item) => item.type === "sleeve");
@@ -71,8 +73,18 @@ export default function SidebarRight({
                 key={item.id}
                 item={item}
                 onDelete={(id) => setCanvasItems((prev) => prev.filter((el) => el.id !== id))}
+                onDuplicate={(item) => {
+                  const duplicatedItem = {
+                    ...item,
+                    id: crypto.randomUUID(),
+                    x: item.x + 30,
+                    y: item.y + 30,
+                  };
+                  setCanvasItems((prev) => [...prev, duplicatedItem]);
+                }}
                 selectedItemId={selectedItemId}
                 setSelectedItemId={setSelectedItemId}
+                hoveredItemId={hoveredItemId}
               />
             ))}
           </div>
@@ -95,23 +107,28 @@ export default function SidebarRight({
 function SortableItem({
   item,
   onDelete,
+  onDuplicate,
   selectedItemId,
   setSelectedItemId,
+  hoveredItemId,
 }: {
   item: CanvasItem;
   onDelete: (id: string) => void;
+  onDuplicate: (item: CanvasItem) => void;
   selectedItemId: string | null;
   setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
+  hoveredItemId: string | null;
 }) {
-  // useSortable liefert Props für Drag&Drop, die du auf den Hauptcontainer packen musst
+  // useSortable provides props and refs for enabling drag-and-drop behavior
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
 
-  // Setze transform/transition für Drag Animation
+  // Apply drag animation styles based on current drag state
   const style: React.CSSProperties = {
     transform: transform ? CSS.Transform.toString(transform) : undefined,
     transition,
     opacity: isDragging ? 0.5 : 1,
-    pointerEvents: "auto", // jetzt korrekt getypt
+    // Ensure item remains interactive even when not dragging
+    pointerEvents: "auto",
   };
 
   return (
@@ -121,31 +138,58 @@ function SortableItem({
       {...listeners}
       style={style}
       onClick={() => setSelectedItemId(item.id)}
-      className={`bg-white border border-gray-300 px-3 py-2 rounded shadow-sm flex justify-between items-center cursor-pointer ${
-        selectedItemId === item.id ? "ring-2 ring-blue-400" : ""
+      onMouseEnter={() => {
+        if (hoveredItemId !== item.id) {
+          setSelectedItemId(item.id);
+        }
+      }}
+      onMouseLeave={() => {
+        if (hoveredItemId === item.id) {
+          setSelectedItemId(null);
+        }
+      }}
+      className={`bg-white border border-gray-300 px-3 py-2 rounded shadow-sm flex justify-between items-center cursor-pointer transition-colors duration-150 ${
+        selectedItemId === item.id ? "ring-2 ring-blue-400" : hoveredItemId === item.id ? "bg-gray-200" : ""
       }`}
     >
-      <span className="flex items-center gap-2 text-sm truncate">
-        <span>{iconForType(item.type)}</span>
-        {item.label ||
-          item.src
-            .split("/")
-            .pop()
-            ?.replace(/\.[^/.]+$/, "")}
-      </span>
+      <div className="flex items-center justify-between w-full">
+        <span className="flex items-center gap-2 text-sm truncate">
+          <span>{iconForType(item.type)}</span>
+          {item.label ||
+            item.src
+              .split("/")
+              .pop()
+              ?.replace(/\.[^/.]+$/, "")}
+        </span>
 
-      {/* Button, der Drag-Events stoppt und somit klickbar bleibt */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation(); // verhindern, dass Klick den Drag triggert
-          onDelete(item.id);
-        }}
-        onPointerDown={(e) => e.stopPropagation()} // verhindert Drag-Start auf Button
-        type="button"
-        className="p-0 ml-2 text-xl text-red-600 bg-transparent border-0 cursor-pointer hover:text-red-800"
-      >
-        🗑️
-      </button>
+        <div className="flex items-center gap-2 ml-4">
+          {/* Duplicate button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDuplicate(item);
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+            type="button"
+            className="p-0 text-lg text-gray-500 bg-transparent border-0 cursor-pointer hover:text-gray-700"
+          >
+            📄
+          </button>
+
+          {/* Delete button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(item.id);
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+            type="button"
+            className="p-0 text-lg text-red-600 bg-transparent border-0 cursor-pointer hover:text-red-800"
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

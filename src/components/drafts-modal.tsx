@@ -1,8 +1,9 @@
-// filename: DraftsModal.tsx
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { createClient } from "@supabase/supabase-js";
 import { CanvasItem } from "./canvas";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 // Initialize Supabase client using environment variables
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL!, import.meta.env.VITE_SUPABASE_ANON_KEY!);
@@ -27,6 +28,8 @@ export default function DraftsModal({
   const [drafts, setDrafts] = useState<any[]>([]);
   // Loading state to indicate whether drafts are being fetched
   const [loading, setLoading] = useState(true);
+  // State to track which draft title is being edited
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   // useEffect hook to fetch drafts when the component mounts or when userId changes
   useEffect(() => {
@@ -52,6 +55,13 @@ export default function DraftsModal({
     fetchDrafts();
   }, [userId]);
 
+  // Sort drafts to put the current draft on top
+  const sortedDrafts = [...drafts].sort((a, b) => {
+    if (a.id === currentDraftId) return -1;
+    if (b.id === currentDraftId) return 1;
+    return 0;
+  });
+
   // Render the modal UI
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -59,7 +69,7 @@ export default function DraftsModal({
         {/* Close button for the modal */}
         <button
           onClick={onClose}
-          className="absolute text-2xl text-gray-600 top-2 right-2 hover:text-red-500"
+          className="absolute text-gray-600 top-2 right-2 hover:text-red-500"
           aria-label="Schliessen"
         >
           &times;
@@ -74,49 +84,103 @@ export default function DraftsModal({
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Map over drafts to display each draft */}
-            {drafts.map((draft) => (
-              <div key={draft.id} className="flex flex-col items-center p-4 border rounded shadow">
-                {/* Draft title or placeholder if no title */}
-                <p className="mb-1 text-lg font-semibold text-center">{draft.title || "(Ohne Titel)"}</p>
+            {sortedDrafts.map((draft) => (
+              <div
+                key={draft.id}
+                className={`flex flex-col items-center p-4 border rounded shadow relative ${
+                  draft.id === currentDraftId ? "bg-gray-100 border-agrotropic-blue" : ""
+                }`}
+              >
+                {/* Show pencil icon if this is the current draft */}
+                {draft.id === currentDraftId && editingId !== draft.id && (
+                  <div className="absolute top-2 left-2 text-md text-agrotropic-blue">✏️</div>
+                )}
+                {/* Editable title input and save button for current draft */}
+                {editingId === draft.id ? (
+                  <div className="flex items-center gap-1 mb-1 text-lg font-semibold text-center">
+                    <input
+                      type="text"
+                      className="px-1 text-center border border-gray-300 rounded"
+                      value={draft.title || ""}
+                      onChange={(e) =>
+                        setDrafts((prev) => prev.map((d) => (d.id === draft.id ? { ...d, title: e.target.value } : d)))
+                      }
+                    />
+                    <button
+                      onClick={async () => {
+                        const trimmed = draft.title?.trim();
+                        if (!trimmed) return;
+                        const { error } = await supabase
+                          .from("user_drafts")
+                          .update({ title: trimmed })
+                          .eq("id", draft.id);
+                        if (error) {
+                          toast.error("Fehler beim Umbenennen");
+                          console.error("Rename error:", error);
+                        } else {
+                          toast.success("Titel aktualisiert");
+                        }
+                        setEditingId(null);
+                      }}
+                      title="Speichern"
+                      className="px-1 text-sm text-green-600 hover:text-green-800"
+                    >
+                      ✅
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1 mb-1 text-lg font-semibold text-center">
+                    <span>{draft.title || "(Ohne Titel)"}</span>
+                    <button
+                      onClick={() => setEditingId(draft.id)}
+                      title="Titel bearbeiten"
+                      className="text-gray-500 hover:text-black"
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                  </div>
+                )}
                 {/* Draft creation date formatted */}
                 <p className="mb-4 text-sm text-gray-600">{new Date(draft.created_at).toLocaleString()}</p>
                 <div className="flex flex-row gap-2 mt-2">
-                  {/* Load draft button */}
-                  <button
-                    onClick={() => {
-                      // Load the selected draft into the canvas
-                      try {
-                        // Clear any previously selected draft ID
-                        onSelectDraftId("");
+                  {/* Load draft button: loads the draft into the canvas and closes the modal */}
+                  {draft.id !== currentDraftId && (
+                    <button
+                      onClick={() => {
+                        // Load the selected draft into the canvas
+                        try {
+                          // Clear any previously selected draft ID
+                          onSelectDraftId("");
 
-                        // Validate draft elements exist and are an array
-                        if (!draft.elements || !Array.isArray(draft.elements)) {
-                          throw new Error("Draft data is empty or not an array");
+                          // Validate draft elements exist and are an array
+                          if (!draft.elements || !Array.isArray(draft.elements)) {
+                            throw new Error("Draft data is empty or not an array");
+                          }
+
+                          // Cast draft elements to CanvasItem array and get sleeve source string
+                          const itemsArray: CanvasItem[] = draft.elements;
+                          const sleeveSrc: string = draft.sleeve || "";
+
+                          // Set sleeve image source and load draft items into canvas
+                          setSleeveSrc(sleeveSrc);
+                          onLoadDraft(itemsArray, sleeveSrc, draft.id, draft.title);
+                          // Show success toast notification
+                          toast.success("Entwurf geladen");
+                          // Set the currently selected draft ID
+                          onSelectDraftId(draft.id);
+                          // Close the modal after loading
+                          onClose();
+                        } catch (err) {
+                          // Log any errors during draft parsing/loading
+                          console.error("Error at parsing of the draft:", err);
                         }
-
-                        // Cast draft elements to CanvasItem array and get sleeve source string
-                        const itemsArray: CanvasItem[] = draft.elements;
-                        const sleeveSrc: string = draft.sleeve || "";
-
-                        // Set sleeve image source and load draft items into canvas
-                        setSleeveSrc(sleeveSrc);
-                        onLoadDraft(itemsArray, sleeveSrc, draft.id, draft.title);
-                        // Show success toast notification
-                        toast.success("Entwurf geladen");
-                        // Set the currently selected draft ID
-                        onSelectDraftId(draft.id);
-                        // Close the modal after loading
-                        onClose();
-                      } catch (err) {
-                        // Log any errors during draft parsing/loading
-                        console.error("Error at parsing of the draft:", err);
-                      }
-                    }}
-                    className="px-4 py-2 text-sm text-white rounded bg-agrotropic-blue hover:brightness-110"
-                  >
-                    Laden
-                  </button>
-                  {/* Delete draft button */}
+                      }}
+                      className="px-4 py-2 text-sm text-white rounded bg-agrotropic-blue hover:brightness-110"
+                    >
+                      Laden
+                    </button>
+                  )}
+                  {/* Delete draft button: deletes the draft from the database and updates UI */}
                   <button
                     onClick={async () => {
                       try {
