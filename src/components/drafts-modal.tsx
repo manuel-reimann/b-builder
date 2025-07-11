@@ -106,7 +106,7 @@ export default function DraftsModal({
                         setDrafts((prev) => prev.map((d) => (d.id === draft.id ? { ...d, title: e.target.value } : d)))
                       }
                     />
-                    <button
+                    <span
                       onClick={async () => {
                         const trimmed = draft.title?.trim();
                         if (!trimmed) return;
@@ -123,21 +123,22 @@ export default function DraftsModal({
                         setEditingId(null);
                       }}
                       title="Speichern"
-                      className="px-1 text-sm text-green-600 hover:text-green-800"
+                      className="px-1 text-sm text-green-600 hover:text-green-800 hover:cursor-pointer"
                     >
-                      ✅
-                    </button>
+                      &nbsp;✅
+                    </span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-1 mb-1 text-lg font-semibold text-center">
                     <span>{draft.title || "(Ohne Titel)"}</span>
-                    <button
+                    <span
                       onClick={() => setEditingId(draft.id)}
                       title="Titel bearbeiten"
                       className="text-gray-500 hover:text-black"
                     >
+                      &nbsp;
                       <FontAwesomeIcon icon={faPenToSquare} />
-                    </button>
+                    </span>
                   </div>
                 )}
                 {/* Draft creation date formatted */}
