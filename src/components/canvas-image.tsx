@@ -68,9 +68,17 @@ export default function CanvasImage({
         }}
         onMouseEnter={() => {
           onHover(item.id);
+          const stage = shapeRef.current?.getStage();
+          if (stage) {
+            stage.container().style.cursor = "pointer";
+          }
         }}
         onMouseLeave={() => {
           onUnhover();
+          const stage = shapeRef.current?.getStage();
+          if (stage) {
+            stage.container().style.cursor = "default";
+          }
         }}
         stroke="red"
         strokeWidth={0.5}

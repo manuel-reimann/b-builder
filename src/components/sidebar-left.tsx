@@ -1,11 +1,37 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import { v4 as uuidv4 } from "uuid";
 
-type ItemType = "flower" | "sprayrose" | "gypsophilla" | "srilanka" | "plug" | "chrysanthemum" | "filler" | "sleeve";
+type ItemType =
+  | "flower"
+  | "sprayrose"
+  | "gypsophilla"
+  | "srilanka"
+  | "plug"
+  | "chrysanthemum"
+  | "filler"
+  | "sleeve"
+  | "background";
 type DataItem = { label: string; src: string; type: ItemType };
 type Data = Record<string, DataItem[]>;
-
 const data: Data = {
+  Backgrounds: [
+    { label: "Christmas 1", src: "/img/bgs/christmas1.webp", type: "background" },
+    { label: "Christmas 2", src: "/img/bgs/christmas2.webp", type: "background" },
+    { label: "Christmas 3", src: "/img/bgs/christmas3.webp", type: "background" },
+    { label: "Empty 1", src: "/img/bgs/empty1.webp", type: "background" },
+    { label: "Empty 2", src: "/img/bgs/empty2.webp", type: "background" },
+    { label: "Empty 3", src: "/img/bgs/empty3.webp", type: "background" },
+    { label: "Florist 1", src: "/img/bgs/florist1.webp", type: "background" },
+    { label: "Florist 2", src: "/img/bgs/florist2.webp", type: "background" },
+    { label: "Florist 3", src: "/img/bgs/florist3.webp", type: "background" },
+    { label: "Florist 4", src: "/img/bgs/florist4.webp", type: "background" },
+    { label: "Florist 5", src: "/img/bgs/florist5.webp", type: "background" },
+    { label: "Florist 6", src: "/img/bgs/florist6.webp", type: "background" },
+    { label: "Florist 7", src: "/img/bgs/florist7.webp", type: "background" },
+    { label: "Valentine 1", src: "/img/bgs/valentine1.webp", type: "background" },
+    { label: "Valentine 2", src: "/img/bgs/valentine2.webp", type: "background" },
+    { label: "Valentine 3", src: "/img/bgs/valentine3.webp", type: "background" },
+  ],
   Sleeves: [
     { label: "Braun", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve" },
     { label: "VM 961", src: "/img/sleeves/vm961_v2.webp", type: "sleeve" },
@@ -70,27 +96,38 @@ const data: Data = {
   ],
 };
 
+// const DESIGN_CATEGORIES = ["Backgrounds", "Sleeves"];
+const DESIGN_CATEGORIES = ["Backgrounds", "Sleeves"];
+
 export default function SidebarLeft({
   setCanvasItems,
-  setSleeveSrc, // NEU
+  setSleeveSrc,
+  setBackgroundSrc,
+  canvasContainerRef,
+  showOnly,
 }: {
   setCanvasItems: Function;
-  setSleeveSrc: React.Dispatch<React.SetStateAction<string>>; // NEU
+  setSleeveSrc: React.Dispatch<React.SetStateAction<string>>;
+  setBackgroundSrc: React.Dispatch<React.SetStateAction<string | null>>;
   canvasContainerRef: React.RefObject<HTMLDivElement | null>;
+  showOnly?: string[];
 }) {
   const handleAddImage = (src: string, label: string, type: ItemType = "flower") => {
     const img = new window.Image();
     img.src = src;
 
     img.onload = () => {
-      const maxHeight = 150;
+      // Dynamically set maxHeight depending on type to ensure sleeves appear larger
+      const maxHeight = type === "sleeve" ? 280 : 150;
+      // Calculate scale so that image fits within maxHeight constraint
       const scale = Math.min(1, maxHeight / img.height);
+      // Apply random offset so new items don’t stack at same position
       const randomOffset = () => Math.floor(Math.random() * 300) - 150;
 
       const newItem = {
         id: uuidv4(),
         src,
-        label, // ← WICHTIG: muss hier übergeben werden
+        label,
         x: 400 + randomOffset(),
         y: 300 + randomOffset(),
         rotation: 0,
@@ -100,8 +137,9 @@ export default function SidebarLeft({
         type,
       };
 
+      // If a sleeve is selected, update sleeve background and existing canvas sleeve element
       if (type === "sleeve") {
-        // Bild im Hintergrund ersetzen
+        // change sleeve background
         setSleeveSrc(src);
 
         // Gleichzeitig auch den sleeve im canvasItems aktualisieren:
@@ -112,72 +150,102 @@ export default function SidebarLeft({
               : item
           )
         );
-      } else {
+      }
+      // If a background is selected, update CSS background image dynamically
+      else if (type === "background") {
+        setBackgroundSrc(src);
+        if (canvasContainerRef.current) {
+          canvasContainerRef.current.style.setProperty("background-image", `url(${src})`);
+        }
+        return;
+      }
+      // For all other items, add them as new draggable canvas elements
+      else {
         setCanvasItems((prev: any[]) => [...prev, newItem]);
       }
     };
   };
 
-  return (
-    <Accordion type="single" collapsible className="flex flex-col gap-2">
-      {Object.entries(data).map(([category, items]) => {
-        return (
-          <AccordionItem
-            value={category}
-            key={category}
-            className="rounded-lg transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] overflow-hidden bg-white"
-          >
-            <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group">
-              <div className="flex items-center gap-2">
-                <span className="text-base">
-                  {{
-                    Sleeves: "📦",
-                    Roses: "🌹",
-                    Sprayroses: "💐",
-                    Gypsophilla: "🌾",
-                    "Sri Lanka": "🌿",
-                    "Flower Plugs": "🔖",
-                    Chrysanthemums: "🌼",
-                    Filler: "🍃",
-                  }[category] || "🪴"}
-                </span>
-                <span>{category}</span>
-              </div>
-              <span className="ml-auto transition-transform duration-300 group-data-[state=open]:rotate-180">⌄</span>
-            </AccordionTrigger>
-            <AccordionContent className="transition-all duration-300 ease-in-out">
-              <div className="grid grid-cols-2 gap-3 mt-2">
-                {items.map(({ label, src, type }) => (
-                  <div
-                    key={label}
-                    onClick={() => handleAddImage(src, label, type)}
-                    draggable
-                    onDragStart={(e) => {
-                      e.dataTransfer.setData("application/json", JSON.stringify({ src, label, type }));
+  function renderAccordionItem(
+    category: string,
+    items: DataItem[],
+    handleAddImage: (src: string, label: string, type: ItemType) => void
+  ) {
+    return (
+      <AccordionItem
+        value={category}
+        key={category}
+        className="rounded-lg transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] overflow-hidden bg-white"
+      >
+        <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group">
+          <div className="flex items-center gap-2">
+            <span className="text-base">
+              {{
+                Backgrounds: "🖼️",
+                Sleeves: "📦",
+                Roses: "🌹",
+                Sprayroses: "💐",
+                Gypsophilla: "🌾",
+                "Sri Lanka": "🌿",
+                "Flower Plugs": "🔖",
+                Chrysanthemums: "🌼",
+                Filler: "🍃",
+              }[category] || "🪴"}
+            </span>
+            <span>{category}</span>
+          </div>
+          <span className="ml-auto transition-transform duration-300 group-data-[state=open]:rotate-180">⌄</span>
+        </AccordionTrigger>
+        <AccordionContent className="transition-all duration-300 ease-in-out">
+          <div className="grid grid-cols-2 gap-3 mt-2">
+            {items.map(({ label, src, type }) => (
+              <div
+                key={label}
+                onClick={() => handleAddImage(src, label, type)}
+                draggable={type !== "background" && type !== "sleeve"}
+                onDragStart={(e) => {
+                  if (type === "background" || type === "sleeve") return;
 
-                      // Use transparent ghost to suppress drag preview
-                      const img = new Image();
-                      img.src =
-                        "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
-                      img.style.position = "absolute";
-                      img.style.top = "-1000px";
-                      document.body.appendChild(img);
-                      e.dataTransfer.setDragImage(img, 0, 0);
-                      setTimeout(() => {
-                        document.body.removeChild(img);
-                      }, 0);
-                    }}
-                    className="flex flex-col items-center w-full p-3 text-center transition-all duration-300 rounded-lg cursor-pointer hover:bg-gray-100 hover:backdrop-blur-sm"
-                  >
-                    <img src={src} alt={label} className="object-contain w-16 h-16 mb-1" />
-                    <span className="text-sm">{label.replace(/\.webp$/, "")}</span>
-                  </div>
-                ))}
+                  e.dataTransfer.setData("application/json", JSON.stringify({ src, label, type }));
+
+                  const img = new Image();
+                  img.src =
+                    "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
+                  img.style.position = "absolute";
+                  img.style.top = "-1000px";
+                  document.body.appendChild(img);
+                  e.dataTransfer.setDragImage(img, 0, 0);
+                  setTimeout(() => {
+                    document.body.removeChild(img);
+                  }, 0);
+                }}
+                className="flex flex-col items-center w-full p-3 text-center transition-all duration-300 rounded-lg cursor-pointer hover:bg-gray-100 hover:backdrop-blur-sm"
+              >
+                <img src={src} alt={label} className="object-contain w-16 h-16 mb-1" />
+                <span className="text-sm">{label.replace(/\.webp$/, "")}</span>
               </div>
-            </AccordionContent>
-          </AccordionItem>
-        );
-      })}
-    </Accordion>
+            ))}
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    );
+  }
+
+  return (
+    <>
+      <h2 className="mb-2 text-xl font-semibold">Set the mood</h2>
+      <Accordion type="single" collapsible className="flex flex-col gap-2 mb-6">
+        {Object.entries(data)
+          .filter(([category]) => DESIGN_CATEGORIES.includes(category))
+          .map(([category, items]) => renderAccordionItem(category, items, handleAddImage))}
+      </Accordion>
+
+      <h2 className="mb-2 text-xl font-semibold">Assets</h2>
+      <Accordion type="single" collapsible className="flex flex-col gap-2">
+        {Object.entries(data)
+          .filter(([category]) => !DESIGN_CATEGORIES.includes(category))
+          .map(([category, items]) => renderAccordionItem(category, items, handleAddImage))}
+      </Accordion>
+    </>
   );
 }

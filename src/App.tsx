@@ -8,7 +8,7 @@ import LoginModal from "./components/login-modal";
 import SignupModal from "./components/signup-modal";
 import { createClient } from "@supabase/supabase-js";
 import UserMenuModal from "./components/user-menu-modal";
-import MyDesignsModal from "./components/designs";
+import MyDesignsModal from "./components/designs-modal";
 import { saveDraftToSupabase } from "./lib/saveDraftToSupabase";
 import DraftsModal from "./components/drafts-modal";
 import SaveDraftModal from "./components/save-draft-modal";
@@ -19,14 +19,12 @@ import "react-toastify/dist/ReactToastify.css";
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 function App() {
-  // Sleeve image source state
   const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1_v2.webp");
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
 
-  // Modal visibility states
   const [showDraftsModal, setShowDraftsModal] = useState(false);
   const [showSaveDraftModal, setShowSaveDraftModal] = useState(false);
 
-  // Canvas items state (elements on the canvas)
   const [canvasItems, setCanvasItems] = useState<any[]>([
     {
       id: "sleeve",
@@ -42,26 +40,16 @@ function App() {
     },
   ]);
 
-  // Selected item and draft IDs
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-  const [selectedDraftId, setSelectedDraftId] = useState<string | null>(null);
-
-  // Hovered item state
   const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
-
-  // Ref for canvas container DOM element
   const canvasContainerRef = useRef<HTMLDivElement>(null!);
 
-  // Modal visibility states for login/signup/user menu/my designs
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMyDesigns, setShowMyDesigns] = useState(false);
 
-  // User state
   const [user, setUser] = useState<any>(null);
-
-  // Current draft ID and title state
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
   const [currentDraftTitle, setCurrentDraftTitle] = useState<string | null>(null);
 
@@ -69,10 +57,7 @@ function App() {
     if (!user || !canvasItems.length) return;
 
     const sleeveItem = canvasItems.find((item) => item.type === "sleeve");
-    if (!sleeveItem) {
-      console.error("No sleeve element found, aborting.");
-      return;
-    }
+    if (!sleeveItem) return;
 
     try {
       const result = await saveDraftToSupabase(
@@ -100,31 +85,7 @@ function App() {
       console.error("Unexpected error saving draft:", error);
     }
   };
-  const handleUpdateDraft = async () => {
-    if (!user) return;
 
-    const itemsToSave = canvasItems.filter((item) => item.type !== "sleeve");
-    const sleeveToSave = canvasItems.find((item) => item.type === "sleeve");
-
-    if (!currentDraftId) return;
-
-    const { error } = await supabase
-      .from("user_drafts")
-      .update({
-        elements: itemsToSave,
-        sleeve: sleeveToSave?.src || "",
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", currentDraftId);
-
-    if (error) {
-      console.error("Error updating draft:", error);
-    } else {
-      console.log("Draft updated successfully.");
-    }
-  };
-
-  // Effect to fetch and listen for user session/auth changes
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       const user = session?.user;
@@ -136,22 +97,19 @@ function App() {
           },
         });
       } else {
-        setUser(null); // Kein Session-Token? -> nicht eingeloggt
+        setUser(null);
       }
     });
 
-    // Listen for login/logout events (e.g. loginModal, or external events)
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null); // Update state or clear it on logout
+      setUser(session?.user ?? null);
     });
 
-    // Cleanup listener on unmount
     return () => {
       listener.subscription.unsubscribe();
     };
   }, []);
 
-  // Effect to sync sleeveSrc changes to canvas items
   useEffect(() => {
     setCanvasItems((prevItems) => {
       const updatedItems = prevItems.map((item) => {
@@ -164,7 +122,6 @@ function App() {
     });
   }, [sleeveSrc]);
 
-  // Main layout structure: header, main content (sidebars and canvas), and modals
   return (
     <div className="flex flex-col h-screen app">
       <header className="p-4 text-white header">
@@ -227,35 +184,54 @@ function App() {
       </header>
 
       <main className="flex flex-1 overflow-hidden main">
-        {/* Sidebar Left: asset selection and sleeve source control */}
         <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-left scrollbar-none">
-          <h2 className="mb-4 text-xl font-semibold">Assets</h2>
           <SidebarLeft
             setCanvasItems={setCanvasItems}
             canvasContainerRef={canvasContainerRef}
             setSleeveSrc={setSleeveSrc}
+            setBackgroundSrc={setBackgroundImage}
+            showOnly={[
+              "backgrounds",
+              "sleeves",
+              "roses",
+              "sprayroses",
+              "gypsophilla",
+              "srilanka",
+              "plugs",
+              "chrysanthemums",
+              "filler",
+            ]}
           />
         </aside>
 
-        {/* Canvas area: main design canvas */}
-        <section className="flex items-center justify-center flex-grow overflow-hidden bg-white canvas-area">
-          <Canvas
-            items={canvasItems}
-            setCanvasItems={setCanvasItems}
-            selectedItemId={selectedItemId}
-            setSelectedItemId={setSelectedItemId}
-            canvasContainerRef={canvasContainerRef}
-            sleeveSrc={sleeveSrc}
-            saveDraft={saveDraft}
-            showSaveDraftModal={() => setShowSaveDraftModal(true)}
-            currentDraftId={currentDraftId}
-            currentDraftTitle={currentDraftTitle}
-            hoveredItemId={hoveredItemId}
-            setHoveredItemId={setHoveredItemId}
-          />
+        <section
+          className="flex items-center justify-center flex-grow overflow-hidden canvas-area"
+          style={{
+            backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
+            backgroundSize: "cover",
+            backgroundPosition: "center center",
+            backgroundRepeat: "no-repeat",
+            transition: "background-image 0.3s ease",
+          }}
+        >
+          <div className="relative w-full h-full">
+            <Canvas
+              items={canvasItems}
+              setCanvasItems={setCanvasItems}
+              selectedItemId={selectedItemId}
+              setSelectedItemId={setSelectedItemId}
+              canvasContainerRef={canvasContainerRef}
+              sleeveSrc={sleeveSrc}
+              saveDraft={saveDraft}
+              showSaveDraftModal={() => setShowSaveDraftModal(true)}
+              currentDraftId={currentDraftId}
+              currentDraftTitle={currentDraftTitle}
+              hoveredItemId={hoveredItemId}
+              setHoveredItemId={setHoveredItemId}
+            />
+          </div>
         </section>
 
-        {/* Sidebar Right: properties and controls for selected canvas items */}
         <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-right">
           <SidebarRight
             items={canvasItems}
@@ -263,9 +239,11 @@ function App() {
             selectedItemId={selectedItemId}
             setSelectedItemId={setSelectedItemId}
             hoveredItemId={hoveredItemId}
+            setHoveredItemId={setHoveredItemId}
           />
         </aside>
       </main>
+
       {showLoginModal && (
         <LoginModal
           onClose={() => setShowLoginModal(false)}
@@ -307,7 +285,6 @@ function App() {
       )}
 
       {showSaveDraftModal && <SaveDraftModal onClose={() => setShowSaveDraftModal(false)} onSave={saveDraft} />}
-      {/* ToastContainer: Displays notification toasts */}
       <ToastContainer
         limit={3}
         position="bottom-center"

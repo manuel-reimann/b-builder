@@ -91,10 +91,6 @@ export default function DraftsModal({
                   draft.id === currentDraftId ? "bg-gray-100 border-agrotropic-blue" : ""
                 }`}
               >
-                {/* Show pencil icon if this is the current draft */}
-                {draft.id === currentDraftId && editingId !== draft.id && (
-                  <div className="absolute top-2 left-2 text-md text-agrotropic-blue">✏️</div>
-                )}
                 {/* Editable title input and save button for current draft */}
                 {editingId === draft.id ? (
                   <div className="flex items-center gap-1 mb-1 text-lg font-semibold text-center">

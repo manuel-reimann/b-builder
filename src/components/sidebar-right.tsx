@@ -32,17 +32,19 @@ export default function SidebarRight({
   selectedItemId,
   setSelectedItemId,
   hoveredItemId,
+  setHoveredItemId,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
   selectedItemId: string | null;
   setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
   hoveredItemId: string | null;
+  setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
   const sensors = useSensors(useSensor(PointerSensor));
   const sleeveItem = items.find((item) => item.type === "sleeve");
   const elementItems = items.filter((item) => item.type !== "sleeve");
-  const reversedElementItems = [...elementItems].reverse(); // neueste oben
+  const reversedElementItems = [...elementItems].reverse(); // newest on top
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
@@ -63,11 +65,11 @@ export default function SidebarRight({
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext
-          items={reversedElementItems.map((item) => item.id)} // Nur verschiebbare Items
+          items={reversedElementItems.map((item) => item.id)} // Only draggable items
           strategy={verticalListSortingStrategy}
         >
           <div className="flex flex-col gap-2">
-            {/* Alle Sortable Items */}
+            {/* All sortable items */}
             {reversedElementItems.map((item) => (
               <SortableItem
                 key={item.id}
@@ -85,13 +87,14 @@ export default function SidebarRight({
                 selectedItemId={selectedItemId}
                 setSelectedItemId={setSelectedItemId}
                 hoveredItemId={hoveredItemId}
+                setHoveredItemId={setHoveredItemId}
               />
             ))}
           </div>
         </SortableContext>
       </DndContext>
 
-      {/* sleeve item is always at the bottom and the last element */}
+      {/* Sleeve item is fixed at the bottom layer and rendered last */}
       {sleeveItem && (
         <div
           key={sleeveItem.id}
@@ -103,7 +106,7 @@ export default function SidebarRight({
     </div>
   );
 }
-// change of type & handover of delete function
+// Represents a draggable item in the right-side layer list, supporting select, hover, duplicate, and delete operations
 function SortableItem({
   item,
   onDelete,
@@ -111,6 +114,7 @@ function SortableItem({
   selectedItemId,
   setSelectedItemId,
   hoveredItemId,
+  setHoveredItemId,
 }: {
   item: CanvasItem;
   onDelete: (id: string) => void;
@@ -118,16 +122,17 @@ function SortableItem({
   selectedItemId: string | null;
   setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
   hoveredItemId: string | null;
+  setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
-  // useSortable provides props and refs for enabling drag-and-drop behavior
+  // Enables drag-and-drop functionality for the layer item
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
 
-  // Apply drag animation styles based on current drag state
+  // Dynamically apply styles depending on drag state
   const style: React.CSSProperties = {
     transform: transform ? CSS.Transform.toString(transform) : undefined,
     transition,
     opacity: isDragging ? 0.5 : 1,
-    // Ensure item remains interactive even when not dragging
+    // Keep the item interactive while it's not being dragged
     pointerEvents: "auto",
   };
 
@@ -138,18 +143,14 @@ function SortableItem({
       {...listeners}
       style={style}
       onClick={() => setSelectedItemId(item.id)}
-      onMouseEnter={() => {
-        if (hoveredItemId !== item.id) {
-          setSelectedItemId(item.id);
-        }
-      }}
-      onMouseLeave={() => {
-        if (hoveredItemId === item.id) {
-          setSelectedItemId(null);
-        }
-      }}
-      className={`bg-white border border-gray-300 px-3 py-2 rounded shadow-sm flex justify-between items-center cursor-pointer transition-colors duration-150 ${
-        selectedItemId === item.id ? "ring-2 ring-blue-400" : hoveredItemId === item.id ? "bg-gray-200" : ""
+      onMouseEnter={() => setHoveredItemId(item.id)}
+      onMouseLeave={() => setHoveredItemId(null)}
+      className={`border border-gray-300 px-3 py-2 rounded shadow-sm flex justify-between items-center cursor-pointer transition-colors duration-150 ${
+        selectedItemId === item.id
+          ? "ring-2 ring-blue-400 bg-white"
+          : hoveredItemId === item.id
+          ? "bg-blue-200"
+          : "bg-white"
       }`}
     >
       <div className="flex items-center justify-between w-full">

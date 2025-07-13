@@ -120,7 +120,11 @@ input {
 /* Canvas center */
 .canvas-area {
   flex: 1;
-  background-color: #ffffff;
+  background-image: url("../public/img/bgs/empty3.webp");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: background-image 0.5s ease;
   border-radius: 15px;
   max-height: calc(100vh - 150px); /* Limit height to avoid touching the bottom */
   overflow-y: auto; /* Ensure scroll if content overflows */

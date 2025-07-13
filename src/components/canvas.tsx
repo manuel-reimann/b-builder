@@ -57,9 +57,6 @@ export default function Canvas({
   hoveredItemId: string | null;
   setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
-  // Tracks the currently selected item ID within the canvas
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-
   // Fixed design dimensions for the canvas
   const DESIGN_WIDTH = 800;
   const DESIGN_HEIGHT = 800;
@@ -90,18 +87,16 @@ export default function Canvas({
     };
   }, []);
 
-  // Listens for the Delete key to remove non-sleeve items from the canvas
+  // Listens for the Delete or Backspace key to remove non-sleeve items from the canvas
   const handleDelete = (e: KeyboardEvent) => {
-    if (e.key === "Delete" && selectedId) {
-      const itemToDelete = items.find((item) => item.id === selectedId);
+    if ((e.key === "Delete" || e.key === "Backspace") && selectedItemId) {
+      const itemToDelete = items.find((item) => item.id === selectedItemId);
 
       if (itemToDelete?.type !== "sleeve") {
-        const filtered = items.filter((item) => item.id !== selectedId);
+        const filtered = items.filter((item) => item.id !== selectedItemId);
 
         setCanvasItems(filtered);
-        setSelectedId(null);
-      } else {
-        console.log("Deleting sleeve items is not allowed.");
+        setSelectedItemId(null);
       }
     }
   };
@@ -111,7 +106,7 @@ export default function Canvas({
     return () => {
       window.removeEventListener("keydown", handleDelete);
     };
-  }, [selectedId, items]);
+  }, [selectedItemId, items]);
 
   // Calculate scaling to keep canvas content proportional and centered
   const scaleX = dimensions.width / DESIGN_WIDTH;
@@ -132,7 +127,7 @@ export default function Canvas({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full"
+      className="relative w-full h-full transition-all bg-center bg-no-repeat bg-cover"
       onDragOver={(e) => e.preventDefault()} // Allow drop
       onDrop={(e) => {
         e.preventDefault();
@@ -154,8 +149,8 @@ export default function Canvas({
           document.body.removeChild(transparentImg);
         }, 0);
 
-        const x = (e.clientX - boundingRect.left - (dimensions.width - DESIGN_WIDTH * scale) / 2) / scale;
-        const y = (e.clientY - boundingRect.top - (dimensions.height - DESIGN_HEIGHT * scale) / 2) / scale;
+        let x = (e.clientX - boundingRect.left - (dimensions.width - DESIGN_WIDTH * scale) / 2) / scale;
+        let y = (e.clientY - boundingRect.top - (dimensions.height - DESIGN_HEIGHT * scale) / 2) / scale;
 
         const img = new window.Image();
         img.src = src;
@@ -163,6 +158,12 @@ export default function Canvas({
         img.onload = () => {
           const maxHeight = 150;
           const scaleFactor = Math.min(1, maxHeight / img.height);
+          const scaledWidth = img.width * scaleFactor;
+          const scaledHeight = img.height * scaleFactor;
+
+          // Adjust x and y so that the image is centered under the mouse
+          x -= scaledWidth / 2;
+          y -= scaledHeight / 2;
 
           const newItem: CanvasItem = {
             id: crypto.randomUUID(),
