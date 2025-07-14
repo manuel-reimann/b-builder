@@ -15,6 +15,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   try {
+    console.log("API KEY is", process.env.BFL_API_KEY);
     const fluxRes = await fetch("https://api.bfl.ai/v1/flux-kontext-pro", {
       method: "POST",
       headers: {
