@@ -2,7 +2,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 
 export const config = {
-  runtime: "edge", // oder "nodejs" für klassische Functions
+  runtime: "edge", // or "nodejs"
 };
 
 export async function POST(req: Request): Promise<Response> {
