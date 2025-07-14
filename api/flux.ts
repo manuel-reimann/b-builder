@@ -15,7 +15,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   try {
-    const fluxRes = await fetch("https://api.bfl.ai/v1/flux-kontext", {
+    const fluxRes = await fetch("https://api.bfl.ai/v1/flux-kontext-pro", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,9 +23,8 @@ export async function POST(req: Request): Promise<Response> {
       },
       body: JSON.stringify({
         prompt,
-        image,
-        model: "flux-kontext-pro",
-        return_base64: true,
+        input_image: image,
+        output_format: "png",
       }),
     });
 
