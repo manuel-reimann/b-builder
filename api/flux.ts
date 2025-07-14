@@ -1,15 +1,17 @@
 // @ts-ignore
-import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Only POST allowed" });
-  }
+export const config = {
+  runtime: "edge", // oder "nodejs" für klassische Functions
+};
 
-  const { image, prompt } = req.body;
+export async function POST(req: Request): Promise<Response> {
+  const { image, prompt } = await req.json();
 
   if (!image || !prompt) {
-    return res.status(400).json({ error: "Missing image or prompt" });
+    return new Response(JSON.stringify({ error: "Missing image or prompt" }), {
+      status: 400,
+    });
   }
 
   try {
@@ -21,21 +23,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
       body: JSON.stringify({
         prompt,
-        image, // base64 string
+        image,
         model: "flux-kontext-pro",
         return_base64: true,
       }),
     });
 
     if (!fluxRes.ok) {
-      const text = await fluxRes.text();
-      return res.status(500).json({ error: `Flux API error: ${text}` });
+      const errorText = await fluxRes.text();
+      return new Response(JSON.stringify({ error: errorText }), {
+        status: 500,
+      });
     }
 
     const data = await fluxRes.json();
-
-    return res.status(200).json({ image: data.image });
+    return new Response(JSON.stringify({ image: data.image }), {
+      status: 200,
+    });
   } catch (error) {
-    return res.status(500).json({ error: "Internal error", details: error });
+    return new Response(JSON.stringify({ error: "Internal error", details: error }), {
+      status: 500,
+    });
   }
 }
