@@ -1,31 +1,17 @@
-export async function generateImageWithFlux({
-  prompt,
-  imageBase64,
-}: {
-  prompt: string;
-  imageBase64: string;
-}): Promise<string | null> {
-  try {
-    const res = await fetch("/api/flux", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt,
-        image: imageBase64,
-      }),
-    });
+export async function generateImageWithFlux({ imageBase64, prompt }: { imageBase64: string; prompt: string }) {
+  const response = await fetch("/api/flux", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ image: imageBase64, prompt }),
+  });
 
-    if (!res.ok) {
-      console.error("Flux API error:", await res.text());
-      return null;
-    }
-
-    const data = await res.json();
-    return data.image;
-  } catch (error) {
-    console.error("Flux API exception:", error);
-    return null;
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Flux API error: ${errorText}`);
   }
+
+  const data = await response.json();
+  return data;
 }
