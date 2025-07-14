@@ -104,7 +104,6 @@ export default function SidebarLeft({
   setSleeveSrc,
   setBackgroundSrc,
   canvasContainerRef,
-  showOnly,
 }: {
   setCanvasItems: Function;
   setSleeveSrc: React.Dispatch<React.SetStateAction<string>>;

@@ -19,6 +19,7 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
       const { data, error } = await supabase
         .from("user_designs")
         .select("id, image_url, prompt, created_at")
+        .eq("user_id", userId)
         .order("created_at", { ascending: false });
 
       if (error) {

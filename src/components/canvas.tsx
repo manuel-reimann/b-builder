@@ -1,3 +1,5 @@
+import { generateImageWithFlux } from "../utils/flux"; // Import the Flux image generation utility
+import { buildPrompt } from "../utils/export-prompt"; // ✅ korrekt // Import the prompt builder utility
 // Import required libraries and components
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer } from "react-konva";
@@ -185,8 +187,8 @@ export default function Canvas({
     >
       {/* Displays the current draft name if available */}
       {currentDraftTitle && (
-        <div className="fixed z-20 px-3 py-1 text-sm text-gray-700 rounded shadow top-4 left-4 bg-white/80">
-          <div>Aktueller Entwurf:</div>
+        <div className="absolute z-20 px-3 py-1 text-sm text-gray-700 rounded shadow top-4 left-4 bg-white/90">
+          <div>Current Draft:</div>
           <div className="font-semibold">{currentDraftTitle}</div>
         </div>
       )}
@@ -264,8 +266,22 @@ export default function Canvas({
           </button>
           {/* Button to trigger generation action (currently logs to console) */}
           <button
-            onClick={() => {
-              console.log("Generate clicked");
+            onClick={async () => {
+              if (!stageRef.current) {
+                console.error("Stage ref is not available");
+                return;
+              }
+
+              const canvasElement = stageRef.current.getStage().toCanvas();
+              const dataUrl = canvasElement.toDataURL("image/png");
+
+              const prompt = buildPrompt(items);
+              const result = await generateImageWithFlux({
+                prompt,
+                imageBase64: dataUrl,
+              });
+
+              console.log("Flux result:", result);
             }}
             className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-green hover:bg-green-900 rounded-md"
           >

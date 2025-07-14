@@ -9,7 +9,7 @@ import SignupModal from "./components/signup-modal";
 import { createClient } from "@supabase/supabase-js";
 import UserMenuModal from "./components/user-menu-modal";
 import MyDesignsModal from "./components/designs-modal";
-import { saveDraftToSupabase } from "./lib/saveDraftToSupabase";
+import { saveDraftToSupabase } from "./lib/save-draft-to-supabase";
 import DraftsModal from "./components/drafts-modal";
 import SaveDraftModal from "./components/save-draft-modal";
 import { ToastContainer } from "react-toastify";
