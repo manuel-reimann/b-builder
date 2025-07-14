@@ -1,6 +1,6 @@
-import { generateImageWithFlux } from "../utils/flux"; // Import the Flux image generation utility
-import { buildPrompt } from "../utils/export-prompt"; // ✅ korrekt // Import the prompt builder utility
 // Import required libraries and components
+import { generateImageWithFlux } from "../utils/flux-client";
+import { buildPrompt } from "../utils/export-prompt"; // Import the prompt builder utility
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer } from "react-konva";
 import StaticSleeveImage from "./static-sleeve-image";
