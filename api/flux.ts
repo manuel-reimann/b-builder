@@ -15,7 +15,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   try {
-    const fluxRes = await fetch("https://api.eu.bfl.ai/flux-kontext-pro", {
+    const fluxRes = await fetch("https://api.bfl.ai/flux-kontext-pro", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,9 +37,20 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     const data = await fluxRes.json();
-    return new Response(JSON.stringify({ image: data.image }), {
-      status: 200,
-    });
+
+    // Optional: Output base64 string to console (nur für Debugging)
+    console.log("Flux result image (truncated):", data.image?.substring(0, 50) + "...");
+
+    // Rückgabe inkl. direkter Vorschau-URL im Browser
+    return new Response(
+      JSON.stringify({
+        image: data.image,
+        downloadUrl: `data:image/jpeg;base64,${data.image}`,
+      }),
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     return new Response(JSON.stringify({ error: "Internal error", details: error }), {
       status: 500,
