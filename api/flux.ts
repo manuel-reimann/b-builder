@@ -15,7 +15,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   try {
-    const fluxRes = await fetch("https://api.bfl.ai/v1/generate", {
+    const fluxRes = await fetch("https://api.eu.bfl.ai/flux-kontext-pro", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
