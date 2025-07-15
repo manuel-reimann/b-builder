@@ -45,7 +45,7 @@ export async function POST(req: Request): Promise<Response> {
     const data = await fluxRes.json();
     */
 
-    const dataUrl = `data:image/jpeg;base64,${image}`;
+    const dataUrl = image;
 
     console.log("To download the image client-side, use a link element with href set to the base64 string.");
     console.log("Download this image:", dataUrl);
