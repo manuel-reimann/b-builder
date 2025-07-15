@@ -45,9 +45,13 @@ export async function POST(req: Request): Promise<Response> {
     const data = await fluxRes.json();
     */
 
+    const dataUrl = `data:image/jpeg;base64,${image}`;
+    console.log("Download this image:", dataUrl);
+
     return new Response(
       JSON.stringify({
-        image: `data:image/jpeg;base64,${image}`,
+        image: dataUrl,
+        html: `<a href="${dataUrl}" download="flux-result.jpg" target="_blank">Download image</a>`,
       }),
       {
         status: 200,
