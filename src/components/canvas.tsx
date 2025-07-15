@@ -287,6 +287,33 @@ export default function Canvas({
 
               if (result && result.image) {
                 setFluxImage(result.image);
+
+                // Show image preview
+                const imageElement = document.createElement("img");
+                imageElement.src = result.image;
+                imageElement.style.maxWidth = "300px";
+                imageElement.style.display = "block";
+                imageElement.style.marginTop = "1rem";
+                document.body.appendChild(imageElement);
+
+                // Create blob and trigger download
+                const byteString = atob(result.image.split(",")[1]);
+                const mimeString = result.image.split(",")[0].split(":")[1].split(";")[0];
+                const ab = new ArrayBuffer(byteString.length);
+                const ia = new Uint8Array(ab);
+                for (let i = 0; i < byteString.length; i++) {
+                  ia[i] = byteString.charCodeAt(i);
+                }
+                const blob = new Blob([ab], { type: mimeString });
+                const blobUrl = URL.createObjectURL(blob);
+
+                const link = document.createElement("a");
+                link.href = blobUrl;
+                link.download = "bouquet.png";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
               } else {
                 console.warn("No image returned from Flux:", result);
               }
