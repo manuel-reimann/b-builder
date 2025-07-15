@@ -66,6 +66,8 @@ export default function Canvas({
   // Reference to the Konva Stage component
   const stageRef = useRef<any>(null);
 
+  const [fluxImage, setFluxImage] = useState<string | null>(null);
+
   // Tracks the current width and height of the canvas container
   const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
 
@@ -282,6 +284,12 @@ export default function Canvas({
               });
 
               console.log("Flux result:", result);
+
+              if (result && result.image) {
+                setFluxImage(result.image);
+              } else {
+                console.warn("No image returned from Flux:", result);
+              }
             }}
             className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-green hover:bg-green-900 rounded-md"
           >
@@ -289,6 +297,16 @@ export default function Canvas({
           </button>
         </div>
       </div>
+
+      {fluxImage && (
+        <div className="absolute z-30 p-4 rounded shadow bottom-4 left-4 bg-white/90">
+          <div className="mb-2 font-semibold text-gray-800">Preview (Flux Output):</div>
+          <img src={fluxImage} alt="Flux Result" className="max-w-xs border border-gray-300 rounded" />
+          <a href={fluxImage} download="flux_output.png" className="inline-block mt-2 text-sm text-blue-600 underline">
+            Bild herunterladen
+          </a>
+        </div>
+      )}
     </div>
   );
 }
