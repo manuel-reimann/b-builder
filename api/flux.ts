@@ -24,7 +24,7 @@ export async function POST(req: Request): Promise<Response> {
       body: JSON.stringify({
         prompt,
         input_image: image,
-        model: "flux-kontext-pro",
+        aspect_ratio: "1:1",
         return_base64: true,
       }),
     });
