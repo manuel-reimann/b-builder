@@ -47,10 +47,13 @@ export async function POST(req: Request): Promise<Response> {
 
     return new Response(
       JSON.stringify({
-        message: "Received image and prompt. Check server logs for base64.",
+        image: `data:image/jpeg;base64,${image}`,
       }),
       {
         status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
   } catch (error) {
