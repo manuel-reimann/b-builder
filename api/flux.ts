@@ -46,17 +46,6 @@ export async function POST(req: Request): Promise<Response> {
     */
 
     const dataUrl = `data:image/jpeg;base64,${image}`;
-    // The following code would trigger a client-side download if run in the browser:
-
-    // Trigger image download in client
-    if (typeof window !== "undefined") {
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = "flux-result.jpg";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
 
     console.log("To download the image client-side, use a link element with href set to the base64 string.");
     console.log("Download this image:", dataUrl);
@@ -64,7 +53,6 @@ export async function POST(req: Request): Promise<Response> {
     return new Response(
       JSON.stringify({
         image: dataUrl,
-        html: `<a href="${dataUrl}" download="flux-result.jpg" target="_blank">Download image</a>`,
       }),
       {
         status: 200,
