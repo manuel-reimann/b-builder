@@ -54,6 +54,7 @@ export default function SidebarRight({
     const csv = generateMaterialsCSV(items);
     // Optional: expose it via window or other global handler if needed
     console.log("Updated materials CSV:", csv);
+    setMaterialsCSV(csv);
   }, [items]);
 
   const handleDragEnd = (event: any) => {

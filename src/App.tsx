@@ -54,6 +54,7 @@ function App() {
   const [currentDraftTitle, setCurrentDraftTitle] = useState<string | null>(null);
 
   const [materialsCSV, setMaterialsCSV] = useState<string>("");
+  void materialsCSV;
 
   const saveDraft = async (titleOverride?: string): Promise<void> => {
     if (!user || !canvasItems.length) return;
