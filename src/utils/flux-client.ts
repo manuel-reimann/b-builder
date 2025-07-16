@@ -4,7 +4,7 @@ export async function generateImageWithFlux({ imageBase64, prompt }: { imageBase
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ image: imageBase64, prompt }),
+    body: JSON.stringify({ input_image: imageBase64, prompt }),
   });
 
   if (!response.ok) {
