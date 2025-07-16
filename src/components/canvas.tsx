@@ -274,13 +274,17 @@ export default function Canvas({
                 return;
               }
 
+              // Deselect any selected element to remove transformation handles
               setSelectedItemId(null);
-              await new Promise((resolve) => setTimeout(resolve, 50)); // Give time for UI to update
+              await new Promise((resolve) => setTimeout(resolve, 50)); // Wait for UI to update
 
               const canvasElement = stageRef.current.getStage().toCanvas();
               const dataUrl = canvasElement.toDataURL("image/png");
 
               const prompt = buildPrompt(items);
+              console.log("DEBUG – Prompt:", prompt);
+              console.log("DEBUG – Image length:", dataUrl.length);
+
               const result = await generateImageWithFlux({
                 prompt,
                 imageBase64: dataUrl,
