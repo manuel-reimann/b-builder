@@ -31,8 +31,7 @@ export async function POST(req: Request): Promise<Response> {
       },
       body: JSON.stringify({
         prompt,
-        input_image: image,
-        aspect_ratio: "1:1",
+        input_image: image.replace(/^data:image\/\w+;base64,/, ""),
       }),
     });
 
