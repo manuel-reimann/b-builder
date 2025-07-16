@@ -45,6 +45,7 @@ export default function Canvas({
   currentDraftTitle,
   hoveredItemId,
   setHoveredItemId,
+  userId,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
@@ -58,6 +59,7 @@ export default function Canvas({
   currentDraftTitle: string | null;
   hoveredItemId: string | null;
   setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
+  userId: string;
 }) {
   // Fixed design dimensions for the canvas
   const DESIGN_WIDTH = 800;
@@ -285,9 +287,25 @@ export default function Canvas({
               console.log("DEBUG – Prompt:", prompt);
               console.log("DEBUG – Image length:", dataUrl.length);
 
+              // Generate CSV string of materials
+              const materialEntries = items.map(
+                (item) =>
+                  item.label ||
+                  item.src
+                    .split("/")
+                    .pop()
+                    ?.replace(/\.[^/.]+$/, "") ||
+                  ""
+              );
+              const materials_csv = materialEntries.join(", ");
+
+              // Send prompt, canvas image, and used materials to Flux API
               const result = await generateImageWithFlux({
                 prompt,
                 imageBase64: dataUrl,
+                materials_csv,
+                userId,
+                title: currentDraftTitle ?? "Untitled",
               });
 
               console.log("Flux result:", result);

@@ -1,4 +1,16 @@
-export async function generateImageWithFlux({ imageBase64, prompt }: { imageBase64: string; prompt: string }) {
+export async function generateImageWithFlux({
+  imageBase64,
+  prompt,
+  userId,
+  title,
+  materials_csv,
+}: {
+  imageBase64: string;
+  prompt: string;
+  userId: string;
+  title: string;
+  materials_csv: string;
+}) {
   const response = await fetch("/api/flux", {
     method: "POST",
     headers: {
@@ -7,6 +19,9 @@ export async function generateImageWithFlux({ imageBase64, prompt }: { imageBase
     body: JSON.stringify({
       image: imageBase64,
       prompt,
+      userId,
+      title,
+      materials_csv,
     }),
   });
 

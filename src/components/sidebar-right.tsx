@@ -2,6 +2,7 @@ import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from 
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CanvasItem } from "./canvas";
+import { useEffect } from "react";
 
 function iconForType(type: string): string {
   switch (type) {
@@ -33,6 +34,7 @@ export default function SidebarRight({
   setSelectedItemId,
   hoveredItemId,
   setHoveredItemId,
+  setMaterialsCSV,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
@@ -40,11 +42,19 @@ export default function SidebarRight({
   setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
   hoveredItemId: string | null;
   setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
+  setMaterialsCSV: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const sensors = useSensors(useSensor(PointerSensor));
   const sleeveItem = items.find((item) => item.type === "sleeve");
   const elementItems = items.filter((item) => item.type !== "sleeve");
   const reversedElementItems = [...elementItems].reverse(); // newest on top
+
+  // Update global materials_csv string whenever canvas items change
+  useEffect(() => {
+    const csv = generateMaterialsCSV(items);
+    // Optional: expose it via window or other global handler if needed
+    console.log("Updated materials CSV:", csv);
+  }, [items]);
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
@@ -58,6 +68,7 @@ export default function SidebarRight({
       setCanvasItems(updated);
     }
   };
+  // CSV generation logic moved to useEffect above
 
   return (
     <div>
@@ -106,6 +117,7 @@ export default function SidebarRight({
     </div>
   );
 }
+
 // Represents a draggable item in the right-side layer list, supporting select, hover, duplicate, and delete operations
 function SortableItem({
   item,
@@ -193,4 +205,19 @@ function SortableItem({
       </div>
     </div>
   );
+}
+
+// Generates a CSV string from all canvas items, including the sleeve
+function generateMaterialsCSV(items: CanvasItem[]): string {
+  return items
+    .map(
+      (item) =>
+        item.label ||
+        item.src
+          .split("/")
+          .pop()
+          ?.replace(/\.[^/.]+$/, "")
+    )
+    .filter(Boolean)
+    .join(",");
 }

@@ -53,6 +53,8 @@ function App() {
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
   const [currentDraftTitle, setCurrentDraftTitle] = useState<string | null>(null);
 
+  const [materialsCSV, setMaterialsCSV] = useState<string>("");
+
   const saveDraft = async (titleOverride?: string): Promise<void> => {
     if (!user || !canvasItems.length) return;
 
@@ -228,6 +230,7 @@ function App() {
               currentDraftTitle={currentDraftTitle}
               hoveredItemId={hoveredItemId}
               setHoveredItemId={setHoveredItemId}
+              userId={user?.id}
             />
           </div>
         </section>
@@ -240,6 +243,7 @@ function App() {
             setSelectedItemId={setSelectedItemId}
             hoveredItemId={hoveredItemId}
             setHoveredItemId={setHoveredItemId}
+            setMaterialsCSV={setMaterialsCSV}
           />
         </aside>
       </main>

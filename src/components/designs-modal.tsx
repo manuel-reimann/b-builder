@@ -1,9 +1,6 @@
 // filename: MyDesignsModal.tsx
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-// Initialize Supabase client with environment variables
-const supabase = createClient(import.meta.env.VITE_SUPABASE_URL!, import.meta.env.VITE_SUPABASE_ANON_KEY!);
+import { supabase } from "../lib/supabase-client";
 
 // Component to display user's saved designs in a modal
 export default function MyDesignsModal({ userId, onClose }: { userId: string; onClose: () => void }) {
@@ -18,7 +15,7 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
       // Query user_designs table for designs, ordered by creation date descending
       const { data, error } = await supabase
         .from("user_designs")
-        .select("id, image_url, prompt, created_at")
+        .select("id, title, image_url, created_at, materials_csv")
         .eq("user_id", userId)
         .order("created_at", { ascending: false });
 
@@ -66,16 +63,52 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
               <div key={design.id} className="flex flex-col items-center p-4 border rounded shadow">
                 {/* Preview image of the design */}
                 <img src={design.image_url} alt="Design Preview" className="object-cover w-full h-48 mb-2 rounded" />
-                {/* Design prompt text, truncated with tooltip */}
-                <p className="w-full mb-1 text-lg truncate text-agrotropic-blue" title={design.prompt}>
-                  {design.prompt}
-                </p>
-                {/* Download button to open image in a new tab */}
+                {/* Design title */}
+                <p className="w-full mb-1 text-lg font-semibold text-agrotropic-blue">{design.title || "Ohne Titel"}</p>
+                {/* Creation date */}
+                <p className="mb-2 text-sm text-gray-500">{new Date(design.created_at).toLocaleString()}</p>
+                {/* Download image */}
                 <button
                   onClick={() => window.open(design.image_url, "_blank")}
-                  className="px-4 py-2 text-lg text-white transition-colors duration-200 rounded bg-agrotropic-blue hover:text-bg-gray-800"
+                  className="px-4 py-1 mb-1 text-sm text-white rounded bg-agrotropic-blue hover:bg-agrotropic-blue/80"
                 >
-                  Download
+                  Bild herunterladen
+                </button>
+                {/* Download CSV */}
+                <button
+                  onClick={() => {
+                    const blob = new Blob([design.materials_csv], { type: "text/csv" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `${design.title || "design"}.csv`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="px-4 py-1 mb-1 text-sm text-white bg-green-600 rounded hover:bg-green-700"
+                >
+                  Werkstoffe (CSV)
+                </button>
+                {/* Placeholder: Delete design */}
+                <button
+                  onClick={async () => {
+                    const confirmDelete = window.confirm("Möchtest du dieses Design wirklich löschen?");
+                    if (!confirmDelete) return;
+                    const { error } = await supabase
+                      .from("user_designs")
+                      .delete()
+                      .eq("id", design.id)
+                      .eq("user_id", userId);
+                    if (error) {
+                      console.error("Fehler beim Löschen des Designs:", error);
+                      alert("Fehler beim Löschen.");
+                    } else {
+                      setDesigns((prev) => prev.filter((d) => d.id !== design.id));
+                    }
+                  }}
+                  className="px-4 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600"
+                >
+                  Löschen
                 </button>
               </div>
             ))}

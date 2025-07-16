@@ -1,5 +1,6 @@
 // @ts-ignore
 import { VercelRequest, VercelResponse } from "@vercel/node";
+import { createClient } from "@supabase/supabase-js";
 
 type FluxPollingResponse = {
   status: string;
@@ -13,10 +14,10 @@ export const config = {
 };
 
 export async function POST(req: Request): Promise<Response> {
-  const { image, prompt } = await req.json();
+  const { image, prompt, userId, title, materials_csv } = await req.json();
 
-  if (!image || !prompt) {
-    return new Response(JSON.stringify({ error: "Missing image or prompt" }), {
+  if (!image || !prompt || !userId || !title || !materials_csv) {
+    return new Response(JSON.stringify({ error: "Missing required fields" }), {
       status: 400,
     });
   }
@@ -74,6 +75,24 @@ export async function POST(req: Request): Promise<Response> {
 
     if (!finalData || !finalData.result?.sample) {
       return new Response(JSON.stringify({ error: "Image not ready after polling" }), {
+        status: 500,
+      });
+    }
+
+    // Save result to Supabase
+    const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+
+    const { error } = await supabase.from("user_designs").insert({
+      user_id: userId,
+      title,
+      image_url: finalData.result.sample,
+      prompt,
+      materials_csv,
+    });
+
+    if (error) {
+      console.error("Supabase insert failed:", error);
+      return new Response(JSON.stringify({ error: "Failed to save to database" }), {
         status: 500,
       });
     }
