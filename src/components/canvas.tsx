@@ -274,6 +274,9 @@ export default function Canvas({
                 return;
               }
 
+              setSelectedItemId(null);
+              await new Promise((resolve) => setTimeout(resolve, 50)); // Give time for UI to update
+
               const canvasElement = stageRef.current.getStage().toCanvas();
               const dataUrl = canvasElement.toDataURL("image/png");
 
