@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
+console.log("INIT SUPABASE", import.meta.env.VITE_SUPABASE_URL);
 const supabase = createClient(process.env.VITE_!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 export async function POST(req: Request): Promise<Response> {
