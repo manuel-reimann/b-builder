@@ -15,6 +15,7 @@ import SaveDraftModal from "./components/save-draft-modal";
 import { ToastContainer } from "react-toastify";
 import { showToastOnceStrict } from "./lib/toastUtils";
 import "react-toastify/dist/ReactToastify.css";
+import "./test-env";
 
 console.log("VITE_SUPABASE_URL:", import.meta.env.VITE_SUPABASE_URL);
 console.log("VITE_SUPABASE_ANON_KEY:", import.meta.env.VITE_SUPABASE_ANON_KEY);
