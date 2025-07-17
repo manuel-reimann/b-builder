@@ -300,10 +300,11 @@ export default function Canvas({
               const materials_csv = materialEntries.join(", ");
 
               // Call Flux API with only prompt and imageBase64
-              const result = await generateImageWithFlux({
-                prompt,
-                imageBase64: dataUrl,
-              });
+              // const result = await generateImageWithFlux({
+              //   prompt,
+              //   imageBase64: dataUrl,
+              // });
+              const result = { image: "/img/dummy-flux-output.jpg" }; // Dummy image for testing
 
               // After receiving result, save to Supabase
               if (result && result.image) {

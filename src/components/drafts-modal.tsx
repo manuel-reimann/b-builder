@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 // Initialize Supabase client using environment variables
-console.log("INIT SUPABASE vo drafts-modal.tsx", import.meta.env.VITE_SUPABASE_URL);
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL!, import.meta.env.VITE_SUPABASE_ANON_KEY!);
 
 // DraftsModal component props definition and component itself

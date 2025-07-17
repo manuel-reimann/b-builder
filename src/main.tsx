@@ -4,8 +4,6 @@ import "./index.css";
 import App from "./App.tsx";
 import { DndContext } from "@dnd-kit/core";
 
-console.log("MAIN ENTRY REACHED");
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <DndContext
