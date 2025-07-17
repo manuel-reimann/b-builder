@@ -16,7 +16,7 @@ import { ToastContainer } from "react-toastify";
 import { showToastOnceStrict } from "./lib/toastUtils";
 import "react-toastify/dist/ReactToastify.css";
 
-const supabase = createClient(import.meta.env.SUPABASE_URL, import.meta.env.SUPABASE_ANON_KEY);
+const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 function App() {
   const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1_v2.webp");
