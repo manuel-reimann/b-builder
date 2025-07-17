@@ -16,10 +16,9 @@ export const config = {
 export async function POST(req: Request): Promise<Response> {
   const body = await req.json();
   console.log("Incoming request body:", body);
-  const { image, prompt } = body;
-  const { userId, title, materials_csv } = body;
+  const { image, prompt, userId, title, materials_csv } = body;
 
-  if (!image || !prompt || !userId || !title || !materials_csv) {
+  if (!image || !prompt) {
     return new Response(JSON.stringify({ error: "Missing required fields" }), {
       status: 400,
     });
