@@ -1,4 +1,4 @@
-Bouquet Builder – Web App for Photorealistic Bouquet Design
+Bouquet Builder – Web App for Photorealistic Bouquet Designs
 
 Project: Bachelor Thesis Web Development (SAE Zurich 2025)  
 Author: Manuel Reimann  
