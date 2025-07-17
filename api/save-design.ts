@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-console.log("INIT SUPABASE", process.env.SUPABASE_URL);
+console.log("INIT SUPABASE vo save-designs.ts", process.env.SUPABASE_URL);
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 export async function POST(req: Request): Promise<Response> {

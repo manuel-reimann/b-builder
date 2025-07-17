@@ -7,6 +7,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error("Supabase environment variables are missing!");
 }
 
-console.log("INIT SUPABASE", supabaseUrl);
+console.log("INIT SUPABASE vo supabase-clients.ts", supabaseUrl);
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-console.log("INIT SUPABASE", import.meta.env.VITE_SUPABASE_URL);
+console.log("INIT SUPABASE vo save-draft-to-supabase.ts", import.meta.env.VITE_SUPABASE_URL);
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 /**
