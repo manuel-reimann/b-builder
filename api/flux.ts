@@ -15,6 +15,7 @@ export const config = {
 
 export async function POST(req: Request): Promise<Response> {
   const body = await req.json();
+  console.log("Incoming request body:", body);
   const { image, prompt } = body;
   const { userId, title, materials_csv } = body;
 
@@ -40,6 +41,7 @@ export async function POST(req: Request): Promise<Response> {
 
     if (!fluxInitRes.ok) {
       const errorText = await fluxInitRes.text();
+      console.error("Flux init failed:", errorText);
       return new Response(JSON.stringify({ error: "Initial request failed", details: errorText }), {
         status: 500,
       });

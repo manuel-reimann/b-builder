@@ -11,18 +11,25 @@ export async function generateImageWithFlux({
   title: string;
   materials_csv: string;
 }) {
+  const payload = {
+    image: imageBase64,
+    prompt,
+    // Optional debug info, NOT sent to Flux
+    _meta: {
+      userId,
+      title,
+      materials_csv,
+    },
+  };
+
+  console.log("Payload to /api/flux:", payload);
+
   const response = await fetch("/api/flux", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      image: imageBase64,
-      prompt,
-      userId,
-      title,
-      materials_csv,
-    }),
+    body: JSON.stringify(payload),
   });
 
   if (!response.ok) {

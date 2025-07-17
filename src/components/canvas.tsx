@@ -300,6 +300,13 @@ export default function Canvas({
               const materials_csv = materialEntries.join(", ");
 
               // Send prompt, canvas image, and used materials to Flux API
+              console.log("DEBUG – Payload to Flux:", {
+                prompt,
+                imageBase64Length: dataUrl.length,
+                materials_csv,
+                userId,
+                title: currentDraftTitle ?? "Untitled",
+              });
               const result = await generateImageWithFlux({
                 prompt,
                 imageBase64: dataUrl,
