@@ -73,7 +73,7 @@ export default function SidebarRight({
 
   return (
     <div>
-      <h2 className="mb-2 text-xl font-semibold">Layers</h2>
+      <h2 className="mb-2 text-xl font-semibold ">Layers</h2>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext

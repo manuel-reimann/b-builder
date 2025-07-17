@@ -28,10 +28,10 @@ html,
   width: 140%;
   height: 140%;
   background: radial-gradient(circle at 30% 30%, #30384b, #848484, #4d9a85);
-  animation: blobMotion 30s ease-in-out infinite;
+  animation: blobMotion 20s ease-in-out infinite;
   z-index: 0;
   filter: blur(100px);
-  opacity: 0.6;
+  opacity: 0.3;
   pointer-events: none;
 }
 

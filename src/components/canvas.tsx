@@ -299,26 +299,29 @@ export default function Canvas({
               );
               const materials_csv = materialEntries.join(", ");
 
-              // Send prompt, canvas image, and used materials to Flux API
-              console.log("DEBUG – Payload to Flux:", {
-                prompt,
-                imageBase64Length: dataUrl.length,
-                materials_csv,
-                userId,
-                title: currentDraftTitle ?? "Untitled",
-              });
+              // Call Flux API with only prompt and imageBase64
               const result = await generateImageWithFlux({
                 prompt,
                 imageBase64: dataUrl,
-                materials_csv,
-                userId,
-                title: currentDraftTitle ?? "Untitled",
               });
 
-              console.log("Flux result:", result);
-
+              // After receiving result, save to Supabase
               if (result && result.image) {
                 setFluxImage(result.image);
+
+                try {
+                  await saveDesignToSupabase({
+                    userId,
+                    prompt,
+                    image_url: result.image,
+                    title: currentDraftTitle ?? "Untitled",
+                    materials_csv,
+                  });
+                  toast.success("Design erfolgreich gespeichert!");
+                } catch (error) {
+                  console.error("Fehler beim Speichern in Supabase:", error);
+                  toast.error("Speichern fehlgeschlagen.");
+                }
               } else {
                 console.warn("No image returned from Flux:", result);
               }
@@ -341,4 +344,39 @@ export default function Canvas({
       )}
     </div>
   );
+}
+
+async function saveDesignToSupabase({
+  userId,
+  image_url,
+  prompt,
+  title,
+  materials_csv,
+}: {
+  userId: string;
+  image_url: string;
+  prompt: string;
+  title: string;
+  materials_csv: string;
+}) {
+  const response = await fetch("/api/save-design", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId,
+      image_url,
+      prompt,
+      title,
+      materials_csv,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(error);
+  }
+
+  return await response.json();
 }

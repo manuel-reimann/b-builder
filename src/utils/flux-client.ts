@@ -1,25 +1,7 @@
-export async function generateImageWithFlux({
-  imageBase64,
-  prompt,
-  userId,
-  title,
-  materials_csv,
-}: {
-  imageBase64: string;
-  prompt: string;
-  userId: string;
-  title: string;
-  materials_csv: string;
-}) {
+export async function generateImageWithFlux({ imageBase64, prompt }: { imageBase64: string; prompt: string }) {
   const payload = {
     image: imageBase64,
     prompt,
-    // Optional debug info, NOT sent to Flux
-    _meta: {
-      userId,
-      title,
-      materials_csv,
-    },
   };
 
   console.log("Payload to /api/flux:", payload);
