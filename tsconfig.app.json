@@ -22,6 +22,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
-  },
-  "include": ["src", "api/save-design.ts"]
+  }
 }
