@@ -36,7 +36,7 @@ export default async function handler(req, res) {
       return res.status(500).send("Database error");
     }
 
-    return res.status(200).send("Saved successfully");
+    return res.status(200).json({ message: "Saved successfully" });
   } catch (err) {
     console.error("Unexpected error:", err);
     return res.status(500).send("Internal server error");
