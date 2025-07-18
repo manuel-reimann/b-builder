@@ -7,8 +7,8 @@ import StaticSleeveImage from "./static-sleeve-image";
 import CanvasImage from "./canvas-image";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { showToastOnceStrict } from "../lib/toastUtils"; // Import custom toast utility
-import { createClient } from "@supabase/supabase-js";
+//import { showToastOnceStrict } from "../lib/toastUtils"; // Import custom toast utility
+//import { createClient } from "@supabase/supabase-js";
 
 // Defines the structure of each item placed on the canvas
 export interface CanvasItem {
@@ -50,8 +50,6 @@ export default function Canvas({
   setHoveredItemId,
   userId,
   showToastOnceStrict,
-  setShowLoginModal,
-  user,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
