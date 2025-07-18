@@ -1,5 +1,5 @@
 // Import required libraries and components
-import { generateImageWithFlux } from "../utils/flux-client";
+//import { generateImageWithFlux } from "../utils/flux-client";
 import { buildPrompt } from "../utils/export-prompt"; // Import the prompt builder utility
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer } from "react-konva";
