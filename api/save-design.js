@@ -1,11 +1,11 @@
-const { createClient } = require("@supabase/supabase-js");
+import { createClient } from "@supabase/supabase-js";
 
 console.log("ENV SUPABASE_URL:", process.env.SUPABASE_URL);
 console.log("ENV SUPABASE_SERVICE_ROLE_KEY:", process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).send("Method Not Allowed");
   }
@@ -41,4 +41,4 @@ module.exports = async (req, res) => {
     console.error("Unexpected error:", err);
     return res.status(500).send("Internal server error");
   }
-};
+}
