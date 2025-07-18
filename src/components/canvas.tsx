@@ -26,7 +26,8 @@ export interface CanvasItem {
     | "Sri Lanka" // Special foliage category
     | "plug" // Flower plugs or accessories
     | "chrysanthemum" // Chrysanthemums
-    | "filler"; // Generic filler greens
+    | "filler" // Generic filler greens
+    | "background"; // Optional background image
   sleeveSrc: string; // Optional separate sleeve source (only used for sleeve-type)
   label?: string; // Optional label for display
 }
@@ -119,6 +120,19 @@ export default function Canvas({
   const scaleY = dimensions.height / DESIGN_HEIGHT;
   const scale = Math.min(scaleX, scaleY);
 
+  const backgroundItem = items.find((item) => item.type === "background");
+
+  useEffect(() => {
+    const bg = items.find((item) => item.type === "background");
+    if (bg) {
+      document.body.style.backgroundImage = `url(${bg.src})`;
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center";
+    } else {
+      document.body.style.backgroundImage = "none";
+    }
+  }, [items]);
+
   // Saves changes to an existing draft and shows a success toast
   function handleUpdateDraft() {
     if (saveDraft) {
@@ -134,6 +148,11 @@ export default function Canvas({
     <div
       ref={containerRef}
       className="relative w-full h-full transition-all bg-center bg-no-repeat bg-cover"
+      style={{
+        backgroundImage: backgroundItem ? `url(${backgroundItem.src})` : undefined,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
       onDragOver={(e) => e.preventDefault()} // Allow drop
       onDrop={(e) => {
         e.preventDefault();
@@ -217,21 +236,23 @@ export default function Canvas({
           {/* StaticSleeveImage: Renders the background sleeve image */}
           <StaticSleeveImage sleeveSrc={sleeveSrc} />
           {/* CanvasImage components: Render each item on the canvas */}
-          {items.map((item) => (
-            <CanvasImage
-              key={item.id}
-              item={item}
-              isSelected={item.id === selectedItemId}
-              isHovered={item.id === hoveredItemId && selectedItemId === null}
-              onSelect={(id) => setSelectedItemId(id)}
-              onHover={(id) => setHoveredItemId(id)}
-              onUnhover={() => setHoveredItemId(null)}
-              onChange={(newAttrs) => {
-                const updated = items.map((it) => (it.id === item.id ? { ...it, ...newAttrs } : it));
-                setCanvasItems(updated);
-              }}
-            />
-          ))}
+          {items
+            .filter((item) => item.type !== "background")
+            .map((item) => (
+              <CanvasImage
+                key={item.id}
+                item={item}
+                isSelected={item.id === selectedItemId}
+                isHovered={item.id === hoveredItemId && selectedItemId === null}
+                onSelect={(id) => setSelectedItemId(id)}
+                onHover={(id) => setHoveredItemId(id)}
+                onUnhover={() => setHoveredItemId(null)}
+                onChange={(newAttrs) => {
+                  const updated = items.map((it) => (it.id === item.id ? { ...it, ...newAttrs } : it));
+                  setCanvasItems(updated);
+                }}
+              />
+            ))}
         </Layer>
       </Stage>
 
@@ -259,7 +280,7 @@ export default function Canvas({
           {/* Button to reset canvas to only the sleeve background */}
           <button
             onClick={() => {
-              const filtered = items.filter((item) => item.type === "sleeve");
+              const filtered = items.filter((item) => item.type === "sleeve" || item.type === "background");
               setCanvasItems(filtered);
               setSelectedItemId(null);
               toast.info("Canvas was reset");

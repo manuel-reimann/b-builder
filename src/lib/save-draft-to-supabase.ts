@@ -9,7 +9,7 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env
  *   id (uuid), user_id (uuid), title (text), elements (jsonb), sleeve (text)
  *
  * @param userId The Supabase user ID
- * @param items Array of canvas items (elements and sleeve)
+ * @param items Array of canvas items (including sleeve and optional background)
  * @param sleeveSrc Path to the sleeve image
  * @param title Optional title to assign (if new draft)
  * @param draftId Optional ID of existing draft to update
@@ -28,6 +28,7 @@ export async function saveDraftToSupabase(
     const basePayload = {
       user_id: userId,
       elements: JSON.parse(JSON.stringify(items)),
+      // Includes all canvas items including backgrounds, sleeve, flowers etc.
       sleeve: sleeveSrc,
     };
 

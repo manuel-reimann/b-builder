@@ -1,4 +1,3 @@
-// filename: MyDesignsModal.tsx
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase-client";
 
@@ -63,53 +62,54 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
               <div key={design.id} className="flex flex-col items-center p-4 border rounded shadow">
                 {/* Preview image of the design */}
                 <img src={design.image_url} alt="Design Preview" className="object-cover w-full h-48 mb-2 rounded" />
-                {/* Design title */}
-                <p className="w-full mb-1 text-lg font-semibold text-agrotropic-blue">{design.title || "Ohne Titel"}</p>
-                {/* Creation date */}
-                <p className="mb-2 text-sm text-gray-500">{new Date(design.created_at).toLocaleString()}</p>
-                {/* Download image */}
-                <button
-                  onClick={() => window.open(design.image_url, "_blank")}
-                  className="px-4 py-1 mb-1 text-sm text-white rounded bg-agrotropic-blue hover:bg-agrotropic-blue/80"
-                >
-                  Bild herunterladen
-                </button>
-                {/* Download CSV */}
-                <button
-                  onClick={() => {
-                    const blob = new Blob([design.materials_csv], { type: "text/csv" });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = `${design.title || "design"}.csv`;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                  }}
-                  className="px-4 py-1 mb-1 text-sm text-white bg-green-600 rounded hover:bg-green-700"
-                >
-                  Werkstoffe (CSV)
-                </button>
-                {/* Placeholder: Delete design */}
-                <button
-                  onClick={async () => {
-                    const confirmDelete = window.confirm("Möchtest du dieses Design wirklich löschen?");
-                    if (!confirmDelete) return;
-                    const { error } = await supabase
-                      .from("user_designs")
-                      .delete()
-                      .eq("id", design.id)
-                      .eq("user_id", userId);
-                    if (error) {
-                      console.error("Fehler beim Löschen des Designs:", error);
-                      alert("Fehler beim Löschen.");
-                    } else {
-                      setDesigns((prev) => prev.filter((d) => d.id !== design.id));
-                    }
-                  }}
-                  className="px-4 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600"
-                >
-                  Löschen
-                </button>
+                {/* Title and creation date row */}
+                <div className="flex items-center justify-between w-full mb-2">
+                  <p className="text-lg font-semibold text-agrotropic-blue">{design.title || "Ohne Titel"}</p>
+                  <p className="text-sm text-gray-500">{new Date(design.created_at).toLocaleDateString()}</p>
+                </div>
+                {/* Buttons row */}
+                <div className="flex gap-2 mt-2">
+                  <button
+                    onClick={() => window.open(design.image_url, "_blank")}
+                    className="px-4 py-1 text-sm text-white rounded bg-agrotropic-blue hover:bg-agrotropic-blue/80"
+                  >
+                    Bild herunterladen
+                  </button>
+                  <button
+                    onClick={() => {
+                      const blob = new Blob([design.materials_csv], { type: "text/csv" });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = `${design.title || "design"}.csv`;
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    }}
+                    className="px-4 py-1 text-sm text-white bg-green-600 rounded hover:bg-green-700"
+                  >
+                    Werkstoffe (CSV)
+                  </button>
+                  <button
+                    onClick={async () => {
+                      const confirmDelete = window.confirm("Möchtest du dieses Design wirklich löschen?");
+                      if (!confirmDelete) return;
+                      const { error } = await supabase
+                        .from("user_designs")
+                        .delete()
+                        .eq("id", design.id)
+                        .eq("user_id", userId);
+                      if (error) {
+                        console.error("Fehler beim Löschen des Designs:", error);
+                        alert("Fehler beim Löschen.");
+                      } else {
+                        setDesigns((prev) => prev.filter((d) => d.id !== design.id));
+                      }
+                    }}
+                    className="px-4 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600"
+                  >
+                    Löschen
+                  </button>
+                </div>
               </div>
             ))}
           </div>

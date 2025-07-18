@@ -19,7 +19,13 @@ export default function DraftsModal({
 }: {
   userId: string;
   onClose: () => void;
-  onLoadDraft: (items: CanvasItem[], sleeveSrc?: string, draftId?: string, draftTitle?: string) => void;
+  onLoadDraft: (
+    items: CanvasItem[],
+    sleeveSrc?: string,
+    draftId?: string,
+    draftTitle?: string,
+    backgroundImage?: string
+  ) => void;
   setSleeveSrc: (src: string) => void;
   onSelectDraftId: (id?: string | null) => void;
   currentDraftId: string | null;
@@ -154,13 +160,26 @@ export default function DraftsModal({
                             throw new Error("Draft data is empty or not an array");
                           }
 
-                          // Cast draft elements to CanvasItem array and get sleeve source string
-                          const itemsArray: CanvasItem[] = draft.elements;
-                          const sleeveSrc: string = draft.sleeve || "";
+                          // Separate background item from others
+                          const allItems: CanvasItem[] = draft.elements;
+                          console.log("All items loaded from draft:", allItems);
+                          const backgroundItem = allItems.find((item: any) => item.type === "background");
+                          console.log("Background Item loaded from draft:", backgroundItem);
+                          const canvasItems = allItems.filter((item: any) => item.type !== "background");
 
-                          // Set sleeve image source and load draft items into canvas
+                          // Optionally set background src
+                          if (backgroundItem) {
+                            const bg = backgroundItem as CanvasItem;
+                            document.body.style.backgroundImage = `url(${bg.src})`;
+                            document.body.style.backgroundSize = "cover";
+                          } else {
+                            console.log("No background item found in draft.");
+                          }
+
+                          // Sleeve remains separate
+                          const sleeveSrc: string = draft.sleeve || "";
                           setSleeveSrc(sleeveSrc);
-                          onLoadDraft(itemsArray, sleeveSrc, draft.id, draft.title);
+                          onLoadDraft(canvasItems, sleeveSrc, draft.id, draft.title, backgroundItem?.src);
                           // Show success toast notification
                           toast.success("Entwurf geladen");
                           // Set the currently selected draft ID

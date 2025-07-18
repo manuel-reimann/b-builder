@@ -62,10 +62,28 @@ function App() {
     const sleeveItem = canvasItems.find((item) => item.type === "sleeve");
     if (!sleeveItem) return;
 
+    const backgroundItem =
+      backgroundImage !== null
+        ? {
+            id: "background",
+            src: backgroundImage,
+            x: 0,
+            y: 0,
+            maxWidth: 800,
+            maxHeight: 800,
+            rotation: 0,
+            scale: 1,
+            type: "background",
+            label: "Hintergrund",
+          }
+        : null;
+
+    const allItems = backgroundItem ? [...canvasItems, backgroundItem] : [...canvasItems];
+
     try {
       const result = await saveDraftToSupabase(
         user.id,
-        canvasItems,
+        allItems,
         sleeveItem.src,
         titleOverride ?? undefined,
         currentDraftId ?? undefined
@@ -274,9 +292,22 @@ function App() {
         <DraftsModal
           userId={user.id}
           onClose={() => setShowDraftsModal(false)}
-          onLoadDraft={(items: any[], sleeveSrc?: string, draftId?: string, draftTitle?: string) => {
-            setCanvasItems(items);
+          onLoadDraft={(
+            items: any[],
+            sleeveSrc?: string,
+            draftId?: string,
+            draftTitle?: string,
+            backgroundSrc?: string
+          ) => {
+            if (backgroundSrc) {
+              setBackgroundImage(backgroundSrc);
+            } else {
+              setBackgroundImage(null);
+            }
+
+            setCanvasItems(items.filter((item) => item.type !== "background"));
             setSelectedItemId(null);
+
             if (sleeveSrc !== undefined) {
               setSleeveSrc(sleeveSrc);
             }
