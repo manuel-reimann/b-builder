@@ -1,7 +1,10 @@
 {
   "functions": {
     "api/*.ts": {
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs",
+      "experimental": {
+        "esm": true
+      }
     }
   }
 }
