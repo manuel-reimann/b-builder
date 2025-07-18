@@ -4,21 +4,21 @@ const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SE
 
 export async function POST(req: Request): Promise<Response> {
   try {
-    const { userId, image, prompt, title, materials_csv } = await req.json();
+    const { userId, image_url, prompt, title, materials_csv } = await req.json();
 
     console.log("userId:", userId);
-    console.log("image length:", image?.length);
+    console.log("image_url:", image_url);
     console.log("prompt:", prompt);
     console.log("title:", title);
     console.log("materials_csv:", materials_csv);
 
-    if (!userId || !image || !prompt || !title || !materials_csv) {
+    if (!userId || !image_url || !prompt || !title || !materials_csv) {
       return new Response("Missing required fields", { status: 400 });
     }
 
     const { error } = await supabase.from("user_designs").insert({
       user_id: userId,
-      image_url: image,
+      image_url,
       prompt,
       title,
       materials_csv,
