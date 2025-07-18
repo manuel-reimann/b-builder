@@ -1,5 +1,5 @@
 // Import required libraries and components
-import { generateImageWithFlux } from "../utils/flux-client"; // Import the Flux API client for image generation
+//import { generateImageWithFlux } from "../utils/flux-client"; // Import the Flux API client for image generation <------
 import { buildPrompt } from "../utils/export-prompt"; // Import the prompt builder utility
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer } from "react-konva";
@@ -7,6 +7,8 @@ import StaticSleeveImage from "./static-sleeve-image";
 import CanvasImage from "./canvas-image";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { showToastOnceStrict } from "../lib/toastUtils"; // Import custom toast utility
+import { createClient } from "@supabase/supabase-js";
 
 // Defines the structure of each item placed on the canvas
 export interface CanvasItem {
@@ -47,6 +49,9 @@ export default function Canvas({
   hoveredItemId,
   setHoveredItemId,
   userId,
+  showToastOnceStrict,
+  setShowLoginModal,
+  user,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
@@ -61,6 +66,9 @@ export default function Canvas({
   hoveredItemId: string | null;
   setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
   userId: string;
+  showToastOnceStrict: (id: string, message: string, type: "info" | "success" | "error") => void;
+  setShowLoginModal: React.Dispatch<React.SetStateAction<boolean>>;
+  user: any;
 }) {
   // Fixed design dimensions for the canvas
   const DESIGN_WIDTH = 800;
@@ -270,7 +278,11 @@ export default function Canvas({
             /* Button to open modal for saving a new draft */
             <button
               onClick={() => {
-                showSaveDraftModal();
+                if (userId) {
+                  showSaveDraftModal();
+                } else {
+                  showToastOnceStrict("login-required", "Please login first", "info");
+                }
               }}
               className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-blue hover:bg-gray-500 rounded-md"
             >
@@ -292,6 +304,16 @@ export default function Canvas({
           {/* Button to trigger generation action (currently logs to console) */}
           <button
             onClick={async () => {
+              if (!userId) {
+                showToastOnceStrict("login-required", "Please login first", "info");
+                return;
+              }
+
+              if (!currentDraftId) {
+                showSaveDraftModal();
+                return;
+              }
+
               if (!stageRef.current) {
                 console.error("Stage ref is not available");
                 return;
@@ -305,7 +327,7 @@ export default function Canvas({
               const dataUrl = canvasElement.toDataURL("image/png");
 
               const prompt = buildPrompt(items);
-              console.log("DEBUG – Prompt:", prompt);
+              console.log("DEBUG – Prompt:", prompt);
               console.log("DEBUG – Image length:", dataUrl.length);
 
               // Generate CSV string of materials
@@ -321,11 +343,11 @@ export default function Canvas({
               const materials_csv = materialEntries.join(", ");
 
               // Call Flux API with only prompt and imageBase64
-              const result = await generateImageWithFlux({
-                prompt,
-                imageBase64: dataUrl,
-              });
-              //const result = { image: "/img/dummy-flux-output.jpg" }; // Dummy image for testing
+              //const result = await generateImageWithFlux({
+              // prompt,
+              // imageBase64: dataUrl,
+              //});
+              const result = { image: "/img/dummy-flux-output.jpg" }; // Dummy image for testing
 
               // After receiving result, save to Supabase
               if (result && result.image) {
