@@ -1,5 +1,6 @@
 // Import required libraries and components
 import { generateImageWithFlux } from "../utils/flux-client"; // Import the Flux API client for image generation <------
+import ResultModal from "./results";
 import { buildPrompt } from "../utils/export-prompt"; // Import the prompt builder utility
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer } from "react-konva";
@@ -75,7 +76,16 @@ export default function Canvas({
   // Reference to the Konva Stage component
   const stageRef = useRef<any>(null);
 
-  const [fluxImage, setFluxImage] = useState<string | null>(null);
+  const [resultModalProps, setResultModalProps] = useState({
+    open: false,
+    imageUrl: null as string | null,
+    prompt: "",
+    title: "",
+    userId: "",
+    materials_csv: "",
+    draftId: null as string | null,
+    defaultTitle: "",
+  });
 
   // Tracks the current width and height of the canvas container
   const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
@@ -319,17 +329,13 @@ export default function Canvas({
                 return;
               }
 
-              // Deselect any selected element to remove transformation handles
               setSelectedItemId(null);
-              await new Promise((resolve) => setTimeout(resolve, 50)); // Wait for UI to update
+              await new Promise((resolve) => setTimeout(resolve, 50));
 
               const canvasElement = stageRef.current.getStage().toCanvas();
               const dataUrl = canvasElement.toDataURL("image/png");
 
               const prompt = buildPrompt(items);
-              console.log("DEBUG – Prompt:", prompt);
-              console.log("DEBUG – Image length:", dataUrl.length);
-
               // Generate CSV string of materials
               const materialEntries = items.map(
                 (item) =>
@@ -342,6 +348,18 @@ export default function Canvas({
               );
               const materials_csv = materialEntries.join(", ");
 
+              // Immediately open the modal with loading state
+              setResultModalProps({
+                open: true,
+                imageUrl: null,
+                prompt,
+                title: currentDraftTitle ?? "Untitled",
+                defaultTitle: currentDraftTitle ?? "Untitled",
+                materials_csv,
+                userId,
+                draftId: currentDraftId ?? null,
+              });
+
               //Call Flux API with only prompt and imageBase64
               const result = await generateImageWithFlux({
                 prompt,
@@ -349,7 +367,6 @@ export default function Canvas({
               });
               //const result = { image: "/img/dummy-flux-output.jpg" }; // Dummy image for testing
 
-              // After receiving result, save to Supabase
               if (result && result.image) {
                 try {
                   // Fetch image from Flux
@@ -369,6 +386,7 @@ export default function Canvas({
                   if (uploadError) {
                     console.error("Error uploading to Supabase:", uploadError);
                     toast.error("Upload to Supabase failed");
+                    // Optionally update modal to show error
                     return;
                   }
 
@@ -377,11 +395,15 @@ export default function Canvas({
                   if (!publicData?.publicUrl) {
                     console.error("Error getting public URL");
                     toast.error("Could not retrieve public URL");
+                    // Optionally update modal to show error
                     return;
                   }
 
                   const publicUrl = publicData.publicUrl;
-                  setFluxImage(publicUrl);
+                  setResultModalProps((prev) => ({
+                    ...prev,
+                    imageUrl: publicUrl,
+                  }));
 
                   await saveDesignToSupabase({
                     userId,
@@ -395,9 +417,11 @@ export default function Canvas({
                 } catch (error) {
                   console.error("Fehler beim Speichern in Supabase:", error);
                   toast.error("Speichern fehlgeschlagen.");
+                  // Optionally update modal to show error
                 }
               } else {
                 console.warn("No image returned from Flux:", result);
+                // Optionally update modal to show error
               }
             }}
             className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-green hover:bg-green-900 rounded-md"
@@ -406,15 +430,17 @@ export default function Canvas({
           </button>
         </div>
       </div>
-
-      {fluxImage && (
-        <div className="absolute z-30 p-4 rounded shadow bottom-4 left-4 bg-white/90">
-          <div className="mb-2 font-semibold text-gray-800">Preview (Flux Output):</div>
-          <img src={fluxImage} alt="Flux Result" className="max-w-xs border border-gray-300 rounded" />
-          <a href={fluxImage} download="flux_output.png" className="inline-block mt-2 text-sm text-blue-600 underline">
-            Bild herunterladen
-          </a>
-        </div>
+      {resultModalProps.open && (
+        <ResultModal
+          open={resultModalProps.open}
+          onClose={() => setResultModalProps((prev) => ({ ...prev, open: false }))}
+          imageUrl={resultModalProps.imageUrl}
+          prompt={resultModalProps.prompt}
+          userId={resultModalProps.userId}
+          materials_csv={resultModalProps.materials_csv}
+          draftId={resultModalProps.draftId}
+          defaultTitle={resultModalProps.defaultTitle}
+        />
       )}
     </div>
   );
