@@ -1,19 +1,16 @@
 export const config = {
-  runtime: "edge", // optional bei Vercel
+  runtime: "edge",
 };
 
-export default async function handler(req: Request) {
-  if (req.method !== "POST") {
-    return new Response("Method Not Allowed", { status: 405 });
+export async function GET(req: Request): Promise<Response> {
+  const { searchParams } = new URL(req.url);
+  const imageUrl = searchParams.get("url");
+
+  if (!imageUrl) {
+    return new Response("Missing 'url' parameter", { status: 400 });
   }
 
   try {
-    const { imageUrl } = await req.json();
-
-    if (!imageUrl) {
-      return new Response("Missing imageUrl", { status: 400 });
-    }
-
     const externalRes = await fetch(imageUrl, {
       method: "GET",
       headers: {
@@ -21,6 +18,7 @@ export default async function handler(req: Request) {
       },
       redirect: "follow",
     });
+
     if (!externalRes.ok) {
       return new Response("Failed to fetch image", { status: 500 });
     }
@@ -29,11 +27,13 @@ export default async function handler(req: Request) {
     const buffer = await externalRes.arrayBuffer();
 
     return new Response(buffer, {
+      status: 200,
       headers: {
         "Content-Type": contentType,
         "Content-Length": buffer.byteLength.toString(),
         "Content-Disposition": "inline; filename=image.png",
         "Cache-Control": "public, max-age=3600",
+        "Access-Control-Allow-Origin": "*", // Optional: relax CORS for testing
       },
     });
   } catch (err) {
