@@ -140,11 +140,11 @@ export default function SidebarLeft({
         // change sleeve background
         setSleeveSrc(src);
 
-        // Gleichzeitig auch den sleeve im canvasItems aktualisieren:
+        // simultaneously update existing sleeve item in canvas
         setCanvasItems((prev: any[]) =>
           prev.map((item) =>
             item.type === "sleeve"
-              ? { ...item, src, label } // 🔁 src & label ersetzen
+              ? { ...item, src, label } // src & label replace
               : item
           )
         );
