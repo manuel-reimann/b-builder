@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { supabase } from "../lib/supabase-client";
 
 interface ResultModalProps {
   open: boolean;
@@ -37,54 +36,32 @@ export default function ResultModal({
 
     try {
       setLoading(true);
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const filename = `flux-output-${Date.now()}.png`;
 
-      const { error: uploadError } = await supabase.storage.from("user-images").upload(filename, blob, {
-        cacheControl: "3600",
-        upsert: false,
-        contentType: "image/png",
-      });
-
-      if (uploadError) {
-        toast.error("Upload fehlgeschlagen");
-        return;
-      }
-
-      const { data: publicData } = supabase.storage.from("user-images").getPublicUrl(filename);
-      const publicUrl = publicData?.publicUrl;
-
-      if (!publicUrl) {
-        toast.error("Bild konnte nicht abgerufen werden");
-        return;
-      }
-
-      // Save to final designs table
-      const saveRes = await fetch("/api/save-design", {
+      const res = await fetch("/api/download-and-save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          imageUrl,
           userId,
-          image_url: publicUrl,
-          prompt,
           title,
+          prompt,
           materials_csv,
         }),
       });
 
-      if (!saveRes.ok) {
-        const errorText = await saveRes.text();
-        throw new Error(errorText);
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text);
       }
 
-      toast.success("Bild erfolgreich gespeichert!");
+      const { publicUrl } = await res.json();
 
       const link = document.createElement("a");
       link.href = publicUrl;
       link.download = "flux_output.png";
       link.click();
 
+      toast.success("Bild erfolgreich gespeichert!");
       onClose();
     } catch (err) {
       console.error(err);
