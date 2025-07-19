@@ -350,16 +350,38 @@ export default function Canvas({
 
               // After receiving result, save to Supabase
               if (result && result.image) {
-                setFluxImage(result.image);
-
                 try {
+                  // Fetch image from Flux
+                  const response = await fetch(result.image);
+                  const blob = await response.blob();
+
+                  // Generate unique filename
+                  const filename = `flux-output-${Date.now()}.png`;
+
+                  // Upload to Supabase Storage
+                  const uploadRes = await fetch("/api/upload-image", {
+                    method: "POST",
+                    body: JSON.stringify({
+                      file: await blobToBase64(blob),
+                      fileName: filename,
+                    }),
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  });
+
+                  const { publicUrl } = await uploadRes.json();
+
+                  setFluxImage(publicUrl);
+
                   await saveDesignToSupabase({
                     userId,
                     prompt,
-                    image_url: result.image,
+                    image_url: publicUrl,
                     title: currentDraftTitle ?? "Untitled",
                     materials_csv,
                   });
+
                   toast.success("Design erfolgreich gespeichert!");
                 } catch (error) {
                   console.error("Fehler beim Speichern in Supabase:", error);
@@ -387,6 +409,15 @@ export default function Canvas({
       )}
     </div>
   );
+}
+// Utility function to convert Blob to Base64 (without prefix)
+async function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve((reader.result as string).split(",")[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
 }
 
 async function saveDesignToSupabase({
