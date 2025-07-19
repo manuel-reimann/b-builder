@@ -33,11 +33,7 @@ export default function ResultModal({
         setLoading(true);
         console.log("📡 Lade Bild über Proxy:", imageUrl);
 
-        const response = await fetch("/api/fetch-image", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ imageUrl }),
-        });
+        const response = await fetch(`/api/fetch-image?url=${encodeURIComponent(imageUrl)}`);
 
         if (!response.ok) {
           throw new Error("Proxy-Bild konnte nicht geladen werden");
