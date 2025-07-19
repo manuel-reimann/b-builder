@@ -60,13 +60,13 @@ export default function ResultModal({
   }, [open, imageUrl]);
 
   const handleDownloadAndSave = async () => {
-    if (!imageUrl || !userId || !draftId) return;
-    console.log("Start Download & Save", { imageUrl, userId, draftId });
+    if (!finalImageUrl || !userId || !draftId) return;
+    console.log("Start Download & Save", { finalImageUrl, userId, draftId });
 
     try {
       setLoading(true);
 
-      const response = await fetch(imageUrl);
+      const response = await fetch(finalImageUrl!);
       console.log("Fetched image response", response);
       const blob = await response.blob();
 

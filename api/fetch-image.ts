@@ -14,7 +14,13 @@ export default async function handler(req: Request) {
       return new Response("Missing imageUrl", { status: 400 });
     }
 
-    const externalRes = await fetch(imageUrl);
+    const externalRes = await fetch(imageUrl, {
+      method: "GET",
+      headers: {
+        "User-Agent": "Mozilla/5.0",
+      },
+      redirect: "follow",
+    });
     if (!externalRes.ok) {
       return new Response("Failed to fetch image", { status: 500 });
     }
@@ -25,8 +31,9 @@ export default async function handler(req: Request) {
     return new Response(buffer, {
       headers: {
         "Content-Type": contentType,
+        "Content-Length": buffer.byteLength.toString(),
         "Content-Disposition": "inline; filename=image.png",
-        "Access-Control-Allow-Origin": "*", // nur falls du auch lokal testen willst
+        "Cache-Control": "public, max-age=3600",
       },
     });
   } catch (err) {
