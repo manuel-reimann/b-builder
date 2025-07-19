@@ -34,18 +34,28 @@ export default function ResultModal({
 
   const handleDownloadAndSave = async () => {
     if (!imageUrl || !userId || !draftId) return;
+    console.log("Start Download & Save", { imageUrl, userId, draftId });
 
     try {
       setLoading(true);
 
       const response = await fetch(imageUrl);
+      console.log("Fetched image response", response);
       const blob = await response.blob();
 
       const reader = new FileReader();
       reader.readAsDataURL(blob);
       reader.onloadend = async () => {
+        console.log("Image loaded as base64", reader.result);
         const base64data = reader.result;
 
+        console.log("POSTing to download-and-save API", {
+          imageDataUrl: base64data,
+          userId,
+          title,
+          prompt,
+          materials_csv,
+        });
         const res = await fetch("/api/download-and-save", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -64,6 +74,7 @@ export default function ResultModal({
         }
 
         const { publicUrl } = await res.json();
+        console.log("Received publicUrl from API", publicUrl);
 
         setFinalImageUrl(publicUrl);
 

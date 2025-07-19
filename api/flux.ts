@@ -15,6 +15,7 @@ export const config = {
 export async function POST(req: Request): Promise<Response> {
   const body = await req.json();
   console.log("Incoming request body:", body);
+  console.log("🔍 Payload received in /api/flux:", body);
   const { image, prompt } = body;
 
   if (!image || !prompt) {
@@ -36,8 +37,10 @@ export async function POST(req: Request): Promise<Response> {
         input_image: image.replace(/^data:image\/\w+;base64,/, ""),
       }),
     });
+    console.log("📤 Sent request to BFL API");
 
     if (!fluxInitRes.ok) {
+      console.error("❌ Flux init request failed with status:", fluxInitRes.status);
       const errorText = await fluxInitRes.text();
       console.error("Flux init failed:", errorText);
       return new Response(JSON.stringify({ error: "Initial request failed", details: errorText }), {
@@ -46,6 +49,7 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     const { polling_url } = await fluxInitRes.json();
+    console.log("✅ Received polling_url:", polling_url);
     if (!polling_url) {
       return new Response(JSON.stringify({ error: "Missing polling_url from response" }), {
         status: 500,
@@ -63,7 +67,9 @@ export async function POST(req: Request): Promise<Response> {
       });
 
       const pollJson: FluxPollingResponse = await pollRes.json();
+      console.log(`⏳ Poll attempt ${i + 1}, status:`, pollJson.status);
       if (pollJson.status === "Ready") {
+        console.log("🎉 Flux result ready:", pollJson.result?.sample);
         finalData = pollJson;
         break;
       } else if (pollJson.status === "Failed" || pollJson.status === "Error") {
@@ -81,6 +87,7 @@ export async function POST(req: Request): Promise<Response> {
       });
     }
 
+    console.log("📦 Returning image URL to frontend");
     return new Response(JSON.stringify({ image: finalData.result.sample }), {
       status: 200,
       headers: {

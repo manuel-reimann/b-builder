@@ -360,18 +360,29 @@ export default function Canvas({
                 draftId: currentDraftId ?? null,
               });
 
+              // === LOGGING: Vor Flux-API-Call ===
+              console.log("🟡 Flux API Call gestartet");
+              console.log("Prompt:", prompt);
+              console.log("Image Base64:", dataUrl.slice(0, 100) + "...");
+
               //Call Flux API with only prompt and imageBase64
               const result = await generateImageWithFlux({
                 prompt,
                 imageBase64: dataUrl,
               });
+              // === LOGGING: Nach Flux-API-Response ===
+              console.log("🟢 Flux API Response:", result);
               //const result = { image: "/img/dummy-flux-output.jpg" }; // Dummy image for testing
 
               if (result && result.image) {
                 try {
+                  // === LOGGING: Vor Bild-Fetch ===
+                  console.log("📡 Lade Bild von Flux URL:", result.image);
                   // Fetch image from Flux
                   const response = await fetch(result.image);
                   const blob = await response.blob();
+                  // === LOGGING: Nach Blob erhalten ===
+                  console.log("📦 Blob erhalten, lade in Supabase hoch");
 
                   // Generate unique filename
                   const filename = `flux-output-${Date.now()}.png`;
@@ -383,11 +394,14 @@ export default function Canvas({
                     contentType: "image/png",
                   });
 
+                  // === LOGGING: Nach Upload zu Supabase ===
                   if (uploadError) {
-                    console.error("Error uploading to Supabase:", uploadError);
+                    console.error("❌ Fehler beim Hochladen:", uploadError);
                     toast.error("Upload to Supabase failed");
                     // Optionally update modal to show error
                     return;
+                  } else {
+                    console.log("✅ Hochgeladen bei Supabase:", filename);
                   }
 
                   const { data: publicData } = supabase.storage.from("user-images").getPublicUrl(filename);
@@ -405,6 +419,8 @@ export default function Canvas({
                     imageUrl: publicUrl,
                   }));
 
+                  // === LOGGING: Vor saveDesignToSupabase ===
+                  console.log("💾 Speichere Design mit public URL:", publicUrl);
                   await saveDesignToSupabase({
                     userId,
                     prompt,
@@ -412,10 +428,13 @@ export default function Canvas({
                     title: currentDraftTitle ?? "Untitled",
                     materials_csv,
                   });
+                  // === LOGGING: Nach erfolgreichem Speichern ===
+                  console.log("✅ Design erfolgreich gespeichert!");
 
                   toast.success("Design erfolgreich gespeichert!");
                 } catch (error) {
-                  console.error("Fehler beim Speichern in Supabase:", error);
+                  // === LOGGING: Fehler im catch-Block ===
+                  console.error("❗ Fehler beim gesamten Vorgang:", error);
                   toast.error("Speichern fehlgeschlagen.");
                   // Optionally update modal to show error
                 }
