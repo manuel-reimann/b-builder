@@ -1,5 +1,5 @@
 // Import required libraries and components
-//import { generateImageWithFlux } from "../utils/flux-client"; // Import the Flux API client for image generation <------
+import { generateImageWithFlux } from "../utils/flux-client"; // Import the Flux API client for image generation <------
 import { buildPrompt } from "../utils/export-prompt"; // Import the prompt builder utility
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer } from "react-konva";
@@ -341,12 +341,12 @@ export default function Canvas({
               );
               const materials_csv = materialEntries.join(", ");
 
-              // Call Flux API with only prompt and imageBase64
-              //const result = await generateImageWithFlux({
-              // prompt,
-              // imageBase64: dataUrl,
-              //});
-              const result = { image: "/img/dummy-flux-output.jpg" }; // Dummy image for testing
+              //Call Flux API with only prompt and imageBase64
+              const result = await generateImageWithFlux({
+                prompt,
+                imageBase64: dataUrl,
+              });
+              //const result = { image: "/img/dummy-flux-output.jpg" }; // Dummy image for testing
 
               // After receiving result, save to Supabase
               if (result && result.image) {
