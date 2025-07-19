@@ -6,6 +6,7 @@ import { Stage, Layer } from "react-konva";
 import StaticSleeveImage from "./static-sleeve-image";
 import CanvasImage from "./canvas-image";
 import { toast } from "react-toastify";
+import { supabase } from "../lib/supabase-client"; // Supabase client import
 import "react-toastify/dist/ReactToastify.css";
 //import { showToastOnceStrict } from "../lib/toastUtils"; // Import custom toast utility
 //import { createClient } from "@supabase/supabase-js";
@@ -359,19 +360,27 @@ export default function Canvas({
                   const filename = `flux-output-${Date.now()}.png`;
 
                   // Upload to Supabase Storage
-                  const uploadRes = await fetch("/api/upload-image", {
-                    method: "POST",
-                    body: JSON.stringify({
-                      file: await blobToBase64(blob),
-                      fileName: filename,
-                    }),
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
+                  const { error: uploadError } = await supabase.storage.from("user-images").upload(filename, blob, {
+                    cacheControl: "3600",
+                    upsert: false,
+                    contentType: "image/png",
                   });
 
-                  const { publicUrl } = await uploadRes.json();
+                  if (uploadError) {
+                    console.error("Error uploading to Supabase:", uploadError);
+                    toast.error("Upload to Supabase failed");
+                    return;
+                  }
 
+                  const { data: publicData } = supabase.storage.from("user-images").getPublicUrl(filename);
+
+                  if (!publicData?.publicUrl) {
+                    console.error("Error getting public URL");
+                    toast.error("Could not retrieve public URL");
+                    return;
+                  }
+
+                  const publicUrl = publicData.publicUrl;
                   setFluxImage(publicUrl);
 
                   await saveDesignToSupabase({
@@ -409,15 +418,6 @@ export default function Canvas({
       )}
     </div>
   );
-}
-// Utility function to convert Blob to Base64 (without prefix)
-async function blobToBase64(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve((reader.result as string).split(",")[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
 }
 
 async function saveDesignToSupabase({
