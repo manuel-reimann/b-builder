@@ -24,6 +24,7 @@ export default function ResultModal({
 }: ResultModalProps) {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState(defaultTitle);
+  const [finalImageUrl, setFinalImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (open) {
@@ -64,6 +65,8 @@ export default function ResultModal({
 
         const { publicUrl } = await res.json();
 
+        setFinalImageUrl(publicUrl);
+
         const link = document.createElement("a");
         link.href = publicUrl;
         link.download = "flux_output.png";
@@ -96,10 +99,10 @@ export default function ResultModal({
             placeholder="Titel des Designs"
           />
 
-          {loading ? (
+          {loading || !finalImageUrl ? (
             <div className="flex items-center justify-center h-48">⏳ Wird geladen...</div>
           ) : (
-            imageUrl && <img src={imageUrl} alt="Result preview" className="w-full rounded shadow" />
+            <img src={finalImageUrl} alt="Result preview" className="w-full rounded shadow" />
           )}
 
           <div className="flex justify-end gap-4 pt-2">
