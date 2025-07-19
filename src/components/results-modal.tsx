@@ -136,7 +136,7 @@ export default function ResultModal({
           {loading || !finalImageUrl ? (
             <div className="flex items-center justify-center h-48">⏳ Wird geladen...</div>
           ) : (
-            <img src={finalImageUrl} alt="Result preview" className="w-full rounded shadow" />
+            imageUrl && <img src={`/api/proxy-image?url=${encodeURIComponent(imageUrl)}`} />
           )}
 
           <div className="flex justify-end gap-4 pt-2">
