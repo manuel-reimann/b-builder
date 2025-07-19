@@ -27,10 +27,37 @@ export default function ResultModal({
   const [finalImageUrl, setFinalImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (open) {
-      setLoading(false);
+    const fetchImage = async () => {
+      if (!imageUrl) return;
+      try {
+        setLoading(true);
+        console.log("📡 Lade Bild über Proxy:", imageUrl);
+
+        const response = await fetch("/api/fetch-image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageUrl }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Proxy-Bild konnte nicht geladen werden");
+        }
+
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        setFinalImageUrl(blobUrl);
+      } catch (err) {
+        console.error("❌ Fehler beim Laden über Proxy:", err);
+        toast.error("Fehler beim Bild-Download über Server");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (open && imageUrl) {
+      fetchImage();
     }
-  }, [open]);
+  }, [open, imageUrl]);
 
   const handleDownloadAndSave = async () => {
     if (!imageUrl || !userId || !draftId) return;
