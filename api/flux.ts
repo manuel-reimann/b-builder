@@ -1,3 +1,4 @@
+import { createClient } from "@supabase/supabase-js";
 // @ts-ignore
 import { VercelRequest, VercelResponse } from "@vercel/node";
 
@@ -14,6 +15,7 @@ export const config = {
 
 export async function POST(req: Request): Promise<Response> {
   const body = await req.json();
+  const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
   console.log("Incoming request body:", body);
   console.log("🔍 Payload received in /api/flux:", body);
   const { image, prompt } = body;
@@ -25,6 +27,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   try {
+    console.log("🧾 Prepared image payload:", image.slice(0, 30));
     // Step 1: Send POST request to BFL API
     const fluxInitRes = await fetch("https://api.bfl.ai/v1/flux-kontext-pro", {
       method: "POST",
@@ -68,6 +71,7 @@ export async function POST(req: Request): Promise<Response> {
 
       const pollJson: FluxPollingResponse = await pollRes.json();
       console.log(`⏳ Poll attempt ${i + 1}, status:`, pollJson.status);
+      console.log("📩 Polling response:", pollJson);
       if (pollJson.status === "Ready") {
         console.log("🎉 Flux result ready:", pollJson.result?.sample);
         finalData = pollJson;
@@ -82,19 +86,54 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     if (!finalData || !finalData.result?.sample) {
+      console.error("⚠️ Polling did not return a final image in time.");
       return new Response(JSON.stringify({ error: "Image not ready after polling" }), {
         status: 500,
       });
     }
 
-    console.log("📦 Returning image URL to frontend");
-    return new Response(JSON.stringify({ image: finalData.result.sample }), {
+    // Download the image from Flux and upload to Supabase Storage
+    const fluxImageUrl = finalData.result.sample;
+    console.log("📡 Lade Bild von Flux:", fluxImageUrl);
+
+    const imageResponse = await fetch(fluxImageUrl);
+    if (!imageResponse.ok) {
+      console.error("❌ Fehler beim Laden des Bildes von Flux:", imageResponse.status);
+      return new Response(JSON.stringify({ error: "Failed to download image from Flux" }), {
+        status: 500,
+      });
+    }
+
+    const imageBuffer = await imageResponse.arrayBuffer();
+    const imageName = `flux-${Date.now()}.png`;
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("user-images")
+      .upload(imageName, imageBuffer, {
+        contentType: "image/png",
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error("❌ Fehler beim Upload zu Supabase:", uploadError);
+      return new Response(JSON.stringify({ error: "Upload to Supabase failed" }), {
+        status: 500,
+      });
+    }
+
+    const { data: publicUrlData } = supabase.storage.from("user-images").getPublicUrl(imageName);
+
+    const publicUrl = publicUrlData.publicUrl;
+    console.log("✅ Bild in Supabase gespeichert:", publicUrl);
+
+    return new Response(JSON.stringify({ image: publicUrl }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
       },
     });
   } catch (error) {
+    console.error("🔥 Uncaught error in /api/flux:", error);
     return new Response(JSON.stringify({ error: "Internal error", details: error }), {
       status: 500,
     });
