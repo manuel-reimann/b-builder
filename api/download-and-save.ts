@@ -1,4 +1,3 @@
-// File: /api/download-and-save.ts
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@supabase/supabase-js";
 
@@ -9,21 +8,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { imageUrl, userId, prompt, title, materials_csv } = req.body;
+  const { imageDataUrl, userId, prompt, title, materials_csv } = req.body;
 
-  if (!imageUrl || !userId || !title) {
+  if (!imageDataUrl || !userId || !title) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   try {
-    // Fetch image
-    const imageResponse = await fetch(imageUrl);
-    if (!imageResponse.ok) throw new Error("Image fetch failed");
-    const blob = await imageResponse.blob();
+    // Convert base64 to buffer
+    const base64Data = imageDataUrl.replace(/^data:image\/png;base64,/, "");
+    const buffer = Buffer.from(base64Data, "base64");
 
     // Upload to Supabase bucket
     const filename = `flux-output-${Date.now()}.png`;
-    const { error: uploadError } = await supabase.storage.from("user-images").upload(filename, blob, {
+    const { error: uploadError } = await supabase.storage.from("user-images").upload(filename, buffer, {
       cacheControl: "3600",
       upsert: false,
       contentType: "image/png",

@@ -37,36 +37,45 @@ export default function ResultModal({
     try {
       setLoading(true);
 
-      const res = await fetch("/api/download-and-save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          imageUrl,
-          userId,
-          title,
-          prompt,
-          materials_csv,
-        }),
-      });
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
 
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text);
-      }
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = async () => {
+        const base64data = reader.result;
 
-      const { publicUrl } = await res.json();
+        const res = await fetch("/api/download-and-save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            imageDataUrl: base64data,
+            userId,
+            title,
+            prompt,
+            materials_csv,
+          }),
+        });
 
-      const link = document.createElement("a");
-      link.href = publicUrl;
-      link.download = "flux_output.png";
-      link.click();
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text);
+        }
 
-      toast.success("Bild erfolgreich gespeichert!");
-      onClose();
+        const { publicUrl } = await res.json();
+
+        const link = document.createElement("a");
+        link.href = publicUrl;
+        link.download = "flux_output.png";
+        link.click();
+
+        toast.success("Bild erfolgreich gespeichert!");
+        onClose();
+        setLoading(false);
+      };
     } catch (err) {
       console.error(err);
       toast.error("Fehler beim Speichern oder Herunterladen");
-    } finally {
       setLoading(false);
     }
   };
