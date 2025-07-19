@@ -49,7 +49,7 @@ export default function Canvas({
   hoveredItemId,
   setHoveredItemId,
   userId,
-  showToastOnceStrict,
+  setShowLoginModal,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
@@ -64,7 +64,6 @@ export default function Canvas({
   hoveredItemId: string | null;
   setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
   userId: string;
-  showToastOnceStrict: (id: string, message: string, type: "info" | "success" | "error") => void;
   setShowLoginModal: React.Dispatch<React.SetStateAction<boolean>>;
   user: any;
 }) {
@@ -279,7 +278,8 @@ export default function Canvas({
                 if (userId) {
                   showSaveDraftModal();
                 } else {
-                  showToastOnceStrict("login-required", "Please login first", "info");
+                  toast.info("Please login first");
+                  setShowLoginModal(true);
                 }
               }}
               className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-blue hover:bg-gray-500 rounded-md"
@@ -303,7 +303,8 @@ export default function Canvas({
           <button
             onClick={async () => {
               if (!userId) {
-                showToastOnceStrict("login-required", "Please login first", "info");
+                toast.info("Please login first");
+                setShowLoginModal(true);
                 return;
               }
 

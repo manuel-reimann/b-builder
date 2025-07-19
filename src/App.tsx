@@ -251,7 +251,6 @@ function App() {
               setHoveredItemId={setHoveredItemId}
               userId={user?.id}
               setShowLoginModal={setShowLoginModal}
-              showToastOnceStrict={showToastOnceStrict}
               user={user}
             />
           </div>
