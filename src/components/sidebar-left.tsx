@@ -96,7 +96,6 @@ const data: Data = {
   ],
 };
 
-// const DESIGN_CATEGORIES = ["Backgrounds", "Sleeves"];
 const DESIGN_CATEGORIES = ["Backgrounds", "Sleeves"];
 
 export default function SidebarLeft({
