@@ -107,12 +107,10 @@ export async function POST(req: Request): Promise<Response> {
     const imageBuffer = await imageResponse.arrayBuffer();
     const imageName = `flux-${Date.now()}.png`;
 
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from("user-images")
-      .upload(imageName, imageBuffer, {
-        contentType: "image/png",
-        upsert: false,
-      });
+    const { error: uploadError } = await supabase.storage.from("user-images").upload(imageName, imageBuffer, {
+      contentType: "image/png",
+      upsert: false,
+    });
 
     if (uploadError) {
       console.error("❌ Fehler beim Upload zu Supabase:", uploadError);
