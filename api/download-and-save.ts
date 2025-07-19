@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import fetch from "node-fetch";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
@@ -8,20 +9,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { imageDataUrl, userId, prompt, title, materials_csv } = req.body;
+  const { imageUrl, userId, prompt, title, materials_csv } = req.body;
 
-  if (!imageDataUrl || !userId || !title) {
+  if (!imageUrl || !userId || !title) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   try {
-    // Convert base64 to buffer
-    const base64Data = imageDataUrl.replace(/^data:image\/png;base64,/, "");
-    const buffer = Buffer.from(base64Data, "base64");
+    // Fetch the image as a buffer from remote URL
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      return res.status(500).json({ error: "Failed to download image from URL" });
+    }
+    const buffer = await response.arrayBuffer();
 
     // Upload to Supabase bucket
     const filename = `flux-output-${Date.now()}.png`;
-    const { error: uploadError } = await supabase.storage.from("user-images").upload(filename, buffer, {
+    const { error: uploadError } = await supabase.storage.from("user-images").upload(filename, Buffer.from(buffer), {
       cacheControl: "3600",
       upsert: false,
       contentType: "image/png",
