@@ -1,3 +1,4 @@
+//final save of the design to the database, after the proxy image has been fetched
 import { createClient } from "@supabase/supabase-js";
 
 console.log("ENV SUPABASE_URL:", process.env.SUPABASE_URL);

@@ -1,12 +1,12 @@
 // /api/proxy-image.ts
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-// native fetch is supported in modern Node runtimes (no need for node-fetch)
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const url = req.query.url as string;
-  if (!url) {
-    console.error("❌ Missing URL in request query");
-    res.status(400).send("Missing URL");
+  const url = req.query.url;
+
+  if (typeof url !== "string") {
+    console.error("❌ Missing or invalid URL in request query");
+    res.status(400).send("Missing or invalid URL");
     return;
   }
 
@@ -31,8 +31,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const buffer = Buffer.from(await imageRes.arrayBuffer());
     res.status(200).send(buffer);
-  } catch (err) {
+  } catch (err: any) {
     console.error("❗ Proxy error during fetch:", err);
-    res.status(500).send(`Proxy error: ${(err as Error).message}`);
+    res.status(500).send(`Proxy error: ${err.message}`);
   }
 }
