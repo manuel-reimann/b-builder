@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/download-and-save.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
-}

@@ -1,18 +1,25 @@
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 //final save of the design to the database, after the proxy image has been fetched
 import { createClient } from "@supabase/supabase-js";
 
 console.log("ENV SUPABASE_URL:", process.env.SUPABASE_URL);
 console.log("ENV SUPABASE_SERVICE_ROLE_KEY:", process.env.SUPABASE_SERVICE_ROLE_KEY);
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     return res.status(405).send("Method Not Allowed");
   }
 
   try {
-    const { userId, image_url, prompt, title, materials_csv } = req.body;
+    const { userId, image_url, prompt, title, materials_csv } = req.body as {
+      userId: string;
+      image_url: string;
+      prompt: string;
+      title: string;
+      materials_csv: string;
+    };
 
     console.log("userId:", userId);
     console.log("image_url:", image_url);
