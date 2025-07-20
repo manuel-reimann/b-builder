@@ -4,22 +4,30 @@ interface ResultModalProps {
   open: boolean;
   onClose: () => void;
   imageUrl: string | null;
-  defaultTitle: string;
 }
 
-export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: ResultModalProps) {
+export default function ResultModal({ open, onClose, imageUrl }: ResultModalProps) {
   const [loading] = useState(false);
-  const [title, setTitle] = useState(defaultTitle);
 
-  const handleDownloadAndSave = () => {
+  const handleDownloadAndSave = async () => {
     if (!imageUrl) return;
 
-    const link = document.createElement("a");
-    link.href = imageUrl;
-    link.download = "flux_output.png";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = "flux_output.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(objectUrl);
+    } catch (error) {
+      console.error("Download error:", error);
+    }
   };
 
   if (!open) return null;
@@ -30,16 +38,8 @@ export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: R
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Generiertes Bild</h2>
 
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md"
-            placeholder="Titel des Designs"
-          />
-
           {loading || !imageUrl ? (
-            <div className="flex items-center justify-center h-48">⏳ Wird geladen...</div>
+            <div className="flex items-center justify-center h-48 animate-pulse">🔄 Wird geladen...</div>
           ) : (
             imageUrl && <img src={imageUrl} alt="Generated Design" className="max-w-full max-h-[500px] mx-auto" />
           )}
@@ -56,7 +56,7 @@ export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: R
               disabled={loading}
               className="px-4 py-2 text-sm font-medium text-white rounded-md bg-agrotropic-green hover:bg-green-800"
             >
-              Herunterladen &amp; Speichern
+              Herunterladen
             </button>
           </div>
         </div>

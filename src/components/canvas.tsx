@@ -443,7 +443,6 @@ export default function Canvas({
         open={resultModalProps.open}
         onClose={() => setResultModalProps((prev) => ({ ...prev, open: false }))}
         imageUrl={resultModalProps.imageUrl}
-        defaultTitle={resultModalProps.defaultTitle}
       />
     </div>
   );
