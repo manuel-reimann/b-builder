@@ -80,8 +80,10 @@ export default function CanvasImage({
             stage.container().style.cursor = "default";
           }
         }}
-        stroke="red"
-        strokeWidth={0.5}
+        strokeEnabled={false}
+        shadowEnabled={false}
+        perfectDrawEnabled={false}
+        imageSmoothingEnabled={false}
       />
       {(isSelected || isHovered) && <Transformer ref={trRef} rotateEnabled={true} />}
     </>
