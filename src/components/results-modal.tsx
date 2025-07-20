@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface ResultModalProps {
   open: boolean;
   onClose: () => void;
@@ -8,8 +6,6 @@ interface ResultModalProps {
 }
 
 export default function ResultModal({ open, onClose, imageUrl, title }: ResultModalProps) {
-  const [loading] = useState(false);
-
   const handleDownloadAndSave = async () => {
     if (!imageUrl) return;
 
@@ -39,10 +35,10 @@ export default function ResultModal({ open, onClose, imageUrl, title }: ResultMo
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">{title}</h2>
 
-          {loading || !imageUrl ? (
+          {!imageUrl ? (
             <div className="flex items-center justify-center h-48 animate-pulse">🔄 Wird geladen...</div>
           ) : (
-            imageUrl && <img src={imageUrl} alt="Generated Design" className="max-w-full max-h-[500px] mx-auto" />
+            <img src={imageUrl} alt="Generated Design" className="max-w-full max-h-[500px] mx-auto" />
           )}
 
           <div className="flex justify-end gap-4 pt-2">
@@ -54,7 +50,6 @@ export default function ResultModal({ open, onClose, imageUrl, title }: ResultMo
             </button>
             <button
               onClick={handleDownloadAndSave}
-              disabled={loading}
               className="px-4 py-2 text-sm font-medium text-white rounded-md bg-agrotropic-green hover:bg-green-800"
             >
               Herunterladen
