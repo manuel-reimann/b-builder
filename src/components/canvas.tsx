@@ -168,6 +168,8 @@ export default function Canvas({
     // If no draft exists, save it first and then re-fetch the latest draft for title/id
     if (!currentDraftId) {
       await saveDraft();
+      // Wait briefly to ensure Supabase has indexed the new draft
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       // After saving, re-fetch the draft to get its ID and title
       const { data } = await supabase
