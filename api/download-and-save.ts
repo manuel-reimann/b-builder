@@ -9,33 +9,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  const { imageUrl, userId, title } = req.body;
+  const { imageDataUrl, userId, title, prompt, materials_csv } = req.body;
 
-  if (!imageUrl || !userId || !title) {
+  if (!imageDataUrl || !userId || !title || !prompt || !materials_csv) {
     res.status(400).json({ error: "Missing required fields" });
     return;
   }
 
   try {
-    const imageRes = await fetch(imageUrl);
-    if (!imageRes.ok) {
-      throw new Error(`Image fetch failed: ${imageRes.statusText}`);
-    }
-
-    const arrayBuffer = await imageRes.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    // Decode base64 image
+    const base64Data = imageDataUrl.replace(/^data:image\/\w+;base64,/, "");
+    const buffer = Buffer.from(base64Data, "base64");
 
     const filename = `${Date.now()}_${title.replace(/\s+/g, "_")}.png`;
 
-    const { error } = await supabase.storage.from("user-designs").upload(filename, buffer, {
+    const { error: uploadError } = await supabase.storage.from("user-designs").upload(filename, buffer, {
       contentType: "image/png",
       upsert: true,
     });
 
-    if (error) throw error;
+    if (uploadError) throw uploadError;
 
     const { data: urlData } = supabase.storage.from("user-designs").getPublicUrl(filename);
-    res.status(200).json({ publicUrl: urlData.publicUrl });
+    const publicUrl = urlData.publicUrl;
+
+    const { error: dbError } = await supabase.from("user_designs").insert({
+      user_id: userId,
+      image_url: publicUrl,
+      prompt,
+      title,
+      materials_csv,
+    });
+
+    if (dbError) throw dbError;
+
+    res.status(200).json({ publicUrl });
   } catch (err: any) {
     console.error("[DOWNLOAD-SAVE ERROR]", err);
     res.status(500).json({ error: err.message ?? "Unknown error" });
