@@ -430,6 +430,7 @@ export default function Canvas({
         </div>
       </div>
       <ResultModal
+        key={resultModalProps.imageUrl} // Ensures modal remounts on new image
         open={resultModalProps.open}
         onClose={() => setResultModalProps((prev) => ({ ...prev, open: false }))}
         imageUrl={resultModalProps.imageUrl}
