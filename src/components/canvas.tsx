@@ -79,7 +79,7 @@ export default function Canvas({
   const [resultModalProps, setResultModalProps] = useState({
     open: false,
     imageUrl: null as string | null,
-    defaultTitle: "", // Add missing defaultTitle to match ResultModalProps type
+    title: "",
   });
 
   // Track whether we should generate after saving draft
@@ -185,7 +185,7 @@ export default function Canvas({
     setResultModalProps({
       open: true,
       imageUrl: null,
-      defaultTitle: currentDraftTitle ?? "Untitled",
+      title: currentDraftTitle ?? "Untitled",
     });
 
     const result = await generateImageWithFlux({ prompt, imageBase64: dataUrl });
@@ -428,7 +428,7 @@ export default function Canvas({
         open={resultModalProps.open}
         onClose={() => setResultModalProps((prev) => ({ ...prev, open: false }))}
         imageUrl={resultModalProps.imageUrl}
-        defaultTitle={resultModalProps.defaultTitle}
+        defaultTitle={resultModalProps.title}
       />
     </div>
   );

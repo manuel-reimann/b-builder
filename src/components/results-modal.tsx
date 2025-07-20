@@ -8,7 +8,7 @@ interface ResultModalProps {
 import { useState } from "react";
 
 export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: ResultModalProps) {
-  const [title, setTitle] = useState(defaultTitle);
+  const [title] = useState(defaultTitle);
   console.log("🟢 ResultModal mounted with defaultTitle:", defaultTitle);
   const handleDownloadAndSave = async () => {
     if (!imageUrl) return;
@@ -40,18 +40,7 @@ export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: R
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-full max-w-xl p-6 bg-white rounded-md shadow-lg">
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Generiertes Bild</h2>
-
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-              console.log("✏️ Title input changed to:", e.target.value);
-            }}
-            className="w-full px-3 py-2 border rounded-md"
-            placeholder="Titel des Designs"
-          />
+          <h2 className="text-xl font-semibold">{title}</h2>
 
           {!imageUrl ? (
             <div className="flex items-center justify-center h-48 animate-pulse">🔄 Wird geladen...</div>
