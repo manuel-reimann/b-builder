@@ -79,7 +79,7 @@ export default function Canvas({
   const [resultModalProps, setResultModalProps] = useState({
     open: false,
     imageUrl: null as string | null,
-    title: "",
+    defaultTitle: "", // Add missing defaultTitle to match ResultModalProps type
   });
 
   // Track whether we should generate after saving draft
@@ -159,6 +159,7 @@ export default function Canvas({
 
   // Handles the generation process (called after all preconditions are met)
   const handleGenerate = async () => {
+    console.log("▶️ Starting image generation...");
     if (!stageRef.current) {
       console.error("Stage ref is not available");
       return;
@@ -184,7 +185,7 @@ export default function Canvas({
     setResultModalProps({
       open: true,
       imageUrl: null,
-      title: currentDraftTitle ?? "Untitled",
+      defaultTitle: currentDraftTitle ?? "Untitled",
     });
 
     const result = await generateImageWithFlux({ prompt, imageBase64: dataUrl });
@@ -257,6 +258,7 @@ export default function Canvas({
   // After draft is saved and we have an id, trigger generation if pending
   useEffect(() => {
     if (shouldGenerateAfterDraft && currentDraftId) {
+      console.log("🧠 Generating after draft was saved...");
       handleGenerate();
       setShouldGenerateAfterDraft(false);
     }
@@ -426,7 +428,7 @@ export default function Canvas({
         open={resultModalProps.open}
         onClose={() => setResultModalProps((prev) => ({ ...prev, open: false }))}
         imageUrl={resultModalProps.imageUrl}
-        title={resultModalProps.title}
+        defaultTitle={resultModalProps.defaultTitle}
       />
     </div>
   );
