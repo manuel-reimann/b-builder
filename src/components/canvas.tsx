@@ -48,6 +48,7 @@ export default function Canvas({
   showSaveDraftModal,
   currentDraftId,
   currentDraftTitle,
+  setCurrentDraftTitle,
   hoveredItemId,
   setHoveredItemId,
   userId,
@@ -63,11 +64,11 @@ export default function Canvas({
   showSaveDraftModal: () => void;
   currentDraftId: string | null;
   currentDraftTitle: string | null;
+  setCurrentDraftTitle: React.Dispatch<React.SetStateAction<string | null>>;
   hoveredItemId: string | null;
   setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
   userId: string;
   setShowLoginModal: React.Dispatch<React.SetStateAction<boolean>>;
-  user: any;
 }) {
   // Fixed design dimensions for the canvas
   const DESIGN_WIDTH = 800;
@@ -181,6 +182,11 @@ export default function Canvas({
       if (data && data.length > 0) {
         const latestDraft = data[0];
         console.log("📦 Loaded latest draft after save:", latestDraft);
+        console.log("🧪 Modal Props being set after draft save:", {
+          title: latestDraft.title,
+          id: latestDraft.id,
+        });
+        setCurrentDraftTitle(latestDraft.title); // Update the draft title state
         setResultModalProps({
           open: true,
           imageUrl: null,
@@ -453,7 +459,7 @@ export default function Canvas({
         </div>
       </div>
       <ResultModal
-        key={resultModalProps.imageUrl} // Ensures modal remounts on new image
+        key={`${resultModalProps.imageUrl}-${resultModalProps.title}`} // Ensures modal remounts on new image and title
         open={resultModalProps.open}
         onClose={() => setResultModalProps((prev) => ({ ...prev, open: false }))}
         imageUrl={resultModalProps.imageUrl}

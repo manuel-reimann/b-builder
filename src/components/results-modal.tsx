@@ -31,6 +31,7 @@ export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: R
   };
 
   if (!open) return null;
+  console.log("🧱 ResultModal rendering with title:", defaultTitle);
   console.log("🧱 ResultModal rendering. Image URL:", imageUrl);
 
   return (

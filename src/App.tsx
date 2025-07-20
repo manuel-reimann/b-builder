@@ -247,11 +247,11 @@ function App() {
               showSaveDraftModal={() => setShowSaveDraftModal(true)}
               currentDraftId={currentDraftId}
               currentDraftTitle={currentDraftTitle}
+              setCurrentDraftTitle={setCurrentDraftTitle}
               hoveredItemId={hoveredItemId}
               setHoveredItemId={setHoveredItemId}
               userId={user?.id}
               setShowLoginModal={setShowLoginModal}
-              user={user}
             />
           </div>
         </section>
