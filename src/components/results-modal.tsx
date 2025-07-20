@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 interface ResultModalProps {
@@ -24,45 +24,15 @@ export default function ResultModal({
 }: ResultModalProps) {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState(defaultTitle);
-  const [finalImageUrl, setFinalImageUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchImage = async () => {
-      if (!imageUrl) return;
-      try {
-        setLoading(true);
-        console.log("📡 Lade Bild über Proxy:", imageUrl);
-
-        const response = await fetch(`/api/fetch-image?url=${encodeURIComponent(imageUrl)}`);
-
-        if (!response.ok) {
-          throw new Error("Proxy-Bild konnte nicht geladen werden");
-        }
-
-        const blob = await response.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        setFinalImageUrl(blobUrl);
-      } catch (err) {
-        console.error("❌ Fehler beim Laden über Proxy:", err);
-        toast.error("Fehler beim Bild-Download über Server");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (open && imageUrl) {
-      fetchImage();
-    }
-  }, [open, imageUrl]);
 
   const handleDownloadAndSave = async () => {
-    if (!finalImageUrl || !userId || !draftId) return;
-    console.log("Start Download & Save", { finalImageUrl, userId, draftId });
+    if (!imageUrl || !userId || !draftId) return;
+    console.log("Start Download & Save", { imageUrl, userId, draftId });
 
     try {
       setLoading(true);
 
-      const response = await fetch(finalImageUrl!);
+      const response = await fetch(imageUrl);
       console.log("Fetched image response", response);
       const blob = await response.blob();
 
@@ -99,7 +69,7 @@ export default function ResultModal({
         const { publicUrl } = await res.json();
         console.log("Received publicUrl from API", publicUrl);
 
-        setFinalImageUrl(publicUrl);
+        imageUrl = publicUrl;
 
         const link = document.createElement("a");
         link.href = publicUrl;
@@ -133,10 +103,10 @@ export default function ResultModal({
             placeholder="Titel des Designs"
           />
 
-          {loading || !finalImageUrl ? (
+          {loading || !imageUrl ? (
             <div className="flex items-center justify-center h-48">⏳ Wird geladen...</div>
           ) : (
-            imageUrl && <img src={`/api/proxy-image?url=${encodeURIComponent(imageUrl)}`} />
+            imageUrl && <img src={imageUrl} alt="Generated Design" className="max-w-full max-h-[500px] mx-auto" />
           )}
 
           <div className="flex justify-end gap-4 pt-2">
