@@ -69,6 +69,24 @@ export default function ResultModal({
         const { publicUrl } = await res.json();
         console.log("Received publicUrl from API", publicUrl);
 
+        // Save metadata in Supabase
+        const saveRes = await fetch("/api/save-design", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId,
+            image_url: publicUrl,
+            title,
+            prompt,
+            materials_csv,
+          }),
+        });
+
+        if (!saveRes.ok) {
+          const text = await saveRes.text();
+          throw new Error(`Save to database failed: ${text}`);
+        }
+
         imageUrl = publicUrl;
 
         const link = document.createElement("a");
