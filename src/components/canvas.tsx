@@ -182,6 +182,7 @@ export default function Canvas({
     );
     const materials_csv = materialEntries.join(", ");
 
+    console.log("📤 Opening ResultModal with title:", currentDraftTitle);
     setResultModalProps({
       open: true,
       imageUrl: null,
@@ -229,6 +230,10 @@ export default function Canvas({
         });
 
         toast.success("Design erfolgreich gespeichert!");
+        console.log("✅ Image generation and save complete. ResultModal props:", {
+          imageUrl: result.image,
+          title: currentDraftTitle ?? "Untitled",
+        });
       } catch (error) {
         console.error("❗ Fehler beim gesamten Vorgang:", error);
         toast.error("Speichern fehlgeschlagen.");
