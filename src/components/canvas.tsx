@@ -243,23 +243,6 @@ export default function Canvas({
     }
   };
 
-  // Handles click on the Generate button, checking login and draft status
-  const handleGenerateClick = async () => {
-    if (!userId) {
-      toast.info("Please login first");
-      setShowLoginModal(true);
-      return;
-    }
-
-    if (!currentDraftId) {
-      setShouldGenerateAfterDraft(true);
-      showSaveDraftModal();
-      return;
-    }
-
-    handleGenerate();
-  };
-
   // After draft is saved and we have an id, trigger generation if pending
   useEffect(() => {
     if (shouldGenerateAfterDraft && currentDraftId) {
@@ -420,10 +403,26 @@ export default function Canvas({
           >
             ♻️ <span>Reset</span>
           </button>
-          {/* Button to trigger generation action (currently logs to console) */}
+          {/* Button to trigger generation action (with disabled and toast logic) */}
           <button
-            onClick={handleGenerateClick}
-            className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-green hover:bg-green-900 rounded-md"
+            onClick={() => {
+              if (!userId) {
+                toast.info("Please login first");
+                setShowLoginModal(true);
+                return;
+              }
+
+              if (!currentDraftId) {
+                toast.warning("Bitte speichere zuerst den Entwurf");
+                return;
+              }
+
+              handleGenerate();
+            }}
+            disabled={!currentDraftId}
+            className={`flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white rounded-md ${
+              !currentDraftId ? "bg-gray-300 cursor-not-allowed" : "bg-agrotropic-green hover:bg-green-900"
+            }`}
           >
             🎨 <span>Generate</span>
           </button>

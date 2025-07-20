@@ -34,7 +34,7 @@ export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: R
   console.log("🧱 ResultModal rendering. Image URL:", imageUrl);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div key={defaultTitle} className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-full max-w-xl p-6 bg-white rounded-md shadow-lg">
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">{defaultTitle}</h2>
