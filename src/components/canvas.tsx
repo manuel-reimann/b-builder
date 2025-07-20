@@ -79,8 +79,11 @@ export default function Canvas({
   const [resultModalProps, setResultModalProps] = useState({
     open: false,
     imageUrl: null as string | null,
-    defaultTitle: "",
+    title: "",
   });
+
+  // Track whether we should generate after saving draft
+  const [shouldGenerateAfterDraft, setShouldGenerateAfterDraft] = useState(false);
 
   // Tracks the current width and height of the canvas container
   const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
@@ -181,7 +184,7 @@ export default function Canvas({
     setResultModalProps({
       open: true,
       imageUrl: null,
-      defaultTitle: currentDraftTitle ?? "Untitled",
+      title: currentDraftTitle ?? "Untitled",
     });
 
     const result = await generateImageWithFlux({ prompt, imageBase64: dataUrl });
@@ -243,15 +246,21 @@ export default function Canvas({
     }
 
     if (!currentDraftId) {
-      await saveDraft();
-      setTimeout(() => {
-        handleGenerate();
-      }, 100);
+      setShouldGenerateAfterDraft(true);
+      showSaveDraftModal();
       return;
     }
 
     handleGenerate();
   };
+
+  // After draft is saved and we have an id, trigger generation if pending
+  useEffect(() => {
+    if (shouldGenerateAfterDraft && currentDraftId) {
+      handleGenerate();
+      setShouldGenerateAfterDraft(false);
+    }
+  }, [shouldGenerateAfterDraft, currentDraftId]);
 
   // JSX structure of the canvas and control buttons
   return (
@@ -417,6 +426,7 @@ export default function Canvas({
         open={resultModalProps.open}
         onClose={() => setResultModalProps((prev) => ({ ...prev, open: false }))}
         imageUrl={resultModalProps.imageUrl}
+        title={resultModalProps.title}
       />
     </div>
   );
