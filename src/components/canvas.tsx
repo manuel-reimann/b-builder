@@ -154,6 +154,105 @@ export default function Canvas({
     }
   }
 
+  // Handles the generation process (called after all preconditions are met)
+  const handleGenerate = async () => {
+    if (!stageRef.current) {
+      console.error("Stage ref is not available");
+      return;
+    }
+
+    setSelectedItemId(null);
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    const canvasElement = stageRef.current.getStage().toCanvas();
+    const dataUrl = canvasElement.toDataURL("image/png");
+
+    const prompt = buildPrompt(items);
+    const materialEntries = items.map(
+      (item) =>
+        item.label ||
+        item.src
+          .split("/")
+          .pop()
+          ?.replace(/\.[^/.]+$/, "") ||
+        ""
+    );
+    const materials_csv = materialEntries.join(", ");
+
+    setResultModalProps({
+      open: true,
+      imageUrl: null,
+      defaultTitle: currentDraftTitle ?? "Untitled",
+    });
+
+    const result = await generateImageWithFlux({ prompt, imageBase64: dataUrl });
+
+    if (result && result.image) {
+      try {
+        const response = await fetch(result.image);
+        const blob = await response.blob();
+        const filename = `flux-output-${Date.now()}.png`;
+
+        const { error: uploadError } = await supabase.storage.from("user-images").upload(filename, blob, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: "image/png",
+        });
+
+        if (uploadError) {
+          toast.error("Upload to Supabase failed");
+          return;
+        }
+
+        const { data: publicData } = supabase.storage.from("user-images").getPublicUrl(filename);
+
+        if (!publicData?.publicUrl) {
+          toast.error("Could not retrieve public URL");
+          return;
+        }
+
+        const publicUrl = publicData.publicUrl;
+        setResultModalProps((prev) => ({
+          ...prev,
+          imageUrl: publicUrl,
+        }));
+
+        await saveDesignToSupabase({
+          userId,
+          prompt,
+          image_url: publicUrl,
+          title: currentDraftTitle ?? "Untitled",
+          materials_csv,
+        });
+
+        toast.success("Design erfolgreich gespeichert!");
+      } catch (error) {
+        console.error("❗ Fehler beim gesamten Vorgang:", error);
+        toast.error("Speichern fehlgeschlagen.");
+      }
+    } else {
+      console.warn("No image returned from Flux:", result);
+    }
+  };
+
+  // Handles click on the Generate button, checking login and draft status
+  const handleGenerateClick = async () => {
+    if (!userId) {
+      toast.info("Please login first");
+      setShowLoginModal(true);
+      return;
+    }
+
+    if (!currentDraftId) {
+      await saveDraft();
+      setTimeout(() => {
+        handleGenerate();
+      }, 100);
+      return;
+    }
+
+    handleGenerate();
+  };
+
   // JSX structure of the canvas and control buttons
   return (
     <div
@@ -307,132 +406,7 @@ export default function Canvas({
           </button>
           {/* Button to trigger generation action (currently logs to console) */}
           <button
-            onClick={async () => {
-              if (!userId) {
-                toast.info("Please login first");
-                setShowLoginModal(true);
-                return;
-              }
-
-              if (!currentDraftId) {
-                showSaveDraftModal();
-                return;
-              }
-
-              if (!stageRef.current) {
-                console.error("Stage ref is not available");
-                return;
-              }
-
-              setSelectedItemId(null);
-              await new Promise((resolve) => setTimeout(resolve, 50));
-
-              const canvasElement = stageRef.current.getStage().toCanvas();
-              const dataUrl = canvasElement.toDataURL("image/png");
-
-              const prompt = buildPrompt(items);
-              // Generate CSV string of materials
-              const materialEntries = items.map(
-                (item) =>
-                  item.label ||
-                  item.src
-                    .split("/")
-                    .pop()
-                    ?.replace(/\.[^/.]+$/, "") ||
-                  ""
-              );
-              const materials_csv = materialEntries.join(", ");
-
-              // Immediately open the modal with loading state
-              setResultModalProps({
-                open: true,
-                imageUrl: null,
-                defaultTitle: currentDraftTitle ?? "Untitled",
-              });
-
-              // === LOGGING: Vor Flux-API-Call ===
-              console.log("🟡 Flux API Call gestartet");
-              console.log("Prompt:", prompt);
-              console.log("Image Base64:", dataUrl.slice(0, 100) + "...");
-
-              //Call Flux API with only prompt and imageBase64
-              const result = await generateImageWithFlux({
-                prompt,
-                imageBase64: dataUrl,
-              });
-              // === LOGGING: Nach Flux-API-Response ===
-              console.log("🟢 Flux API Response:", result);
-              //const result = { image: "/img/dummy-flux-output.jpg" }; // Dummy image for testing
-
-              if (result && result.image) {
-                try {
-                  // === LOGGING: Vor Bild-Fetch ===
-                  console.log("📡 Lade Bild von Flux URL:", result.image);
-                  // Fetch image from Flux
-                  const response = await fetch(result.image);
-                  const blob = await response.blob();
-                  // === LOGGING: Nach Blob erhalten ===
-                  console.log("📦 Blob erhalten, lade in Supabase hoch");
-
-                  // Generate unique filename
-                  const filename = `flux-output-${Date.now()}.png`;
-
-                  // Upload to Supabase Storage
-                  const { error: uploadError } = await supabase.storage.from("user-images").upload(filename, blob, {
-                    cacheControl: "3600",
-                    upsert: false,
-                    contentType: "image/png",
-                  });
-
-                  // === LOGGING: Nach Upload zu Supabase ===
-                  if (uploadError) {
-                    console.error("❌ Fehler beim Hochladen:", uploadError);
-                    toast.error("Upload to Supabase failed");
-                    // Optionally update modal to show error
-                    return;
-                  } else {
-                    console.log("✅ Hochgeladen bei Supabase:", filename);
-                  }
-
-                  const { data: publicData } = supabase.storage.from("user-images").getPublicUrl(filename);
-
-                  if (!publicData?.publicUrl) {
-                    console.error("Error getting public URL");
-                    toast.error("Could not retrieve public URL");
-                    // Optionally update modal to show error
-                    return;
-                  }
-
-                  const publicUrl = publicData.publicUrl;
-                  setResultModalProps((prev) => ({
-                    ...prev,
-                    imageUrl: publicUrl,
-                  }));
-
-                  // === LOGGING: Vor saveDesignToSupabase ===
-                  console.log("💾 Speichere Design mit public URL:", publicUrl);
-                  await saveDesignToSupabase({
-                    userId,
-                    prompt,
-                    image_url: publicUrl,
-                    title: currentDraftTitle ?? "Untitled",
-                    materials_csv,
-                  });
-                  // === LOGGING: Nach erfolgreichem Speichern ===
-                  console.log("✅ Design erfolgreich gespeichert!");
-
-                  toast.success("Design erfolgreich gespeichert!");
-                } catch (error) {
-                  // === LOGGING: Fehler im catch-Block ===
-                  console.error("❗ Fehler beim gesamten Vorgang:", error);
-                  toast.error("Speichern fehlgeschlagen.");
-                  // Optionally update modal to show error
-                }
-              } else {
-                console.warn("No image returned from Flux:", result);
-                // Optionally update modal to show error
-              }
-            }}
+            onClick={handleGenerateClick}
             className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-green hover:bg-green-900 rounded-md"
           >
             🎨 <span>Generate</span>
