@@ -1,108 +1,25 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
 
 interface ResultModalProps {
   open: boolean;
   onClose: () => void;
   imageUrl: string | null;
-  draftId: string | null;
   defaultTitle: string;
-  userId: string;
-  prompt: string;
-  materials_csv: string;
 }
 
-export default function ResultModal({
-  open,
-  onClose,
-  imageUrl,
-  draftId,
-  defaultTitle,
-  userId,
-  prompt,
-  materials_csv,
-}: ResultModalProps) {
-  const [loading, setLoading] = useState(false);
+export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: ResultModalProps) {
+  const [loading] = useState(false);
   const [title, setTitle] = useState(defaultTitle);
 
-  const handleDownloadAndSave = async () => {
-    if (!imageUrl || !userId || !draftId) return;
-    console.log("Start Download & Save", { imageUrl, userId, draftId });
+  const handleDownloadAndSave = () => {
+    if (!imageUrl) return;
 
-    try {
-      setLoading(true);
-
-      const response = await fetch(imageUrl);
-      console.log("Fetched image response", response);
-      const blob = await response.blob();
-
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = async () => {
-        console.log("Image loaded as base64", reader.result);
-        const base64data = reader.result;
-
-        console.log("POSTing to download-and-save API", {
-          imageDataUrl: base64data,
-          userId,
-          title,
-          prompt,
-          materials_csv,
-        });
-        const res = await fetch("/api/download-and-save", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            imageDataUrl: base64data,
-            userId,
-            title,
-            prompt,
-            materials_csv,
-          }),
-        });
-
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(text);
-        }
-
-        const { publicUrl } = await res.json();
-        console.log("Received publicUrl from API", publicUrl);
-
-        // Save metadata in Supabase
-        const saveRes = await fetch("/api/save-design", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId,
-            image_url: publicUrl,
-            title,
-            prompt,
-            materials_csv,
-          }),
-        });
-
-        if (!saveRes.ok) {
-          const text = await saveRes.text();
-          throw new Error(`Save to database failed: ${text}`);
-        }
-
-        imageUrl = publicUrl;
-
-        const link = document.createElement("a");
-        link.href = publicUrl;
-        link.download = "flux_output.png";
-        link.click();
-
-        toast.success("Bild erfolgreich gespeichert!");
-        onClose();
-        setLoading(false);
-      };
-    } catch (err) {
-      console.error(err);
-      toast.error("Fehler beim Speichern oder Herunterladen");
-      setLoading(false);
-    }
+    const link = document.createElement("a");
+    link.href = imageUrl;
+    link.download = "flux_output.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   if (!open) return null;

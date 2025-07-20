@@ -79,11 +79,6 @@ export default function Canvas({
   const [resultModalProps, setResultModalProps] = useState({
     open: false,
     imageUrl: null as string | null,
-    prompt: "",
-    title: "",
-    userId: "",
-    materials_csv: "",
-    draftId: null as string | null,
     defaultTitle: "",
   });
 
@@ -352,12 +347,7 @@ export default function Canvas({
               setResultModalProps({
                 open: true,
                 imageUrl: null,
-                prompt,
-                title: currentDraftTitle ?? "Untitled",
                 defaultTitle: currentDraftTitle ?? "Untitled",
-                materials_csv,
-                userId,
-                draftId: currentDraftId ?? null,
               });
 
               // === LOGGING: Vor Flux-API-Call ===
@@ -449,18 +439,12 @@ export default function Canvas({
           </button>
         </div>
       </div>
-      {resultModalProps.open && (
-        <ResultModal
-          open={resultModalProps.open}
-          onClose={() => setResultModalProps((prev) => ({ ...prev, open: false }))}
-          imageUrl={resultModalProps.imageUrl}
-          prompt={resultModalProps.prompt}
-          userId={resultModalProps.userId}
-          materials_csv={resultModalProps.materials_csv}
-          draftId={resultModalProps.draftId}
-          defaultTitle={resultModalProps.defaultTitle}
-        />
-      )}
+      <ResultModal
+        open={resultModalProps.open}
+        onClose={() => setResultModalProps((prev) => ({ ...prev, open: false }))}
+        imageUrl={resultModalProps.imageUrl}
+        defaultTitle={resultModalProps.defaultTitle}
+      />
     </div>
   );
 }
