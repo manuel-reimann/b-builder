@@ -165,6 +165,35 @@ export default function Canvas({
       return;
     }
 
+    // If no draft exists, save it first and then re-fetch the latest draft for title/id
+    if (!currentDraftId) {
+      await saveDraft();
+
+      // After saving, re-fetch the draft to get its ID and title
+      const { data } = await supabase
+        .from("user_drafts")
+        .select("id, title")
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+      if (data && data.length > 0) {
+        const latestDraft = data[0];
+        console.log("📦 Loaded latest draft after save:", latestDraft);
+        setResultModalProps({
+          open: true,
+          imageUrl: null,
+          title: latestDraft.title ?? "Untitled",
+        });
+      }
+    } else {
+      console.log("📛 Draft title used for modal and download:", currentDraftTitle);
+      setResultModalProps({
+        open: true,
+        imageUrl: null,
+        title: currentDraftTitle ?? "Untitled",
+      });
+    }
+
     setSelectedItemId(null);
     await new Promise((resolve) => setTimeout(resolve, 50));
     const canvasElement = stageRef.current.getStage().toCanvas();
@@ -181,13 +210,6 @@ export default function Canvas({
         ""
     );
     const materials_csv = materialEntries.join(", ");
-
-    console.log("📤 Opening ResultModal with title:", currentDraftTitle);
-    setResultModalProps({
-      open: true,
-      imageUrl: null,
-      title: currentDraftTitle ?? "Untitled",
-    });
 
     const result = await generateImageWithFlux({ prompt, imageBase64: dataUrl });
 
@@ -413,7 +435,7 @@ export default function Canvas({
               }
 
               if (!currentDraftId) {
-                toast.warning("Bitte speichere zuerst den Entwurf");
+                toast.warning("Bitte speichere zuerst deinen Entwurf, bevor du das Bild generierst.");
                 return;
               }
 
