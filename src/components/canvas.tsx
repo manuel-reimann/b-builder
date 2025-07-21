@@ -438,10 +438,13 @@ export default function Canvas({
                 setShowLoginModal(true);
                 return;
               }
-              // Remove duplicate toast here; handleGenerate will show warning/toast itself if no draft
+              if (!currentDraftId) {
+                toast.info("Bitte speichere zuerst deinen Entwurf.");
+                return;
+              }
               handleGenerate();
             }}
-            disabled={false}
+            disabled={!currentDraftId}
             className={`flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white rounded-md ${
               !currentDraftId ? "bg-gray-300 cursor-not-allowed" : "bg-agrotropic-green hover:bg-green-900"
             }`}
