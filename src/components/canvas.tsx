@@ -166,8 +166,9 @@ export default function Canvas({
       return;
     }
 
-    // If no draft exists, save it first and then re-fetch the latest draft for title/id
+    // If no draft exists, show warning and save it first, then re-fetch the latest draft for title/id
     if (!currentDraftId) {
+      toast.warning("Bitte speichere zuerst deinen Entwurf, bevor du das Bild generierst.");
       await saveDraft();
       // Wait briefly to ensure Supabase has indexed the new draft
       await new Promise((resolve) => setTimeout(resolve, 300));
@@ -181,12 +182,8 @@ export default function Canvas({
 
       if (data && data.length > 0) {
         const latestDraft = data[0];
-        console.log("📦 Loaded latest draft after save:", latestDraft);
-        console.log("🧪 Modal Props being set after draft save:", {
-          title: latestDraft.title,
-          id: latestDraft.id,
-        });
         setCurrentDraftTitle(latestDraft.title); // Update the draft title state
+        console.log("📛 Draft title used for modal and download:", latestDraft.title);
         setResultModalProps({
           open: true,
           imageUrl: null,
@@ -441,15 +438,10 @@ export default function Canvas({
                 setShowLoginModal(true);
                 return;
               }
-
-              if (!currentDraftId) {
-                toast.warning("Bitte speichere zuerst deinen Entwurf, bevor du das Bild generierst.");
-                return;
-              }
-
+              // Remove duplicate toast here; handleGenerate will show warning/toast itself if no draft
               handleGenerate();
             }}
-            disabled={!currentDraftId}
+            disabled={false}
             className={`flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white rounded-md ${
               !currentDraftId ? "bg-gray-300 cursor-not-allowed" : "bg-agrotropic-green hover:bg-green-900"
             }`}

@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 interface ResultModalProps {
   open: boolean;
   onClose: () => void;
@@ -6,7 +8,13 @@ interface ResultModalProps {
 }
 
 export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: ResultModalProps) {
-  console.log("🟢 ResultModal mounted with defaultTitle:", defaultTitle);
+  const [title, setTitle] = useState(defaultTitle);
+
+  useEffect(() => {
+    setTitle(defaultTitle);
+  }, [defaultTitle]);
+
+  console.log("🟢 ResultModal mounted with title:", title);
   const handleDownloadAndSave = async () => {
     if (!imageUrl) return;
 
@@ -14,12 +22,12 @@ export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: R
     try {
       const response = await fetch(imageUrl);
       const blob = await response.blob();
-      console.log("📦 Blob created, preparing to download:", defaultTitle);
+      console.log("📦 Blob created, preparing to download:", title);
       const objectUrl = URL.createObjectURL(blob);
 
       const link = document.createElement("a");
       link.href = objectUrl;
-      link.download = `${defaultTitle.replace(/\s+/g, "_")}.png`;
+      link.download = `${title.replace(/\s+/g, "_")}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -31,14 +39,14 @@ export default function ResultModal({ open, onClose, imageUrl, defaultTitle }: R
   };
 
   if (!open) return null;
-  console.log("🧱 ResultModal rendering with title:", defaultTitle);
+  console.log("🧱 ResultModal rendering with title:", title);
   console.log("🧱 ResultModal rendering. Image URL:", imageUrl);
 
   return (
-    <div key={defaultTitle} className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div key={title} className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-full max-w-xl p-6 bg-white rounded-md shadow-lg">
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold">{defaultTitle}</h2>
+          <h2 className="text-xl font-semibold">{title}</h2>
 
           {!imageUrl ? (
             <div className="flex items-center justify-center h-48 animate-pulse">🔄 Wird geladen...</div>
