@@ -51,6 +51,7 @@ function App() {
 
   const [user, setUser] = useState<any>(null);
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
+  const [currentDraftTitle, setCurrentDraftTitle] = useState<string | null>(null);
 
   const [materialsCSV, setMaterialsCSV] = useState<string>("");
   void materialsCSV;
@@ -234,9 +235,9 @@ function App() {
             transition: "background-image 0.3s ease",
           }}
         >
-          {currentDraftId && (
+          {currentDraftTitle && (
             <div className="absolute z-50 px-3 py-1 text-xs text-white bg-black bg-opacity-50 rounded pointer-events-none top-2 left-2">
-              Current Draft: {currentDraftId}
+              Aktueller Entwurf: {currentDraftTitle}
             </div>
           )}
           <div className="relative w-full h-full">
@@ -296,7 +297,13 @@ function App() {
         <DraftsModal
           userId={user.id}
           onClose={() => setShowDraftsModal(false)}
-          onLoadDraft={(items: any[], sleeveSrc?: string, draftId?: string, backgroundSrc?: string) => {
+          onLoadDraft={(
+            items: any[],
+            sleeveSrc?: string,
+            draftId?: string,
+            backgroundSrc?: string,
+            draftTitle?: string
+          ) => {
             const backgroundItem = items.find((item) => item.type === "background");
             if (backgroundSrc || backgroundItem?.src) {
               setBackgroundImage(backgroundSrc ?? backgroundItem.src);
@@ -311,6 +318,7 @@ function App() {
               setSleeveSrc(sleeveSrc);
             }
             setCurrentDraftId(draftId ?? null);
+            setCurrentDraftTitle(draftTitle ?? null);
           }}
           setSleeveSrc={setSleeveSrc}
           onSelectDraftId={(draftId: string | null | undefined) => setCurrentDraftId(draftId ?? null)}

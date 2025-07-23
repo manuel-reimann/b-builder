@@ -133,17 +133,6 @@ export default function Canvas({
 
   const backgroundItem = items.find((item) => item.type === "background");
 
-  useEffect(() => {
-    const bg = items.find((item) => item.type === "background");
-    if (bg) {
-      document.body.style.backgroundImage = `url(${bg.src})`;
-      document.body.style.backgroundSize = "cover";
-      document.body.style.backgroundPosition = "center";
-    } else {
-      document.body.style.backgroundImage = "none";
-    }
-  }, [items]);
-
   // Saves changes to an existing draft and shows a success toast
   function handleUpdateDraft() {
     if (saveDraft) {
@@ -342,10 +331,10 @@ export default function Canvas({
         };
       }}
     >
-      {/* Displays the current draft id if available */}
-      {currentDraftId && (
+      {/* Displays the current draft title if available (fallback to '(Ohne Titel)') */}
+      {resultModalProps.title && (
         <div className="absolute top-4 left-4 px-4 py-1.5 bg-white/80 text-sm font-semibold rounded shadow-md text-gray-800">
-          Aktueller Entwurf: {currentDraftId}
+          Aktueller Entwurf: {resultModalProps.title || "(Ohne Titel)"}
         </div>
       )}
       {/* Konva Stage: The main container for canvas rendering */}
