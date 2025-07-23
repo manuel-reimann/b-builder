@@ -137,8 +137,13 @@ export default function Canvas({
   // Effect to set background image from backgroundItem
   useEffect(() => {
     console.log("📦 Items in background useEffect:", items);
+    console.log("📏 Items length:", items.length);
+    console.log(
+      "🧪 Final loaded items:",
+      items.map((i) => ({ id: i.id, type: i.type, src: i.src }))
+    );
     if (items.length > 0) {
-      const backgroundItem = items.find((item) => item.type === "background");
+      const backgroundItem = items.find((item) => item.type?.toLowerCase() === "background");
       if (backgroundItem) {
         console.log("🟢 Setting background from backgroundItem:", backgroundItem.src);
         setBackgroundImage(backgroundItem.src);
