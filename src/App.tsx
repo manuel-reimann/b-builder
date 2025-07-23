@@ -234,6 +234,11 @@ function App() {
             transition: "background-image 0.3s ease",
           }}
         >
+          {currentDraftId && (
+            <div className="absolute z-50 px-3 py-1 text-xs text-white bg-black bg-opacity-50 rounded pointer-events-none top-2 left-2">
+              Current Draft: {currentDraftId}
+            </div>
+          )}
           <div className="relative w-full h-full">
             <Canvas
               items={canvasItems}
@@ -292,8 +297,9 @@ function App() {
           userId={user.id}
           onClose={() => setShowDraftsModal(false)}
           onLoadDraft={(items: any[], sleeveSrc?: string, draftId?: string, backgroundSrc?: string) => {
-            if (backgroundSrc) {
-              setBackgroundImage(backgroundSrc);
+            const backgroundItem = items.find((item) => item.type === "background");
+            if (backgroundSrc || backgroundItem?.src) {
+              setBackgroundImage(backgroundSrc ?? backgroundItem.src);
             } else {
               setBackgroundImage(null);
             }

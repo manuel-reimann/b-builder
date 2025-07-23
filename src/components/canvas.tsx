@@ -342,11 +342,10 @@ export default function Canvas({
         };
       }}
     >
-      {/* Displays the current draft name if available */}
-      {/* Optionally, could display the draft title here if desired, but removed currentDraftTitle usage */}
-      {resultModalProps.title && (
+      {/* Displays the current draft id if available */}
+      {currentDraftId && (
         <div className="absolute top-4 left-4 px-4 py-1.5 bg-white/80 text-sm font-semibold rounded shadow-md text-gray-800">
-          ✏️ Aktueller Entwurf: {resultModalProps.title}
+          Aktueller Entwurf: {currentDraftId}
         </div>
       )}
       {/* Konva Stage: The main container for canvas rendering */}
