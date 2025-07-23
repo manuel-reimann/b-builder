@@ -344,6 +344,11 @@ export default function Canvas({
     >
       {/* Displays the current draft name if available */}
       {/* Optionally, could display the draft title here if desired, but removed currentDraftTitle usage */}
+      {resultModalProps.title && (
+        <div className="absolute top-4 left-4 px-4 py-1.5 bg-white/80 text-sm font-semibold rounded shadow-md text-gray-800">
+          ✏️ Aktueller Entwurf: {resultModalProps.title}
+        </div>
+      )}
       {/* Konva Stage: The main container for canvas rendering */}
       <Stage
         width={dimensions.width}
@@ -365,23 +370,24 @@ export default function Canvas({
           {/* StaticSleeveImage: Renders the background sleeve image */}
           <StaticSleeveImage sleeveSrc={sleeveSrc} />
           {/* CanvasImage components: Render each item on the canvas */}
-          {items
-            .filter((item) => item.type !== "background")
-            .map((item) => (
-              <CanvasImage
-                key={item.id}
-                item={item}
-                isSelected={item.id === selectedItemId}
-                isHovered={item.id === hoveredItemId && selectedItemId === null}
-                onSelect={(id) => setSelectedItemId(id)}
-                onHover={(id) => setHoveredItemId(id)}
-                onUnhover={() => setHoveredItemId(null)}
-                onChange={(newAttrs) => {
-                  const updated = items.map((it) => (it.id === item.id ? { ...it, ...newAttrs } : it));
-                  setCanvasItems(updated);
-                }}
-              />
-            ))}
+          {items.map(
+            (item) =>
+              item.type !== "background" && (
+                <CanvasImage
+                  key={item.id}
+                  item={item}
+                  isSelected={item.id === selectedItemId}
+                  isHovered={item.id === hoveredItemId && selectedItemId === null}
+                  onSelect={(id) => setSelectedItemId(id)}
+                  onHover={(id) => setHoveredItemId(id)}
+                  onUnhover={() => setHoveredItemId(null)}
+                  onChange={(newAttrs) => {
+                    const updated = items.map((it) => (it.id === item.id ? { ...it, ...newAttrs } : it));
+                    setCanvasItems(updated);
+                  }}
+                />
+              )
+          )}
         </Layer>
       </Stage>
 
