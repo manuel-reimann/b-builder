@@ -131,7 +131,20 @@ export default function Canvas({
   const scaleY = dimensions.height / DESIGN_HEIGHT;
   const scale = Math.min(scaleX, scaleY);
 
-  const backgroundItem = items.find((item) => item.type === "background");
+  // State for background image
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+
+  // Effect to set background image from backgroundItem
+  useEffect(() => {
+    const backgroundItem = items.find((item) => item.type === "background");
+    if (backgroundItem) {
+      console.log("🟢 Setting background from backgroundItem:", backgroundItem.src);
+      setBackgroundImage(backgroundItem.src);
+    } else {
+      console.log("🔴 No backgroundItem found");
+      setBackgroundImage(null);
+    }
+  }, [items]);
 
   // Saves changes to an existing draft and shows a success toast
   function handleUpdateDraft() {
@@ -272,7 +285,7 @@ export default function Canvas({
       ref={containerRef}
       className="relative w-full h-full transition-all bg-center bg-no-repeat bg-cover"
       style={{
-        backgroundImage: backgroundItem ? `url(${backgroundItem.src})` : undefined,
+        backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
