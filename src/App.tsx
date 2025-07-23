@@ -305,6 +305,7 @@ function App() {
             draftTitle?: string
           ) => {
             const backgroundItem = items.find((item) => item.type === "background");
+            console.log("Setting backgroundImage to:", backgroundSrc ?? backgroundItem?.src);
             if (backgroundSrc || backgroundItem?.src) {
               setBackgroundImage(backgroundSrc ?? backgroundItem.src);
             } else {
