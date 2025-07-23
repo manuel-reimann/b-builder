@@ -47,8 +47,6 @@ export default function Canvas({
   saveDraft,
   showSaveDraftModal,
   currentDraftId,
-  currentDraftTitle,
-  setCurrentDraftTitle,
   hoveredItemId,
   setHoveredItemId,
   userId,
@@ -63,8 +61,6 @@ export default function Canvas({
   saveDraft: () => Promise<void>;
   showSaveDraftModal: () => void;
   currentDraftId: string | null;
-  currentDraftTitle: string | null;
-  setCurrentDraftTitle: React.Dispatch<React.SetStateAction<string | null>>;
   hoveredItemId: string | null;
   setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
   userId: string;
@@ -166,6 +162,7 @@ export default function Canvas({
       return;
     }
 
+    let draftTitle: string = "Untitled";
     // If no draft exists, show warning and save it first, then re-fetch the latest draft for title/id
     if (!currentDraftId) {
       toast.warning("Bitte speichere zuerst deinen Entwurf, bevor du das Bild generierst.");
@@ -179,23 +176,24 @@ export default function Canvas({
         .select("id, title")
         .order("created_at", { ascending: false })
         .limit(1);
-
-      if (data && data.length > 0) {
-        const latestDraft = data[0];
-        setCurrentDraftTitle(latestDraft.title); // Update the draft title state
-        console.log("📛 Draft title used for modal and download:", latestDraft.title);
-        setResultModalProps({
-          open: true,
-          imageUrl: null,
-          title: latestDraft.title ?? "Untitled",
-        });
-      }
-    } else {
-      console.log("📛 Draft title used for modal and download:", currentDraftTitle);
+      const latestDraft = data?.[0];
+      draftTitle = latestDraft?.title ?? "Untitled";
+      console.log("📛 Draft title used for modal and download:", draftTitle);
       setResultModalProps({
         open: true,
         imageUrl: null,
-        title: currentDraftTitle ?? "Untitled",
+        title: draftTitle,
+      });
+    } else {
+      // If we do have a draft, fetch its title from Supabase
+      const { data } = await supabase.from("user_drafts").select("id, title").eq("id", currentDraftId).limit(1);
+      const currentDraft = data?.[0];
+      draftTitle = currentDraft?.title ?? "Untitled";
+      console.log("📛 Draft title used for modal and download:", draftTitle);
+      setResultModalProps({
+        open: true,
+        imageUrl: null,
+        title: draftTitle,
       });
     }
 
@@ -252,14 +250,14 @@ export default function Canvas({
           userId,
           prompt,
           image_url: publicUrl,
-          title: currentDraftTitle ?? "Untitled",
+          title: draftTitle,
           materials_csv,
         });
 
         toast.success("Design erfolgreich gespeichert!");
         console.log("✅ Image generation and save complete. ResultModal props:", {
           imageUrl: result.image,
-          title: currentDraftTitle ?? "Untitled",
+          title: draftTitle,
         });
       } catch (error) {
         console.error("❗ Fehler beim gesamten Vorgang:", error);
@@ -345,12 +343,7 @@ export default function Canvas({
       }}
     >
       {/* Displays the current draft name if available */}
-      {currentDraftTitle && (
-        <div className="absolute z-20 px-3 py-1 text-sm text-gray-700 rounded shadow top-4 left-4 bg-white/90">
-          <div>Current Draft:</div>
-          <div className="font-semibold">{currentDraftTitle}</div>
-        </div>
-      )}
+      {/* Optionally, could display the draft title here if desired, but removed currentDraftTitle usage */}
       {/* Konva Stage: The main container for canvas rendering */}
       <Stage
         width={dimensions.width}
@@ -458,7 +451,7 @@ export default function Canvas({
         open={resultModalProps.open}
         onClose={() => setResultModalProps((prev) => ({ ...prev, open: false }))}
         imageUrl={resultModalProps.imageUrl}
-        defaultTitle={resultModalProps.title}
+        title={resultModalProps.title}
       />
     </div>
   );

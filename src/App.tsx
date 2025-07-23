@@ -51,7 +51,6 @@ function App() {
 
   const [user, setUser] = useState<any>(null);
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
-  const [currentDraftTitle, setCurrentDraftTitle] = useState<string | null>(null);
 
   const [materialsCSV, setMaterialsCSV] = useState<string>("");
   void materialsCSV;
@@ -246,8 +245,6 @@ function App() {
               saveDraft={saveDraft}
               showSaveDraftModal={() => setShowSaveDraftModal(true)}
               currentDraftId={currentDraftId}
-              currentDraftTitle={currentDraftTitle}
-              setCurrentDraftTitle={setCurrentDraftTitle}
               hoveredItemId={hoveredItemId}
               setHoveredItemId={setHoveredItemId}
               userId={user?.id}
@@ -294,13 +291,7 @@ function App() {
         <DraftsModal
           userId={user.id}
           onClose={() => setShowDraftsModal(false)}
-          onLoadDraft={(
-            items: any[],
-            sleeveSrc?: string,
-            draftId?: string,
-            draftTitle?: string,
-            backgroundSrc?: string
-          ) => {
+          onLoadDraft={(items: any[], sleeveSrc?: string, draftId?: string, backgroundSrc?: string) => {
             if (backgroundSrc) {
               setBackgroundImage(backgroundSrc);
             } else {
@@ -314,7 +305,6 @@ function App() {
               setSleeveSrc(sleeveSrc);
             }
             setCurrentDraftId(draftId ?? null);
-            setCurrentDraftTitle(draftTitle ?? null);
           }}
           setSleeveSrc={setSleeveSrc}
           onSelectDraftId={(draftId: string | null | undefined) => setCurrentDraftId(draftId ?? null)}
