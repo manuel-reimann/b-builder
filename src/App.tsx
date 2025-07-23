@@ -305,10 +305,15 @@ function App() {
             draftTitle?: string
           ) => {
             const backgroundItem = items.find((item) => item.type === "background");
-            console.log("Setting backgroundImage to:", backgroundSrc ?? backgroundItem?.src);
-            if (backgroundSrc || backgroundItem?.src) {
-              setBackgroundImage(backgroundSrc ?? backgroundItem.src);
+
+            if (backgroundSrc) {
+              console.log("🎯 Using backgroundSrc directly:", backgroundSrc);
+              setBackgroundImage(backgroundSrc);
+            } else if (backgroundItem?.src) {
+              console.log("🎯 Using backgroundItem.src fallback:", backgroundItem.src);
+              setBackgroundImage(backgroundItem.src);
             } else {
+              console.log("❌ No background image found at all.");
               setBackgroundImage(null);
             }
 
