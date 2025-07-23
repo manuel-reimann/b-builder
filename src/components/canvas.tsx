@@ -136,13 +136,18 @@ export default function Canvas({
 
   // Effect to set background image from backgroundItem
   useEffect(() => {
-    const backgroundItem = items.find((item) => item.type === "background");
-    if (backgroundItem) {
-      console.log("🟢 Setting background from backgroundItem:", backgroundItem.src);
-      setBackgroundImage(backgroundItem.src);
+    console.log("📦 Items in background useEffect:", items);
+    if (items.length > 0) {
+      const backgroundItem = items.find((item) => item.type === "background");
+      if (backgroundItem) {
+        console.log("🟢 Setting background from backgroundItem:", backgroundItem.src);
+        setBackgroundImage(backgroundItem.src);
+      } else {
+        console.log("🔴 No backgroundItem found in items");
+        setBackgroundImage(null);
+      }
     } else {
-      console.log("🔴 No backgroundItem found");
-      setBackgroundImage(null);
+      console.log("⛔ Items array empty, skipping background check");
     }
   }, [items]);
 
