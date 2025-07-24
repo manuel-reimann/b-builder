@@ -165,9 +165,16 @@ export default function DraftsModal({
                           // Determine final background src: prefer the element's src, fall back to stored key
                           const finalBackgroundSrc: string | undefined =
                             backgroundItemFromElements?.src ?? backgroundKey;
+                          // Resolve full URL for legacy or key-based backgrounds
+                          const resolvedBackgroundUrl: string | undefined = finalBackgroundSrc
+                            ? finalBackgroundSrc.startsWith("http") || finalBackgroundSrc.startsWith("/")
+                              ? finalBackgroundSrc
+                              : `${import.meta.env.BASE_URL}img/bgs/${finalBackgroundSrc}.webp`
+                            : undefined;
+                          console.log("Resolved background URL in DraftsModal:", resolvedBackgroundUrl);
                           // Apply background
-                          if (finalBackgroundSrc) {
-                            document.body.style.backgroundImage = `url(${finalBackgroundSrc})`;
+                          if (resolvedBackgroundUrl) {
+                            document.body.style.backgroundImage = `url(${resolvedBackgroundUrl})`;
                             document.body.style.backgroundSize = "cover";
                           } else {
                             console.log("No background found in draft.");
@@ -176,7 +183,7 @@ export default function DraftsModal({
                           // Sleeve remains separate
                           const sleeveSrc: string = draft.sleeve || "";
                           setSleeveSrc(sleeveSrc);
-                          onLoadDraft(canvasItems, sleeveSrc, draft.id, draft.title, finalBackgroundSrc);
+                          onLoadDraft(canvasItems, sleeveSrc, draft.id, draft.title, resolvedBackgroundUrl);
                           // Show success toast notification
                           toast.success("Entwurf geladen");
                           // Set the currently selected draft ID

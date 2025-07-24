@@ -340,7 +340,7 @@ export default function Canvas({
     >
       {/* Displays the current draft title if available (fallback to '(Ohne Titel)') */}
       {resultModalProps.title && (
-        <div className="absolute top-4 left-4 px-4 py-1.5 bg-white/80 text-sm font-semibold rounded shadow-md text-gray-800">
+        <div className="absolute px-6 py-2 text-lg font-bold text-gray-900 rounded shadow-lg top-4 left-4 bg-white/90 backdrop-blur-sm">
           Aktueller Entwurf: {resultModalProps.title || "(Ohne Titel)"}
         </div>
       )}

@@ -22,6 +22,14 @@ function App() {
   const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1_v2.webp");
   const [backgroundSrc, setBackgroundSrc] = useState<string | null>(null);
 
+  // Resolve full asset URL for section background
+  const resolvedSectionBg: string | undefined = backgroundSrc
+    ? backgroundSrc.startsWith("http") || backgroundSrc.startsWith("/")
+      ? backgroundSrc
+      : `${import.meta.env.BASE_URL}img/bgs/${backgroundSrc}.webp`
+    : undefined;
+  console.log("Resolved section background URL:", resolvedSectionBg);
+
   const [showDraftsModal, setShowDraftsModal] = useState(false);
   const [showSaveDraftModal, setShowSaveDraftModal] = useState(false);
 
@@ -90,6 +98,10 @@ function App() {
       );
 
       if (result && result.success) {
+        // Update current draft title for newly saved or overridden drafts
+        if (titleOverride) {
+          setCurrentDraftTitle(titleOverride);
+        }
         if (!currentDraftId && !titleOverride) {
           setShowSaveDraftModal(true);
         } else {
@@ -228,7 +240,7 @@ function App() {
         <section
           className="flex items-center justify-center flex-grow overflow-hidden canvas-area"
           style={{
-            backgroundImage: backgroundSrc ? `url(${backgroundSrc})` : undefined,
+            backgroundImage: resolvedSectionBg ? `url(${resolvedSectionBg})` : undefined,
             backgroundSize: "cover",
             backgroundPosition: "center center",
             backgroundRepeat: "no-repeat",
