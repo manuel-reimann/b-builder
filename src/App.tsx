@@ -20,7 +20,7 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env
 
 function App() {
   const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1_v2.webp");
-  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+  const [backgroundSrc, setBackgroundSrc] = useState<string | null>(null);
 
   const [showDraftsModal, setShowDraftsModal] = useState(false);
   const [showSaveDraftModal, setShowSaveDraftModal] = useState(false);
@@ -63,10 +63,10 @@ function App() {
     if (!sleeveItem) return;
 
     const backgroundItem =
-      backgroundImage !== null
+      backgroundSrc !== null
         ? {
             id: "background",
-            src: backgroundImage,
+            src: backgroundSrc,
             x: 0,
             y: 0,
             maxWidth: 800,
@@ -210,7 +210,7 @@ function App() {
             setCanvasItems={setCanvasItems}
             canvasContainerRef={canvasContainerRef}
             setSleeveSrc={setSleeveSrc}
-            setBackgroundSrc={setBackgroundImage}
+            setBackgroundSrc={setBackgroundSrc}
             showOnly={[
               "backgrounds",
               "sleeves",
@@ -228,7 +228,7 @@ function App() {
         <section
           className="flex items-center justify-center flex-grow overflow-hidden canvas-area"
           style={{
-            backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
+            backgroundImage: backgroundSrc ? `url(${backgroundSrc})` : undefined,
             backgroundSize: "cover",
             backgroundPosition: "center center",
             backgroundRepeat: "no-repeat",
@@ -248,6 +248,7 @@ function App() {
               setSelectedItemId={setSelectedItemId}
               canvasContainerRef={canvasContainerRef}
               sleeveSrc={sleeveSrc}
+              backgroundSrc={backgroundSrc}
               saveDraft={saveDraft}
               showSaveDraftModal={() => setShowSaveDraftModal(true)}
               currentDraftId={currentDraftId}
@@ -308,13 +309,13 @@ function App() {
 
             if (backgroundSrc) {
               console.log("🎯 Using backgroundSrc directly:", backgroundSrc);
-              setBackgroundImage(backgroundSrc);
+              setBackgroundSrc(backgroundSrc);
             } else if (backgroundItem?.src) {
               console.log("🎯 Using backgroundItem.src fallback:", backgroundItem.src);
-              setBackgroundImage(backgroundItem.src);
+              setBackgroundSrc(backgroundItem.src);
             } else {
               console.log("❌ No background image found at all.");
-              setBackgroundImage(null);
+              setBackgroundSrc(null);
             }
 
             setCanvasItems(items.filter((item) => item.type !== "background"));

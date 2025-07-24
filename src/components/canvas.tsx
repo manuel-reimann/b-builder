@@ -44,6 +44,7 @@ export default function Canvas({
   setSelectedItemId,
   canvasContainerRef,
   sleeveSrc,
+  backgroundSrc,
   saveDraft,
   showSaveDraftModal,
   currentDraftId,
@@ -58,6 +59,7 @@ export default function Canvas({
   setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
   canvasContainerRef: React.RefObject<HTMLDivElement | null>;
   sleeveSrc: string;
+  backgroundSrc: string | null;
   saveDraft: () => Promise<void>;
   showSaveDraftModal: () => void;
   currentDraftId: string | null;
@@ -130,31 +132,6 @@ export default function Canvas({
   const scaleX = dimensions.width / DESIGN_WIDTH;
   const scaleY = dimensions.height / DESIGN_HEIGHT;
   const scale = Math.min(scaleX, scaleY);
-
-  // State for background image
-  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
-
-  // Effect to set background image from backgroundItem
-  useEffect(() => {
-    console.log("📦 Items in background useEffect:", items);
-    console.log("📏 Items length:", items.length);
-    console.log(
-      "🧪 Final loaded items:",
-      items.map((i) => ({ id: i.id, type: i.type, src: i.src }))
-    );
-    if (items.length > 0) {
-      const backgroundItem = items.find((item) => item.type?.toLowerCase() === "background");
-      if (backgroundItem) {
-        console.log("🟢 Setting background from backgroundItem:", backgroundItem.src);
-        setBackgroundImage(backgroundItem.src);
-      } else {
-        console.log("🔴 No backgroundItem found in items");
-        setBackgroundImage(null);
-      }
-    } else {
-      console.log("⛔ Items array empty, skipping background check");
-    }
-  }, [items]);
 
   // Saves changes to an existing draft and shows a success toast
   function handleUpdateDraft() {
@@ -295,7 +272,7 @@ export default function Canvas({
       ref={containerRef}
       className="relative w-full h-full transition-all bg-center bg-no-repeat bg-cover"
       style={{
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
+        backgroundImage: backgroundSrc ? `url(${backgroundSrc})` : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

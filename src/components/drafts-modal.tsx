@@ -43,7 +43,7 @@ export default function DraftsModal({
       // Query Supabase to get drafts for the current user, ordered by creation date descending
       const { data, error } = await supabase
         .from("user_drafts")
-        .select("id, title, elements, sleeve, created_at")
+        .select("id, title, elements, sleeve, background, created_at")
         .eq("user_id", userId)
         .order("created_at", { ascending: false });
 
@@ -155,22 +155,15 @@ export default function DraftsModal({
                           // Clear any previously selected draft ID
                           onSelectDraftId("");
 
-                          // Validate draft elements exist and are an array
-                          if (!draft.elements || !Array.isArray(draft.elements)) {
-                            throw new Error("Draft data is empty or not an array");
-                          }
+                          // Get background source from new background column or fallback
+                          const backgroundSrcFromColumn: string | undefined = draft.background ?? undefined;
 
-                          // Separate background item from others
-                          const allItems: CanvasItem[] = draft.elements;
-                          console.log("All items loaded from draft:", allItems);
-                          const backgroundItem = allItems.find((item: any) => item.type === "background");
-                          console.log("Background Item loaded from draft:", backgroundItem);
-                          const canvasItems = allItems.filter((item: any) => item.type !== "background");
+                          // Validate draft elements exist and are an array
+                          const canvasItems: CanvasItem[] = Array.isArray(draft.elements) ? draft.elements : [];
 
                           // Optionally set background src
-                          if (backgroundItem) {
-                            const bg = backgroundItem as CanvasItem;
-                            document.body.style.backgroundImage = `url(${bg.src})`;
+                          if (backgroundSrcFromColumn) {
+                            document.body.style.backgroundImage = `url(${backgroundSrcFromColumn})`;
                             document.body.style.backgroundSize = "cover";
                           } else {
                             console.log("No background item found in draft.");
@@ -179,7 +172,7 @@ export default function DraftsModal({
                           // Sleeve remains separate
                           const sleeveSrc: string = draft.sleeve || "";
                           setSleeveSrc(sleeveSrc);
-                          onLoadDraft(canvasItems, sleeveSrc, draft.id, draft.title, backgroundItem?.src);
+                          onLoadDraft(canvasItems, sleeveSrc, draft.id, draft.title, backgroundSrcFromColumn);
                           // Show success toast notification
                           toast.success("Entwurf geladen");
                           // Set the currently selected draft ID
