@@ -155,24 +155,28 @@ export default function DraftsModal({
                           // Clear any previously selected draft ID
                           onSelectDraftId("");
 
-                          // Get background source from new background column or fallback
-                          const backgroundSrcFromColumn: string | undefined = draft.background ?? undefined;
-
-                          // Validate draft elements exist and are an array
-                          const canvasItems: CanvasItem[] = Array.isArray(draft.elements) ? draft.elements : [];
-
-                          // Optionally set background src
-                          if (backgroundSrcFromColumn) {
-                            document.body.style.backgroundImage = `url(${backgroundSrcFromColumn})`;
+                          // Get background key from column (may be draft name without extension)
+                          const backgroundKey: string | undefined = draft.background ?? undefined;
+                          // Extract all items and identify the background item
+                          const allItems: CanvasItem[] = Array.isArray(draft.elements) ? draft.elements : [];
+                          const backgroundItemFromElements = allItems.find((item) => item.type === "background");
+                          // Remove background item from canvas items
+                          const canvasItems: CanvasItem[] = allItems.filter((item) => item.type !== "background");
+                          // Determine final background src: prefer the element's src, fall back to stored key
+                          const finalBackgroundSrc: string | undefined =
+                            backgroundItemFromElements?.src ?? backgroundKey;
+                          // Apply background
+                          if (finalBackgroundSrc) {
+                            document.body.style.backgroundImage = `url(${finalBackgroundSrc})`;
                             document.body.style.backgroundSize = "cover";
                           } else {
-                            console.log("No background item found in draft.");
+                            console.log("No background found in draft.");
                           }
 
                           // Sleeve remains separate
                           const sleeveSrc: string = draft.sleeve || "";
                           setSleeveSrc(sleeveSrc);
-                          onLoadDraft(canvasItems, sleeveSrc, draft.id, draft.title, backgroundSrcFromColumn);
+                          onLoadDraft(canvasItems, sleeveSrc, draft.id, draft.title, finalBackgroundSrc);
                           // Show success toast notification
                           toast.success("Entwurf geladen");
                           // Set the currently selected draft ID
