@@ -76,7 +76,7 @@ export default function Canvas({
   const resolvedBackgroundSrc: string | undefined = backgroundSrc
     ? backgroundSrc.startsWith("http") || backgroundSrc.startsWith("/")
       ? backgroundSrc
-      : `/img/backgrounds/${backgroundSrc}.webp`
+      : `/img/bgs/${backgroundSrc}.webp`
     : undefined;
   // Reference to the Konva Stage component
   const stageRef = useRef<any>(null);
