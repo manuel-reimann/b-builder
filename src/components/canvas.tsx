@@ -193,6 +193,9 @@ export default function Canvas({
     const dataUrl = canvasElement.toDataURL("image/png");
 
     const prompt = buildPrompt(items, promptAddition);
+    console.log("💬 Generated AI Prompt:", prompt);
+    console.log(`📦 Prepared image payload size: ${dataUrl.length} characters`);
+    console.log(`🐦 Image payload preview: ${dataUrl.slice(0, 60)}...`);
     const materialEntries = items.map(
       (item) =>
         item.label ||
@@ -204,10 +207,14 @@ export default function Canvas({
     );
     const materials_csv = materialEntries.join(", ");
 
+    console.log("📤 Sending request to Flux API with prompt and image payload");
     const result = await generateImageWithFlux({ prompt, imageBase64: dataUrl });
+    console.log("📥 Flux API result:", result);
 
     if (result && result.image) {
       try {
+        console.log("🔗 Fetching generated image from:", result.image);
+        console.log("🧾 Materials CSV:", materials_csv);
         const response = await fetch(result.image);
         const blob = await response.blob();
         const filename = `flux-output-${Date.now()}.png`;
