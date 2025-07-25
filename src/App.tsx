@@ -46,6 +46,16 @@ function App() {
 
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
+
+  // Reset items while preserving background and sleeve; clear draft info
+  const handleResetItemsAndDraft = () => {
+    // Keep only sleeve and background items
+    setCanvasItems((prev) => prev.filter((item) => item.type === "sleeve" || item.type === "background"));
+    setSelectedItemId(null);
+    // Clear draft metadata
+    setCurrentDraftTitle(null);
+    setCurrentDraftId(null);
+  };
   const canvasContainerRef = useRef<HTMLDivElement>(null!);
 
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -244,6 +254,7 @@ function App() {
               setHoveredItemId={setHoveredItemId}
               userId={user?.id}
               setShowLoginModal={setShowLoginModal}
+              onResetCanvas={handleResetItemsAndDraft}
             />
           </div>
         </section>

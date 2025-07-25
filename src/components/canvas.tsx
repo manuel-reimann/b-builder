@@ -53,6 +53,7 @@ export default function Canvas({
   setHoveredItemId,
   userId,
   setShowLoginModal,
+  onResetCanvas,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
@@ -68,6 +69,7 @@ export default function Canvas({
   setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
   userId: string;
   setShowLoginModal: React.Dispatch<React.SetStateAction<boolean>>;
+  onResetCanvas: () => void;
 }) {
   // Fixed design dimensions for the canvas
   const DESIGN_WIDTH = 800;
@@ -437,9 +439,7 @@ export default function Canvas({
           {/* Button to reset canvas to only the sleeve background */}
           <button
             onClick={() => {
-              const filtered = items.filter((item) => item.type === "sleeve" || item.type === "background");
-              setCanvasItems(filtered);
-              setSelectedItemId(null);
+              onResetCanvas();
               toast.info("Canvas was reset");
             }}
             className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-gray hover:bg-gray-400 rounded-md"
