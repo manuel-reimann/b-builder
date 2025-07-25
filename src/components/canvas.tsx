@@ -2,6 +2,7 @@
 import { generateImageWithFlux } from "../utils/flux-client"; // Import the Flux API client for image generation <------
 import ResultModal from "./results-modal";
 import { buildPrompt } from "../utils/export-prompt"; // Import the prompt builder utility
+import { backgroundAssets, sleeveAssets } from "./sidebar-left";
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer } from "react-konva";
 import StaticSleeveImage from "./static-sleeve-image";
@@ -190,8 +191,25 @@ export default function Canvas({
     const canvasElement = stageRef.current.getStage().toCanvas();
     const dataUrl = canvasElement.toDataURL("image/png");
 
-    // Build full prompt from current canvas items
-    const prompt = buildPrompt(items);
+    // Build initial prompt from current canvas items
+    let prompt = buildPrompt(items);
+
+    // Append sleeve-specific snippet if defined
+    if (sleeveSrc) {
+      const slDef = sleeveAssets.find((s: any) => s.src === sleeveSrc);
+      if (slDef?.promptAddition) {
+        prompt += ` ${slDef.promptAddition}`;
+      }
+    }
+
+    // Append background-specific snippet if defined
+    if (backgroundSrc) {
+      const bgDef = backgroundAssets.find((b: any) => b.src === backgroundSrc);
+      if (bgDef?.promptAddition) {
+        prompt += ` ${bgDef.promptAddition}`;
+      }
+    }
+
     console.log("💬 Generated AI Prompt:", prompt);
     console.log(`📦 Prepared image payload size: ${dataUrl.length} characters`);
     console.log(`🐦 Image payload preview: ${dataUrl.slice(0, 60)}...`);
