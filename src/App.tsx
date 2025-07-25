@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 // Root of the app: manages layout and state for the entire application
 import "./App.css";
 import SidebarLeft from "./components/sidebar-left";
+import { allAssets } from "./components/sidebar-left";
 import SidebarRight from "./components/sidebar-right";
 import Canvas from "./components/canvas";
 import LoginModal from "./components/login-modal";
@@ -24,7 +25,6 @@ function App() {
 
   // Resolve full asset URL for section background
   const resolvedSectionBg: string | undefined = backgroundSrc ? (backgroundSrc.startsWith("http") || backgroundSrc.startsWith("/") ? backgroundSrc : `${import.meta.env.BASE_URL}img/bgs/${backgroundSrc}.webp`) : undefined;
-  console.log("Resolved section background URL:", resolvedSectionBg);
 
   const [showDraftsModal, setShowDraftsModal] = useState(false);
   const [showSaveDraftModal, setShowSaveDraftModal] = useState(false);
@@ -269,7 +269,16 @@ function App() {
           userId={user.id}
           onClose={() => setShowDraftsModal(false)}
           onLoadDraft={(items: any[], sleeveSrc?: string, draftId?: string, backgroundSrc?: string, draftTitle?: string) => {
-            const backgroundItem = items.find((item) => item.type === "background");
+            // Hydrate loaded items with promptAddition and stackable flags
+            const hydratedItems = items.map((item: any) => {
+              const def = allAssets.find((a) => a.src === item.src && a.type === item.type);
+              return {
+                ...item,
+                promptAddition: def?.promptAddition,
+                stackable: def?.stackable,
+              };
+            });
+            const backgroundItem = hydratedItems.find((item) => item.type === "background");
 
             if (backgroundSrc) {
               console.log("🎯 Using backgroundSrc directly:", backgroundSrc);
@@ -282,7 +291,7 @@ function App() {
               setBackgroundSrc(null);
             }
 
-            setCanvasItems(items.filter((item) => item.type !== "background"));
+            setCanvasItems(hydratedItems.filter((item) => item.type !== "background"));
             setSelectedItemId(null);
 
             if (sleeveSrc !== undefined) {

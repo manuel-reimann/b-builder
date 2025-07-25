@@ -19,13 +19,7 @@ export default function DraftsModal({
 }: {
   userId: string;
   onClose: () => void;
-  onLoadDraft: (
-    items: CanvasItem[],
-    sleeveSrc?: string,
-    draftId?: string,
-    draftTitle?: string,
-    backgroundImage?: string
-  ) => void;
+  onLoadDraft: (items: CanvasItem[], sleeveSrc?: string, draftId?: string, draftTitle?: string, backgroundImage?: string) => void;
   setSleeveSrc: (src: string) => void;
   onSelectDraftId: (id?: string | null) => void;
   currentDraftId: string | null;
@@ -41,11 +35,7 @@ export default function DraftsModal({
   useEffect(() => {
     const fetchDrafts = async () => {
       // Query Supabase to get drafts for the current user, ordered by creation date descending
-      const { data, error } = await supabase
-        .from("user_drafts")
-        .select("id, title, elements, sleeve, background, created_at")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("user_drafts").select("id, title, elements, sleeve, background, created_at").eq("user_id", userId).order("created_at", { ascending: false });
 
       if (error) {
         // Log any errors during fetching
@@ -73,11 +63,7 @@ export default function DraftsModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white w-3/4 max-h-[80vh] overflow-y-auto p-6 rounded shadow-lg relative">
         {/* Close button for the modal */}
-        <button
-          onClick={onClose}
-          className="absolute text-gray-600 top-2 right-2 hover:text-red-500"
-          aria-label="Schliessen"
-        >
+        <button onClick={onClose} className="absolute text-gray-600 top-2 right-2 hover:text-red-500" aria-label="Schliessen">
           &times;
         </button>
         {/* Modal title */}
@@ -91,31 +77,16 @@ export default function DraftsModal({
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Map over drafts to display each draft */}
             {sortedDrafts.map((draft) => (
-              <div
-                key={draft.id}
-                className={`flex flex-col items-center p-4 border rounded shadow relative ${
-                  draft.id === currentDraftId ? "bg-gray-100 border-agrotropic-blue" : ""
-                }`}
-              >
+              <div key={draft.id} className={`flex flex-col items-center p-4 border rounded shadow relative ${draft.id === currentDraftId ? "bg-gray-100 border-agrotropic-blue" : ""}`}>
                 {/* Editable title input and save button for current draft */}
                 {editingId === draft.id ? (
                   <div className="flex items-center gap-1 mb-1 text-lg font-semibold text-center">
-                    <input
-                      type="text"
-                      className="px-1 text-center border border-gray-300 rounded"
-                      value={draft.title || ""}
-                      onChange={(e) =>
-                        setDrafts((prev) => prev.map((d) => (d.id === draft.id ? { ...d, title: e.target.value } : d)))
-                      }
-                    />
+                    <input type="text" className="px-1 text-center border border-gray-300 rounded" value={draft.title || ""} onChange={(e) => setDrafts((prev) => prev.map((d) => (d.id === draft.id ? { ...d, title: e.target.value } : d)))} />
                     <span
                       onClick={async () => {
                         const trimmed = draft.title?.trim();
                         if (!trimmed) return;
-                        const { error } = await supabase
-                          .from("user_drafts")
-                          .update({ title: trimmed })
-                          .eq("id", draft.id);
+                        const { error } = await supabase.from("user_drafts").update({ title: trimmed }).eq("id", draft.id);
                         if (error) {
                           toast.error("Fehler beim Umbenennen");
                           console.error("Rename error:", error);
@@ -133,11 +104,7 @@ export default function DraftsModal({
                 ) : (
                   <div className="flex items-center gap-1 mb-1 text-lg font-semibold text-center">
                     <span>{draft.title || "(Ohne Titel)"}</span>
-                    <span
-                      onClick={() => setEditingId(draft.id)}
-                      title="Titel bearbeiten"
-                      className="text-gray-500 hover:text-black"
-                    >
+                    <span onClick={() => setEditingId(draft.id)} title="Titel bearbeiten" className="text-gray-500 hover:text-black">
                       &nbsp;
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </span>
@@ -159,29 +126,19 @@ export default function DraftsModal({
                           const backgroundKey: string | undefined = draft.background ?? undefined;
                           // Extract all items and identify the background item
                           const allItems: CanvasItem[] = Array.isArray(draft.elements) ? draft.elements : [];
-                          const backgroundItemFromElements = allItems.find(
-                            (item) =>
-                              item.type === "background" ||
-                              (typeof item.src === "string" && item.src.startsWith("/img/bgs/"))
-                          );
+                          const backgroundItemFromElements = allItems.find((item) => item.type === "background" || (typeof item.src === "string" && item.src.startsWith("/img/bgs/")));
                           // Remove background item from canvas items
                           const canvasItems: CanvasItem[] = allItems.filter((item) => item.type !== "background");
                           // Determine final background src: prefer the element's src, fall back to stored key only if it's a valid url or filename
                           const finalBackgroundSrc: string | undefined =
-                            backgroundItemFromElements?.src ??
-                            (backgroundKey &&
-                            (backgroundKey.includes(".") ||
-                              backgroundKey.startsWith("/") ||
-                              backgroundKey.startsWith("http"))
-                              ? backgroundKey
-                              : undefined);
+                            backgroundItemFromElements?.src ?? (backgroundKey && (backgroundKey.includes(".") || backgroundKey.startsWith("/") || backgroundKey.startsWith("http")) ? backgroundKey : undefined);
                           // Resolve full URL for legacy or key-based backgrounds
                           const resolvedBackgroundUrl: string | undefined = finalBackgroundSrc
                             ? finalBackgroundSrc.startsWith("http") || finalBackgroundSrc.startsWith("/")
                               ? finalBackgroundSrc
                               : `${import.meta.env.BASE_URL}img/bgs/${finalBackgroundSrc}.webp`
                             : undefined;
-                          console.log("Resolved background URL in DraftsModal:", resolvedBackgroundUrl);
+
                           // Apply background
                           if (resolvedBackgroundUrl) {
                             document.body.style.backgroundImage = `url(${resolvedBackgroundUrl})`;

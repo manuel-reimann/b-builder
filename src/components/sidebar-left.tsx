@@ -95,7 +95,11 @@ const data: Data = {
 
 // Named asset lists for prompt-building in Canvas
 export const backgroundAssets: DataItem[] = data.Backgrounds;
+
 export const sleeveAssets: DataItem[] = data.Sleeves;
+
+// Combined list of all assets for hydrating and prompt additions
+export const allAssets: DataItem[] = Object.values(data).flat();
 
 const DESIGN_CATEGORIES = ["Backgrounds", "Sleeves"];
 
