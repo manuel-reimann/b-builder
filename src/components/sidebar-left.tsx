@@ -1,43 +1,40 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import { v4 as uuidv4 } from "uuid";
 
-type ItemType =
-  | "flower"
-  | "sprayrose"
-  | "gypsophilla"
-  | "srilanka"
-  | "plug"
-  | "chrysanthemum"
-  | "filler"
-  | "sleeve"
-  | "background";
-type DataItem = { label: string; src: string; type: ItemType };
+type ItemType = "flower" | "sprayrose" | "gypsophilla" | "srilanka" | "plug" | "chrysanthemum" | "filler" | "sleeve" | "background";
+type DataItem = {
+  label: string;
+  src: string;
+  type: ItemType;
+  promptAddition?: string;
+  stackable?: boolean;
+};
 type Data = Record<string, DataItem[]>;
 const data: Data = {
   Backgrounds: [
-    { label: "Christmas 1", src: "/img/bgs/christmas1.webp", type: "background" },
-    { label: "Christmas 2", src: "/img/bgs/christmas2.webp", type: "background" },
-    { label: "Christmas 3", src: "/img/bgs/christmas3.webp", type: "background" },
-    { label: "Empty 1", src: "/img/bgs/empty1.webp", type: "background" },
-    { label: "Empty 2", src: "/img/bgs/empty2.webp", type: "background" },
-    { label: "Empty 3", src: "/img/bgs/empty3.webp", type: "background" },
-    { label: "Florist 1", src: "/img/bgs/florist1.webp", type: "background" },
-    { label: "Florist 2", src: "/img/bgs/florist2.webp", type: "background" },
-    { label: "Florist 3", src: "/img/bgs/florist3.webp", type: "background" },
-    { label: "Florist 4", src: "/img/bgs/florist4.webp", type: "background" },
-    { label: "Florist 5", src: "/img/bgs/florist5.webp", type: "background" },
-    { label: "Florist 6", src: "/img/bgs/florist6.webp", type: "background" },
-    { label: "Florist 7", src: "/img/bgs/florist7.webp", type: "background" },
-    { label: "Valentine 1", src: "/img/bgs/valentine1.webp", type: "background" },
-    { label: "Valentine 2", src: "/img/bgs/valentine2.webp", type: "background" },
-    { label: "Valentine 3", src: "/img/bgs/valentine3.webp", type: "background" },
+    { label: "Christmas 1", src: "/img/bgs/christmas1.webp", type: "background", promptAddition: "Frame the bouquet with delicate frosty snowflakes for a winter feel.", stackable: false },
+    { label: "Christmas 2", src: "/img/bgs/christmas2.webp", type: "background", stackable: false },
+    { label: "Christmas 3", src: "/img/bgs/christmas3.webp", type: "background", stackable: false },
+    { label: "Empty 1", src: "/img/bgs/empty1.webp", type: "background", stackable: false },
+    { label: "Empty 2", src: "/img/bgs/empty2.webp", type: "background", stackable: false },
+    { label: "Empty 3", src: "/img/bgs/empty3.webp", type: "background", stackable: false },
+    { label: "Florist 1", src: "/img/bgs/florist1.webp", type: "background", promptAddition: "Add gentle pastel bokeh lighting behind the bouquet to create a dreamy ambiance.", stackable: false },
+    { label: "Florist 2", src: "/img/bgs/florist2.webp", type: "background", stackable: false },
+    { label: "Florist 3", src: "/img/bgs/florist3.webp", type: "background", stackable: false },
+    { label: "Florist 4", src: "/img/bgs/florist4.webp", type: "background", stackable: false },
+    { label: "Florist 5", src: "/img/bgs/florist5.webp", type: "background", stackable: false },
+    { label: "Florist 6", src: "/img/bgs/florist6.webp", type: "background", stackable: false },
+    { label: "Florist 7", src: "/img/bgs/florist7.webp", type: "background", stackable: false },
+    { label: "Valentine 1", src: "/img/bgs/valentine1.webp", type: "background", promptAddition: "Enhance the background with soft pink heart petals on the valentine table", stackable: false },
+    { label: "Valentine 2", src: "/img/bgs/valentine2.webp", type: "background", stackable: false },
+    { label: "Valentine 3", src: "/img/bgs/valentine3.webp", type: "background", stackable: false },
   ],
   Sleeves: [
-    { label: "Braun", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve" },
-    { label: "VM 961", src: "/img/sleeves/vm961_v2.webp", type: "sleeve" },
-    { label: "VM 968", src: "/img/sleeves/vm968_v2.webp", type: "sleeve" },
-    { label: "VM 1029", src: "/img/sleeves/vm1029_v2.webp", type: "sleeve" },
-    { label: "VM 1033", src: "/img/sleeves/vm1033_v2.webp", type: "sleeve" },
+    { label: "Braun", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve", stackable: false },
+    { label: "VM 961", src: "/img/sleeves/vm961_v2.webp", type: "sleeve", stackable: false },
+    { label: "VM 968", src: "/img/sleeves/vm968_v2.webp", type: "sleeve", stackable: false },
+    { label: "VM 1029", src: "/img/sleeves/vm1029_v2.webp", type: "sleeve", stackable: false },
+    { label: "VM 1033", src: "/img/sleeves/vm1033_v2.webp", type: "sleeve", stackable: false },
   ],
   Roses: [
     { label: "Aly", src: "/img/roses/aly.webp", type: "flower" },
@@ -110,7 +107,7 @@ export default function SidebarLeft({
   canvasContainerRef: React.RefObject<HTMLDivElement | null>;
   showOnly?: string[];
 }) {
-  const handleAddImage = (src: string, label: string, type: ItemType = "flower") => {
+  const handleAddImage = (src: string, label: string, type: ItemType = "flower", promptAddition?: string, stackable: boolean = true) => {
     const img = new window.Image();
     img.src = src;
 
@@ -133,6 +130,8 @@ export default function SidebarLeft({
         maxWidth: maxHeight,
         maxHeight,
         type,
+        promptAddition,
+        stackable,
       };
 
       // If a sleeve is selected, update sleeve background and existing canvas sleeve element
@@ -164,17 +163,9 @@ export default function SidebarLeft({
     };
   };
 
-  function renderAccordionItem(
-    category: string,
-    items: DataItem[],
-    handleAddImage: (src: string, label: string, type: ItemType) => void
-  ) {
+  function renderAccordionItem(category: string, items: DataItem[], handleAddImage: (src: string, label: string, type: ItemType, promptAddition?: string, stackable?: boolean) => void) {
     return (
-      <AccordionItem
-        value={category}
-        key={category}
-        className="rounded-lg transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] overflow-hidden bg-white"
-      >
+      <AccordionItem value={category} key={category} className="rounded-lg transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] overflow-hidden bg-white">
         <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group">
           <div className="flex items-center gap-2">
             <span className="text-base">
@@ -196,10 +187,10 @@ export default function SidebarLeft({
         </AccordionTrigger>
         <AccordionContent className="transition-all duration-300 ease-in-out">
           <div className="grid grid-cols-2 gap-3 mt-2">
-            {items.map(({ label, src, type }) => (
+            {items.map(({ label, src, type, promptAddition, stackable }) => (
               <div
                 key={label}
-                onClick={() => handleAddImage(src, label, type)}
+                onClick={() => handleAddImage(src, label, type, promptAddition, stackable ?? true)}
                 draggable={type !== "background" && type !== "sleeve"}
                 onDragStart={(e) => {
                   if (type === "background" || type === "sleeve") return;
@@ -207,8 +198,7 @@ export default function SidebarLeft({
                   e.dataTransfer.setData("application/json", JSON.stringify({ src, label, type }));
 
                   const img = new Image();
-                  img.src =
-                    "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
+                  img.src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
                   img.style.position = "absolute";
                   img.style.top = "-1000px";
                   document.body.appendChild(img);

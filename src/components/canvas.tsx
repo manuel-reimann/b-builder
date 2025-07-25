@@ -9,8 +9,6 @@ import CanvasImage from "./canvas-image";
 import { toast } from "react-toastify";
 import { supabase } from "../lib/supabase-client"; // Supabase client import
 import "react-toastify/dist/ReactToastify.css";
-//import { showToastOnceStrict } from "../lib/toastUtils"; // Import custom toast utility
-//import { createClient } from "@supabase/supabase-js";
 
 // Defines the structure of each item placed on the canvas
 export interface CanvasItem {
@@ -34,6 +32,8 @@ export interface CanvasItem {
     | "background"; // Optional background image
   sleeveSrc: string; // Optional separate sleeve source (only used for sleeve-type)
   label?: string; // Optional label for display
+  promptAddition?: string; // Optional custom snippet to include in AI prompt
+  stackable?: boolean; // Whether the promptAddition can be stacked with others or not
 }
 
 // Main Canvas component responsible for rendering the canvas and managing items
@@ -73,11 +73,7 @@ export default function Canvas({
   const DESIGN_HEIGHT = 800;
   const containerRef = canvasContainerRef;
   // Resolve full asset URL: if key only, build the path; otherwise use as-is
-  const resolvedBackgroundSrc: string | undefined = backgroundSrc
-    ? backgroundSrc.startsWith("http") || backgroundSrc.startsWith("/")
-      ? backgroundSrc
-      : `${import.meta.env.BASE_URL}img/bgs/${backgroundSrc}.webp`
-    : undefined;
+  const resolvedBackgroundSrc: string | undefined = backgroundSrc ? (backgroundSrc.startsWith("http") || backgroundSrc.startsWith("/") ? backgroundSrc : `${import.meta.env.BASE_URL}img/bgs/${backgroundSrc}.webp`) : undefined;
   console.log("Resolved background URL:", resolvedBackgroundSrc);
   // Reference to the Konva Stage component
   const stageRef = useRef<any>(null);
@@ -167,11 +163,7 @@ export default function Canvas({
       await new Promise((resolve) => setTimeout(resolve, 300));
 
       // After saving, re-fetch the draft to get its ID and title
-      const { data } = await supabase
-        .from("user_drafts")
-        .select("id, title")
-        .order("created_at", { ascending: false })
-        .limit(1);
+      const { data } = await supabase.from("user_drafts").select("id, title").order("created_at", { ascending: false }).limit(1);
       const latestDraft = data?.[0];
       draftTitle = latestDraft?.title ?? "Untitled";
       console.log("📛 Draft title used for modal and download:", draftTitle);
@@ -296,8 +288,7 @@ export default function Canvas({
 
         // Use a transparent ghost image to suppress browser default previews
         const transparentImg = new Image();
-        transparentImg.src =
-          "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
+        transparentImg.src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
         document.body.appendChild(transparentImg);
         e.dataTransfer.setDragImage(transparentImg, 0, 0);
         setTimeout(() => {
@@ -338,12 +329,6 @@ export default function Canvas({
         };
       }}
     >
-      {/* Displays the current draft title if available (fallback to '(Ohne Titel)') */}
-      {resultModalProps.title && (
-        <div className="absolute px-6 py-2 text-lg font-bold text-gray-900 rounded shadow-lg top-4 left-4 bg-white/90 backdrop-blur-sm">
-          Aktueller Entwurf: {resultModalProps.title || "(Ohne Titel)"}
-        </div>
-      )}
       {/* Konva Stage: The main container for canvas rendering */}
       <Stage
         width={dimensions.width}
@@ -390,10 +375,7 @@ export default function Canvas({
         <div className="flex gap-3 p-2 border border-gray-300 rounded-lg shadow-md bg-white/80 backdrop-blur-sm">
           {/* Button to update an existing draft */}
           {currentDraftId ? (
-            <button
-              onClick={handleUpdateDraft}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-yellow-700 bg-blue-100 hover:bg-blue-200 rounded-md"
-            >
+            <button onClick={handleUpdateDraft} className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-yellow-700 bg-blue-100 hover:bg-blue-200 rounded-md">
               Update Draft
             </button>
           ) : (
@@ -439,9 +421,7 @@ export default function Canvas({
               handleGenerate();
             }}
             disabled={!currentDraftId}
-            className={`flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white rounded-md ${
-              !currentDraftId ? "bg-gray-300 cursor-not-allowed" : "bg-agrotropic-green hover:bg-green-900"
-            }`}
+            className={`flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white rounded-md ${!currentDraftId ? "bg-gray-300 cursor-not-allowed" : "bg-agrotropic-green hover:bg-green-900"}`}
           >
             🎨 <span>Generate</span>
           </button>
@@ -458,19 +438,7 @@ export default function Canvas({
   );
 }
 
-async function saveDesignToSupabase({
-  userId,
-  image_url,
-  prompt,
-  title,
-  materials_csv,
-}: {
-  userId: string;
-  image_url: string;
-  prompt: string;
-  title: string;
-  materials_csv: string;
-}) {
+async function saveDesignToSupabase({ userId, image_url, prompt, title, materials_csv }: { userId: string; image_url: string; prompt: string; title: string; materials_csv: string }) {
   const response = await fetch("/api/save-design", {
     method: "POST",
     headers: {

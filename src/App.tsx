@@ -248,7 +248,7 @@ function App() {
           }}
         >
           {currentDraftTitle && (
-            <div className="absolute z-50 px-3 py-1 text-xs text-white bg-black bg-opacity-50 rounded pointer-events-none top-2 left-2">
+            <div className="absolute px-6 py-2 text-lg font-bold text-gray-900 rounded shadow-lg top-4 left-4 bg-white/90 backdrop-blur-sm">
               Aktueller Entwurf: {currentDraftTitle}
             </div>
           )}
