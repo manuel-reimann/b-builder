@@ -93,6 +93,10 @@ const data: Data = {
   ],
 };
 
+// Named asset lists for prompt-building in Canvas
+export const backgroundAssets: DataItem[] = data.Backgrounds;
+export const sleeveAssets: DataItem[] = data.Sleeves;
+
 const DESIGN_CATEGORIES = ["Backgrounds", "Sleeves"];
 
 export default function SidebarLeft({
