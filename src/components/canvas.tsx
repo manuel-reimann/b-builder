@@ -291,6 +291,20 @@ export default function Canvas({
     }
   }, [shouldGenerateAfterDraft, currentDraftId]);
 
+  // Unified click handler for the Generate button:
+  const handleGenerateClick = () => {
+    if (!userId) {
+      toast.info("Please login first");
+      setShowLoginModal(true);
+      return;
+    }
+    if (!currentDraftId) {
+      toast.info("Bitte speichere zuerst deinen Entwurf.");
+      return;
+    }
+    handleGenerate();
+  };
+
   // JSX structure of the canvas and control buttons
   return (
     <div
@@ -433,22 +447,7 @@ export default function Canvas({
             ♻️ <span>Reset</span>
           </button>
           {/* Button to trigger generation action (with disabled and toast logic) */}
-          <button
-            onClick={() => {
-              if (!userId) {
-                toast.info("Please login first");
-                setShowLoginModal(true);
-                return;
-              }
-              if (!currentDraftId) {
-                toast.info("Bitte speichere zuerst deinen Entwurf.");
-                return;
-              }
-              handleGenerate();
-            }}
-            disabled={!currentDraftId}
-            className={`flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white rounded-md ${!currentDraftId ? "bg-gray-300 cursor-not-allowed" : "bg-agrotropic-green hover:bg-green-900"}`}
-          >
+          <button onClick={handleGenerateClick} className={`flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white rounded-md ${!currentDraftId ? "bg-gray-300 cursor-not-allowed" : "bg-agrotropic-green hover:bg-green-900"}`}>
             🎨 <span>Generate</span>
           </button>
         </div>

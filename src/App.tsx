@@ -56,6 +56,8 @@ function App() {
   const [user, setUser] = useState<any>(null);
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
   const [currentDraftTitle, setCurrentDraftTitle] = useState<string | null>(null);
+  // Temporarily hold title until drafts modal is closed
+  const [pendingDraftTitle, setPendingDraftTitle] = useState<string | null>(null);
 
   const [materialsCSV, setMaterialsCSV] = useState<string>("");
   void materialsCSV;
@@ -88,16 +90,16 @@ function App() {
       const result = await saveDraftToSupabase(user.id, allItems, sleeveItem.src, titleOverride ?? undefined, currentDraftId ?? undefined);
 
       if (result && result.success) {
-        // Update current draft title for newly saved or overridden drafts
-        if (titleOverride) {
-          setCurrentDraftTitle(titleOverride);
-        }
+        // Always update current draft title
+        const newTitle = titleOverride?.trim() || currentDraftTitle || "Untitled";
+        setCurrentDraftTitle(newTitle);
+        // Control SaveDraftModal visibility
         if (!currentDraftId && !titleOverride) {
           setShowSaveDraftModal(true);
         } else {
           setShowSaveDraftModal(false);
         }
-
+        // Store new draft ID if provided
         if (result.newDraftId) {
           setCurrentDraftId(result.newDraftId);
         }
@@ -145,12 +147,20 @@ function App() {
     });
   }, [sleeveSrc]);
 
+  // Once drafts modal is closed, commit the pending draft title to the visible badge
+  useEffect(() => {
+    if (!showDraftsModal && pendingDraftTitle !== null) {
+      setCurrentDraftTitle(pendingDraftTitle);
+      setPendingDraftTitle(null);
+    }
+  }, [showDraftsModal]);
+
   return (
     <div className="flex flex-col h-screen app">
       <header className="p-4 text-white header">
         <nav className="nav backdrop-blur-sm ">
-          <ul className="flex items-center space-x-6">
-            <li onClick={() => window.location.reload()} className="transition-colors duration-200 cursor-pointer ">
+          <ul className="flex items-center space-x-6 ">
+            <li onClick={() => window.location.reload()} className="text-lg transition-colors duration-200 cursor-pointer">
               Start new
             </li>
             <li>
@@ -163,7 +173,7 @@ function App() {
                     setShowLoginModal(true);
                   }
                 }}
-                className="transition-colors duration-200 cursor-pointer"
+                className="text-lg transition-colors duration-200 cursor-pointer"
               >
                 Drafts
               </span>
@@ -177,17 +187,17 @@ function App() {
                   setShowLoginModal(true);
                 }
               }}
-              className="transition-colors duration-200 cursor-pointer"
+              className="text-lg transition-colors duration-200 cursor-pointer"
             >
               Designs
             </li>
             <li>
               {user ? (
-                <span onClick={() => setShowUserMenu(true)} className="transition-colors duration-200 cursor-pointer" role="button" tabIndex={0}>
+                <span onClick={() => setShowUserMenu(true)} className="text-lg transition-colors duration-200 cursor-pointer" role="button" tabIndex={0}>
                   👋 Hello, {user.user_metadata?.name || "User"}
                 </span>
               ) : (
-                <span onClick={() => setShowLoginModal(true)} className="transition-colors duration-200 cursor-pointer" role="button" tabIndex={0}>
+                <span onClick={() => setShowLoginModal(true)} className="text-lg transition-colors duration-200 cursor-pointer" role="button" tabIndex={0}>
                   Login
                 </span>
               )}
@@ -217,7 +227,7 @@ function App() {
             transition: "background-image 0.3s ease",
           }}
         >
-          {currentDraftTitle && <div className="absolute px-6 py-2 text-lg font-bold text-gray-900 rounded shadow-lg top-4 left-4 bg-white/90 backdrop-blur-sm">Aktueller Entwurf: {currentDraftTitle}</div>}
+          {currentDraftTitle && <div className="absolute z-50 px-6 py-2 font-bold text-gray-900 rounded shadow-lg top-4 left-4 bg-white/90 backdrop-blur-sm">Aktueller Entwurf: {currentDraftTitle}</div>}
           <div className="relative w-full h-full">
             <Canvas
               items={canvasItems}
@@ -298,7 +308,8 @@ function App() {
               setSleeveSrc(sleeveSrc);
             }
             setCurrentDraftId(draftId ?? null);
-            setCurrentDraftTitle(draftTitle ?? null);
+            // Delay title set until modal is closed
+            setPendingDraftTitle(draftTitle ?? null);
             setShowDraftsModal(false);
           }}
           setSleeveSrc={setSleeveSrc}
