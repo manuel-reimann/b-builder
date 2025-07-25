@@ -1,6 +1,6 @@
 import { CanvasItem } from "../components/canvas";
 
-export function buildPrompt(items: CanvasItem[]): string {
+export function buildPrompt(items: CanvasItem[], backgroundPromptAddition?: string): string {
   const basePrompt =
     "Update the image, make it more realistic. Do not change the existing colors of flowers or assets in any way. You may add shading, leaves or stems behind the heads to make it more realistic. Goal is a photorealistic looking bouquet without changing the original flowers.";
 
@@ -15,7 +15,13 @@ export function buildPrompt(items: CanvasItem[]): string {
       stackers.push(item.promptAddition);
     }
   });
-  const combinedSnippets = [...Object.values(overrides), ...stackers].join(" ");
+  // Include background-specific snippet first if provided
+  const combinedSnippetsArray: string[] = [];
+  if (backgroundPromptAddition) {
+    combinedSnippetsArray.push(backgroundPromptAddition);
+  }
+  combinedSnippetsArray.push(...Object.values(overrides), ...stackers);
+  const combinedSnippets = combinedSnippetsArray.join(" ").trim();
   const snippetSegment = combinedSnippets ? ` ${combinedSnippets}` : "";
 
   return basePrompt + snippetSegment;

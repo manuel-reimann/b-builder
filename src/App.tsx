@@ -21,13 +21,10 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env
 function App() {
   const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1_v2.webp");
   const [backgroundSrc, setBackgroundSrc] = useState<string | null>(null);
+  const [promptAddition, setPromptAddition] = useState<string | undefined>(undefined);
 
   // Resolve full asset URL for section background
-  const resolvedSectionBg: string | undefined = backgroundSrc
-    ? backgroundSrc.startsWith("http") || backgroundSrc.startsWith("/")
-      ? backgroundSrc
-      : `${import.meta.env.BASE_URL}img/bgs/${backgroundSrc}.webp`
-    : undefined;
+  const resolvedSectionBg: string | undefined = backgroundSrc ? (backgroundSrc.startsWith("http") || backgroundSrc.startsWith("/") ? backgroundSrc : `${import.meta.env.BASE_URL}img/bgs/${backgroundSrc}.webp`) : undefined;
   console.log("Resolved section background URL:", resolvedSectionBg);
 
   const [showDraftsModal, setShowDraftsModal] = useState(false);
@@ -89,13 +86,7 @@ function App() {
     const allItems = backgroundItem ? [...canvasItems, backgroundItem] : [...canvasItems];
 
     try {
-      const result = await saveDraftToSupabase(
-        user.id,
-        allItems,
-        sleeveItem.src,
-        titleOverride ?? undefined,
-        currentDraftId ?? undefined
-      );
+      const result = await saveDraftToSupabase(user.id, allItems, sleeveItem.src, titleOverride ?? undefined, currentDraftId ?? undefined);
 
       if (result && result.success) {
         // Update current draft title for newly saved or overridden drafts
@@ -193,21 +184,11 @@ function App() {
             </li>
             <li>
               {user ? (
-                <span
-                  onClick={() => setShowUserMenu(true)}
-                  className="transition-colors duration-200 cursor-pointer"
-                  role="button"
-                  tabIndex={0}
-                >
+                <span onClick={() => setShowUserMenu(true)} className="transition-colors duration-200 cursor-pointer" role="button" tabIndex={0}>
                   👋 Hello, {user.user_metadata?.name || "User"}
                 </span>
               ) : (
-                <span
-                  onClick={() => setShowLoginModal(true)}
-                  className="transition-colors duration-200 cursor-pointer"
-                  role="button"
-                  tabIndex={0}
-                >
+                <span onClick={() => setShowLoginModal(true)} className="transition-colors duration-200 cursor-pointer" role="button" tabIndex={0}>
                   Login
                 </span>
               )}
@@ -223,17 +204,8 @@ function App() {
             canvasContainerRef={canvasContainerRef}
             setSleeveSrc={setSleeveSrc}
             setBackgroundSrc={setBackgroundSrc}
-            showOnly={[
-              "backgrounds",
-              "sleeves",
-              "roses",
-              "sprayroses",
-              "gypsophilla",
-              "srilanka",
-              "plugs",
-              "chrysanthemums",
-              "filler",
-            ]}
+            setPromptAddition={setPromptAddition}
+            showOnly={["backgrounds", "sleeves", "roses", "sprayroses", "gypsophilla", "srilanka", "plugs", "chrysanthemums", "filler"]}
           />
         </aside>
 
@@ -247,11 +219,7 @@ function App() {
             transition: "background-image 0.3s ease",
           }}
         >
-          {currentDraftTitle && (
-            <div className="absolute px-6 py-2 text-lg font-bold text-gray-900 rounded shadow-lg top-4 left-4 bg-white/90 backdrop-blur-sm">
-              Aktueller Entwurf: {currentDraftTitle}
-            </div>
-          )}
+          {currentDraftTitle && <div className="absolute px-6 py-2 text-lg font-bold text-gray-900 rounded shadow-lg top-4 left-4 bg-white/90 backdrop-blur-sm">Aktueller Entwurf: {currentDraftTitle}</div>}
           <div className="relative w-full h-full">
             <Canvas
               items={canvasItems}
@@ -261,6 +229,7 @@ function App() {
               canvasContainerRef={canvasContainerRef}
               sleeveSrc={sleeveSrc}
               backgroundSrc={backgroundSrc}
+              promptAddition={promptAddition}
               saveDraft={saveDraft}
               showSaveDraftModal={() => setShowSaveDraftModal(true)}
               currentDraftId={currentDraftId}
@@ -273,15 +242,7 @@ function App() {
         </section>
 
         <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-right">
-          <SidebarRight
-            items={canvasItems}
-            setCanvasItems={setCanvasItems}
-            selectedItemId={selectedItemId}
-            setSelectedItemId={setSelectedItemId}
-            hoveredItemId={hoveredItemId}
-            setHoveredItemId={setHoveredItemId}
-            setMaterialsCSV={setMaterialsCSV}
-          />
+          <SidebarRight items={canvasItems} setCanvasItems={setCanvasItems} selectedItemId={selectedItemId} setSelectedItemId={setSelectedItemId} hoveredItemId={hoveredItemId} setHoveredItemId={setHoveredItemId} setMaterialsCSV={setMaterialsCSV} />
         </aside>
       </main>
 
@@ -310,13 +271,7 @@ function App() {
         <DraftsModal
           userId={user.id}
           onClose={() => setShowDraftsModal(false)}
-          onLoadDraft={(
-            items: any[],
-            sleeveSrc?: string,
-            draftId?: string,
-            backgroundSrc?: string,
-            draftTitle?: string
-          ) => {
+          onLoadDraft={(items: any[], sleeveSrc?: string, draftId?: string, backgroundSrc?: string, draftTitle?: string) => {
             const backgroundItem = items.find((item) => item.type === "background");
 
             if (backgroundSrc) {
@@ -346,17 +301,7 @@ function App() {
       )}
 
       {showSaveDraftModal && <SaveDraftModal onClose={() => setShowSaveDraftModal(false)} onSave={saveDraft} />}
-      <ToastContainer
-        limit={3}
-        position="bottom-center"
-        autoClose={2000}
-        hideProgressBar={false}
-        closeOnClick
-        draggable
-        pauseOnHover
-        closeButton={true}
-        newestOnTop
-      />
+      <ToastContainer limit={3} position="bottom-center" autoClose={2000} hideProgressBar={false} closeOnClick draggable pauseOnHover closeButton={true} newestOnTop />
 
       {user && showUserMenu && (
         <UserMenuModal

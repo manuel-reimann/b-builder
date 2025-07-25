@@ -99,11 +99,13 @@ export default function SidebarLeft({
   setCanvasItems,
   setSleeveSrc,
   setBackgroundSrc,
+  setPromptAddition,
   canvasContainerRef,
 }: {
   setCanvasItems: Function;
   setSleeveSrc: React.Dispatch<React.SetStateAction<string>>;
   setBackgroundSrc: React.Dispatch<React.SetStateAction<string | null>>;
+  setPromptAddition: React.Dispatch<React.SetStateAction<string | undefined>>;
   canvasContainerRef: React.RefObject<HTMLDivElement | null>;
   showOnly?: string[];
 }) {
@@ -112,6 +114,10 @@ export default function SidebarLeft({
     img.src = src;
 
     img.onload = () => {
+      // Override prompt snippet for all but gypsophilla, srilanka, and filler
+      if (promptAddition && !["gypsophilla", "srilanka", "filler"].includes(type)) {
+        setPromptAddition(promptAddition);
+      }
       // Dynamically set maxHeight depending on type to ensure sleeves appear larger
       const maxHeight = type === "sleeve" ? 280 : 150;
       // Calculate scale so that image fits within maxHeight constraint
