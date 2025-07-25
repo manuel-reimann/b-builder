@@ -7,10 +7,9 @@ import { CanvasItem } from "../components/canvas";
 /**
  * Constructs the final prompt string.
  * @param items - Array of canvas items, each may include a promptAddition and stackable flag.
- * @param backgroundPromptAddition - Optional snippet specific to the chosen background.
  * @returns Combined prompt for AI image generation.
  */
-export function buildPrompt(items: CanvasItem[], backgroundPromptAddition?: string): string {
+export function buildPrompt(items: CanvasItem[]): string {
   // Base prompt: always include this description to maintain core realism requirements
   const basePrompt =
     "Update the image, make it more realistic. Do not change the existing colors of flowers or assets in any way. You may add shading, leaves or stems behind the heads to make it more realistic. Goal is a photorealistic looking bouquet without changing the original flowers.";
@@ -34,14 +33,8 @@ export function buildPrompt(items: CanvasItem[], backgroundPromptAddition?: stri
       }
     }
   });
-  // Build the final array of snippets, starting with background if provided, then overrides, then stackers
-  const combinedSnippetsArray: string[] = [];
-  if (backgroundPromptAddition) {
-    combinedSnippetsArray.push(backgroundPromptAddition);
-  }
-  combinedSnippetsArray.push(...Object.values(overrides), ...stackers);
-  // Join all collected snippets into a single string, trimming extra spaces
-  const combinedSnippets = combinedSnippetsArray.join(" ").trim();
+  // Build snippet segment from overrides and stackers
+  const combinedSnippets = [...Object.values(overrides), ...stackers].join(" ").trim();
   const snippetSegment = combinedSnippets ? ` ${combinedSnippets}` : "";
 
   // Return the base prompt concatenated with any custom snippet segment

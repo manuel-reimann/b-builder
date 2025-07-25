@@ -45,7 +45,6 @@ export default function Canvas({
   canvasContainerRef,
   sleeveSrc,
   backgroundSrc,
-  promptAddition,
   saveDraft,
   showSaveDraftModal,
   currentDraftId,
@@ -61,7 +60,6 @@ export default function Canvas({
   canvasContainerRef: React.RefObject<HTMLDivElement | null>;
   sleeveSrc: string;
   backgroundSrc: string | null;
-  promptAddition?: string;
   saveDraft: () => Promise<void>;
   showSaveDraftModal: () => void;
   currentDraftId: string | null;
@@ -192,7 +190,7 @@ export default function Canvas({
     const canvasElement = stageRef.current.getStage().toCanvas();
     const dataUrl = canvasElement.toDataURL("image/png");
 
-    const prompt = buildPrompt(items, promptAddition);
+    const prompt = buildPrompt(items);
     console.log("💬 Generated AI Prompt:", prompt);
     console.log(`📦 Prepared image payload size: ${dataUrl.length} characters`);
     console.log(`🐦 Image payload preview: ${dataUrl.slice(0, 60)}...`);

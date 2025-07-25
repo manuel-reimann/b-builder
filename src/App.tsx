@@ -21,7 +21,6 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env
 function App() {
   const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1_v2.webp");
   const [backgroundSrc, setBackgroundSrc] = useState<string | null>(null);
-  const [promptAddition, setPromptAddition] = useState<string | undefined>(undefined);
 
   // Resolve full asset URL for section background
   const resolvedSectionBg: string | undefined = backgroundSrc ? (backgroundSrc.startsWith("http") || backgroundSrc.startsWith("/") ? backgroundSrc : `${import.meta.env.BASE_URL}img/bgs/${backgroundSrc}.webp`) : undefined;
@@ -204,7 +203,6 @@ function App() {
             canvasContainerRef={canvasContainerRef}
             setSleeveSrc={setSleeveSrc}
             setBackgroundSrc={setBackgroundSrc}
-            setPromptAddition={setPromptAddition}
             showOnly={["backgrounds", "sleeves", "roses", "sprayroses", "gypsophilla", "srilanka", "plugs", "chrysanthemums", "filler"]}
           />
         </aside>
@@ -229,7 +227,6 @@ function App() {
               canvasContainerRef={canvasContainerRef}
               sleeveSrc={sleeveSrc}
               backgroundSrc={backgroundSrc}
-              promptAddition={promptAddition}
               saveDraft={saveDraft}
               showSaveDraftModal={() => setShowSaveDraftModal(true)}
               currentDraftId={currentDraftId}
@@ -293,19 +290,6 @@ function App() {
             }
             setCurrentDraftId(draftId ?? null);
             setCurrentDraftTitle(draftTitle ?? null);
-            // Reconstruct prompt additions: override non‑stackable, accumulate stackable
-            const overrides: Record<string, string> = {};
-            const stackers: string[] = [];
-            items.forEach((item: any) => {
-              if (!item.promptAddition) return;
-              if (item.stackable === false) {
-                overrides[item.type] = item.promptAddition;
-              } else {
-                stackers.push(item.promptAddition);
-              }
-            });
-            const combinedSnippets = [...Object.values(overrides), ...stackers].join(" ");
-            setPromptAddition(combinedSnippets || undefined);
             setShowDraftsModal(false);
           }}
           setSleeveSrc={setSleeveSrc}
