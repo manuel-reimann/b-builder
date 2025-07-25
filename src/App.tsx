@@ -306,6 +306,7 @@ function App() {
             });
             const combinedSnippets = [...Object.values(overrides), ...stackers].join(" ");
             setPromptAddition(combinedSnippets || undefined);
+            setShowDraftsModal(false);
           }}
           setSleeveSrc={setSleeveSrc}
           onSelectDraftId={(draftId: string | null | undefined) => setCurrentDraftId(draftId ?? null)}

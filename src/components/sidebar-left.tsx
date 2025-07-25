@@ -30,7 +30,7 @@ const data: Data = {
     { label: "Valentine 3", src: "/img/bgs/valentine3.webp", type: "background", stackable: false },
   ],
   Sleeves: [
-    { label: "Braun", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve", stackable: false },
+    { label: "Braun", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve", promptAddition: "Do not change the brown sleeve behind the flowers in shape or texture.", stackable: false },
     { label: "VM 961", src: "/img/sleeves/vm961_v2.webp", type: "sleeve", stackable: false },
     { label: "VM 968", src: "/img/sleeves/vm968_v2.webp", type: "sleeve", stackable: false },
     { label: "VM 1029", src: "/img/sleeves/vm1029_v2.webp", type: "sleeve", stackable: false },
@@ -86,8 +86,8 @@ const data: Data = {
     { label: "Chrysanthemums Purple", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum" },
   ],
   Filler: [
-    { label: "Eucalyptus", src: "/img/filler/eucalyptus.webp", type: "filler" },
-    { label: "Delphinium", src: "/img/filler/delphinium.webp", type: "filler" },
+    { label: "Eucalyptus", src: "/img/filler/eucalyptus.webp", type: "filler", promptAddition: "You may adjust the angle of the Eucalyptus for enhanced realism.", stackable: true },
+    { label: "Delphinium", src: "/img/filler/delphinium.webp", type: "filler", promptAddition: "You may adjust the size of the Delphinium for a better overall look", stackable: true },
     { label: "Lillie", src: "/img/filler/lillie.webp", type: "filler" },
     { label: "Veronica", src: "/img/filler/veronica.webp", type: "filler" },
   ],
