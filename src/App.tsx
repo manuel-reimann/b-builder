@@ -293,6 +293,19 @@ function App() {
             }
             setCurrentDraftId(draftId ?? null);
             setCurrentDraftTitle(draftTitle ?? null);
+            // Reconstruct prompt additions: override non‑stackable, accumulate stackable
+            const overrides: Record<string, string> = {};
+            const stackers: string[] = [];
+            items.forEach((item: any) => {
+              if (!item.promptAddition) return;
+              if (item.stackable === false) {
+                overrides[item.type] = item.promptAddition;
+              } else {
+                stackers.push(item.promptAddition);
+              }
+            });
+            const combinedSnippets = [...Object.values(overrides), ...stackers].join(" ");
+            setPromptAddition(combinedSnippets || undefined);
           }}
           setSleeveSrc={setSleeveSrc}
           onSelectDraftId={(draftId: string | null | undefined) => setCurrentDraftId(draftId ?? null)}
