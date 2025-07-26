@@ -120,7 +120,7 @@ input {
 /* Canvas center */
 .canvas-area {
   flex: 1;
-  background-image: url("../public/img/bgs/empty2.webp");
+  background-image: url("../public/img/bgs/marmor.webp");
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;

@@ -4,29 +4,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { CanvasItem } from "./canvas";
 import { useEffect } from "react";
 
-function iconForType(type: string): string {
-  switch (type) {
-    case "sleeve":
-      return "📦";
-    case "flower":
-      return "🌹";
-    case "sprayrose":
-      return "💐";
-    case "gypsophilla":
-      return "🌾";
-    case "srilanka":
-      return "🌿";
-    case "plug":
-      return "🔖";
-    case "chrysanthemum":
-      return "🌼";
-    case "filler":
-      return "🍃";
-    default:
-      return " ";
-  }
-}
-
 export default function SidebarRight({
   items,
   setCanvasItems,
@@ -108,11 +85,9 @@ export default function SidebarRight({
 
       {/* Sleeve item is fixed at the bottom layer and rendered last */}
       {sleeveItem && (
-        <div
-          key={sleeveItem.id}
-          className="px-3 py-2 mt-4 text-gray-500 bg-gray-100 border border-gray-300 rounded shadow-sm"
-        >
-          📦 {sleeveItem.label} (unterste Ebene)
+        <div key={sleeveItem.id} className="px-3 py-2 mt-4 text-gray-500 bg-gray-100 border border-gray-300 rounded shadow-sm">
+          <img src={sleeveItem.src} alt={sleeveItem.label} className="inline-block object-contain w-5 h-5 mr-2" />
+          {sleeveItem.label} (unterste Ebene)
         </div>
       )}
     </div>
@@ -159,16 +134,12 @@ function SortableItem({
       onMouseEnter={() => setHoveredItemId(item.id)}
       onMouseLeave={() => setHoveredItemId(null)}
       className={`border border-gray-300 px-3 py-2 rounded shadow-sm flex justify-between items-center cursor-pointer transition-colors duration-150 ${
-        selectedItemId === item.id
-          ? "ring-2 ring-blue-400 bg-white"
-          : hoveredItemId === item.id
-          ? "bg-blue-200"
-          : "bg-white"
+        selectedItemId === item.id ? "ring-2 ring-blue-400 bg-white" : hoveredItemId === item.id ? "bg-blue-200" : "bg-white"
       }`}
     >
       <div className="flex items-center justify-between w-full">
         <span className="flex items-center gap-2 text-sm truncate">
-          <span>{iconForType(item.type)}</span>
+          <img src={item.src} alt={item.label || "item thumbnail"} className="object-contain w-5 h-5" />
           {item.label ||
             item.src
               .split("/")

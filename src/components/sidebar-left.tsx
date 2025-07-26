@@ -12,22 +12,23 @@ type DataItem = {
 type Data = Record<string, DataItem[]>;
 const data: Data = {
   Backgrounds: [
-    { label: "Christmas 1", src: "/img/bgs/christmas1.webp", type: "background", promptAddition: "Frame the bouquet with delicate frosty snowflakes for a winter feel.", stackable: false },
-    { label: "Christmas 2", src: "/img/bgs/christmas2.webp", type: "background", stackable: false },
-    { label: "Christmas 3", src: "/img/bgs/christmas3.webp", type: "background", stackable: false },
-    { label: "Empty 1", src: "/img/bgs/empty1.webp", type: "background", stackable: false },
-    { label: "Empty 2", src: "/img/bgs/empty2.webp", type: "background", stackable: false },
-    { label: "Empty 3", src: "/img/bgs/empty3.webp", type: "background", stackable: false },
-    { label: "Florist 1", src: "/img/bgs/florist1.webp", type: "background", promptAddition: "Add gentle pastel bokeh lighting behind the bouquet to create a dreamy ambiance.", stackable: false },
-    { label: "Florist 2", src: "/img/bgs/florist2.webp", type: "background", stackable: false },
-    { label: "Florist 3", src: "/img/bgs/florist3.webp", type: "background", stackable: false },
-    { label: "Florist 4", src: "/img/bgs/florist4.webp", type: "background", stackable: false },
-    { label: "Florist 5", src: "/img/bgs/florist5.webp", type: "background", stackable: false },
-    { label: "Florist 6", src: "/img/bgs/florist6.webp", type: "background", stackable: false },
-    { label: "Florist 7", src: "/img/bgs/florist7.webp", type: "background", stackable: false },
-    { label: "Valentine 1", src: "/img/bgs/valentine1.webp", type: "background", promptAddition: "Enhance the background with soft pink heart petals on the valentine table", stackable: false },
-    { label: "Valentine 2", src: "/img/bgs/valentine2.webp", type: "background", stackable: false },
-    { label: "Valentine 3", src: "/img/bgs/valentine3.webp", type: "background", stackable: false },
+    { label: "Marmor Table", src: "/img/bgs/marmor.webp", type: "background", stackable: false },
+    { label: "White", src: "/img/bgs/white.webp", type: "background", stackable: false },
+    { label: "Christmas Table", src: "/img/bgs/christmas1.webp", type: "background", promptAddition: "Frame the bouquet with delicate frosty snowflakes for a winter feel.", stackable: false },
+    { label: "Christmas Table 2", src: "/img/bgs/christmas2.webp", type: "background", stackable: false },
+    { label: "Christmas Table 3", src: "/img/bgs/christmas3.webp", type: "background", stackable: false },
+    { label: "Wood Table 1", src: "/img/bgs/empty1.webp", type: "background", stackable: false },
+    { label: "Wood Table 2", src: "/img/bgs/empty2.webp", type: "background", stackable: false },
+    { label: "Florist Table 1", src: "/img/bgs/florist1.webp", type: "background", promptAddition: "Add gentle pastel bokeh lighting behind the bouquet to create a dreamy ambiance.", stackable: false },
+    { label: "Florist Table 2", src: "/img/bgs/florist2.webp", type: "background", stackable: false },
+    { label: "Florist Table 3", src: "/img/bgs/florist3.webp", type: "background", stackable: false },
+    { label: "Florist Table 4", src: "/img/bgs/florist4.webp", type: "background", stackable: false },
+    { label: "Florist Table 5", src: "/img/bgs/florist5.webp", type: "background", stackable: false },
+    { label: "Florist Table 6", src: "/img/bgs/florist6.webp", type: "background", stackable: false },
+    { label: "Florist Table 7", src: "/img/bgs/florist7.webp", type: "background", stackable: false },
+    { label: "Valentine Table 1", src: "/img/bgs/valentine1.webp", type: "background", promptAddition: "Enhance the background with soft pink heart petals on the valentine table", stackable: false },
+    { label: "Valentine Table 2", src: "/img/bgs/valentine2.webp", type: "background", stackable: false },
+    { label: "Valentine Table 3", src: "/img/bgs/valentine3.webp", type: "background", stackable: false },
   ],
   Sleeves: [
     { label: "Braun", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve", promptAddition: "Do not change the brown sleeve behind the flowers in shape or texture.", stackable: false },
@@ -71,6 +72,7 @@ const data: Data = {
     { label: "Gypsophilla Rosa", src: "/img/gyps/pink.webp", type: "gypsophilla" },
   ],
   "Sri Lanka": [
+    { label: "Monstera Epipremnum", src: "/img/srilanka/monstera_ epipremnum.webp", type: "srilanka" },
     { label: "Dracaena Sanderiana White", src: "/img/srilanka/dracaena_sanderiana_white.webp", type: "srilanka" },
     { label: "Dracaena surculosa Florida Beauty", src: "/img/srilanka/ds_florida_beauty.webp", type: "srilanka" },
     { label: "Chrysalidocarpus lutescens", src: "/img/srilanka/kentia.webp", type: "srilanka" },
@@ -183,19 +185,7 @@ export default function SidebarLeft({
       <AccordionItem value={category} key={category} className="rounded-lg transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] overflow-hidden bg-white">
         <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group">
           <div className="flex items-center gap-2">
-            <span className="text-base">
-              {{
-                Backgrounds: "🖼️",
-                Sleeves: "📦",
-                Roses: "🌹",
-                Sprayroses: "💐",
-                Gypsophilla: "🌾",
-                "Sri Lanka": "🌿",
-                "Flower Plugs": "🔖",
-                Chrysanthemums: "🌼",
-                Filler: "🍃",
-              }[category] || "🪴"}
-            </span>
+            <img src={data[category][0].src} alt={`${category} icon`} className="object-contain w-5 h-5" />
             <span>{category}</span>
           </div>
           <span className="ml-auto transition-transform duration-300 group-data-[state=open]:rotate-180">⌄</span>
