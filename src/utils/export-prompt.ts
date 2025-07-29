@@ -12,7 +12,7 @@ import { CanvasItem } from "../components/canvas";
 export function buildPrompt(items: CanvasItem[]): string {
   // Base prompt: always include this description to maintain core realism requirements
   const basePrompt =
-    "Update the image, make it more realistic. Do not change the existing colors of flowers or assets in any way. You may add shading, leaves or stems behind the heads to make it more realistic. Goal is a photorealistic looking bouquet without changing the original flowers.";
+    "Enhance the image to a photorealistic finish. Do not change the flower types, colors, number, positions or spacing, and do not add or remove any elements. Add only subtle shading and fine surface detail. Preserve the existing light direction and overall focus characteristics; reinforce gentle occlusion shadows where petals overlap.";
 
   // Prepare collections for prompt snippets:
   // - overrides: stores the latest snippet for non-stackable types (e.g., backgrounds, sleeves)

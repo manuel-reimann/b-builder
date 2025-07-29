@@ -134,7 +134,7 @@ function SortableItem({
       onMouseEnter={() => setHoveredItemId(item.id)}
       onMouseLeave={() => setHoveredItemId(null)}
       className={`border border-gray-300 px-3 py-2 rounded shadow-sm flex justify-between items-center cursor-pointer transition-colors duration-150 ${
-        selectedItemId === item.id ? "ring-2 ring-blue-400 bg-white" : hoveredItemId === item.id ? "bg-blue-200" : "bg-white"
+        selectedItemId === item.id ? "ring-2 ring-blue-400 bg-white" : hoveredItemId === item.id ? "bg-agrotropic-green text-white" : "bg-white"
       }`}
     >
       <div className="flex items-center justify-between w-full">

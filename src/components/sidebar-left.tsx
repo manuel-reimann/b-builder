@@ -12,47 +12,210 @@ type DataItem = {
 type Data = Record<string, DataItem[]>;
 const data: Data = {
   Backgrounds: [
-    { label: "Marmor Table", src: "/img/bgs/marmor.webp", type: "background", stackable: false },
-    { label: "White", src: "/img/bgs/white.webp", type: "background", stackable: false },
-    { label: "Christmas Table", src: "/img/bgs/christmas1.webp", type: "background", promptAddition: "Frame the bouquet with delicate frosty snowflakes for a winter feel.", stackable: false },
-    { label: "Christmas Table 2", src: "/img/bgs/christmas2.webp", type: "background", stackable: false },
-    { label: "Christmas Table 3", src: "/img/bgs/christmas3.webp", type: "background", stackable: false },
-    { label: "Wood Table 1", src: "/img/bgs/empty1.webp", type: "background", stackable: false },
-    { label: "Wood Table 2", src: "/img/bgs/empty2.webp", type: "background", stackable: false },
-    { label: "Florist Table 1", src: "/img/bgs/florist1.webp", type: "background", promptAddition: "Add gentle pastel bokeh lighting behind the bouquet to create a dreamy ambiance.", stackable: false },
-    { label: "Florist Table 2", src: "/img/bgs/florist2.webp", type: "background", stackable: false },
-    { label: "Florist Table 3", src: "/img/bgs/florist3.webp", type: "background", stackable: false },
-    { label: "Florist Table 4", src: "/img/bgs/florist4.webp", type: "background", stackable: false },
-    { label: "Florist Table 5", src: "/img/bgs/florist5.webp", type: "background", stackable: false },
-    { label: "Florist Table 6", src: "/img/bgs/florist6.webp", type: "background", stackable: false },
-    { label: "Florist Table 7", src: "/img/bgs/florist7.webp", type: "background", stackable: false },
-    { label: "Valentine Table 1", src: "/img/bgs/valentine1.webp", type: "background", promptAddition: "Enhance the background with soft pink heart petals on the valentine table", stackable: false },
-    { label: "Valentine Table 2", src: "/img/bgs/valentine2.webp", type: "background", stackable: false },
-    { label: "Valentine Table 3", src: "/img/bgs/valentine3.webp", type: "background", stackable: false },
+    {
+      label: "Marmor Table",
+      src: "/img/bgs/marmor.webp",
+      type: "background",
+      promptAddition: "Create a white marble stone tabletop beneath the bouquet, top-down, with subtle veining and a soft contact shadow; keep the bouquet and paper wrap unchanged.",
+      stackable: false,
+    },
+    {
+      label: "White",
+      src: "/img/bgs/white.webp",
+      type: "background",
+      promptAddition: "Use a clean, matte white tabletop beneath the bouquet, viewed from above. Keep it uniform and low-contrast with a soft contact shadow; no room geometry, no props.",
+      stackable: false,
+    },
+    {
+      label: "Wood Table 1",
+      src: "/img/bgs/empty1.webp",
+      type: "background",
+      promptAddition: "Use a pale wooden tabletop beneath the bouquet, seen from directly above, with fine grain and low contrast. Add a soft contact shadow; no room elements or strong perspective cues.",
+      stackable: false,
+    },
+    {
+      label: "Wood Table 2",
+      src: "/img/bgs/empty2.webp",
+      type: "background",
+      promptAddition: "Place the bouquet on a white-painted wooden tabletop from an overhead view, with faint plank lines and very low texture. Include a soft contact shadow; no furniture, no angled room geometry.",
+      stackable: false,
+    },
+    {
+      label: "Florist Table 1",
+      src: "/img/bgs/florist3.webp",
+      type: "background",
+      promptAddition:
+        "Show a florist’s workbench from directly above: a neutral benchtop with a few small tools at the far edges only, partially cropped and softly defocused. Do not let tools overlap the bouquet; add a soft contact shadow and avoid room perspective.",
+      stackable: false,
+    },
+    {
+      label: "Florist Table 2",
+      src: "/img/bgs/florist7.webp",
+      type: "background",
+      promptAddition:
+        "Show a florist’s workbench from directly above: a neutral benchtop with a few small tools at the far edges only, partially cropped and softly defocused. Do not let tools overlap the bouquet; add a soft contact shadow and avoid room perspective.",
+      stackable: false,
+    },
+    {
+      label: "Christmas Table",
+      src: "/img/bgs/christmas2.webp",
+      type: "background",
+      promptAddition:
+        "Use a subtle Christmas-themed tabletop seen from above: muted, low-contrast decor near the edges only (e.g., tiny gold speckles or soft bokeh), staying secondary to the bouquet. Add a gentle contact shadow; no walls, furniture or strong perspective.",
+      stackable: false,
+    },
+    {
+      label: "Christmas Table 2",
+      src: "/img/bgs/christmas3.webp",
+      type: "background",
+      promptAddition:
+        "Create a festive tabletop from a top-down view with lightly scattered holiday elements at the far edges (e.g., a hint of ribbon or miniature ornaments), softly defocused and low-contrast. Keep the bouquet clear; add a soft contact shadow and avoid any overlapping props.",
+      stackable: false,
+    },
+    {
+      label: "Valentine Table 1",
+      src: "/img/bgs/valentine1.webp",
+      type: "background",
+      promptAddition: "Use a Valentine-inspired tabletop from a top-down view with tiny, low-contrast heart details near the edges only. Keep all decor subtle and secondary; add a soft contact shadow and avoid any room elements.",
+      stackable: false,
+    },
+    {
+      label: "Valentine Table 2",
+      src: "/img/bgs/valentine2.webp",
+      type: "background",
+      promptAddition:
+        "Background only: keep the bouquet and paper wrap unchanged. From a top-down view, use a romantic tabletop with a gentle red/pink accent field and tiny heart motifs confined to the margins, softly defocused and low-contrast; add a soft contact shadow and avoid any room elements.",
+      stackable: false,
+    },
   ],
   Sleeves: [
-    { label: "Braun", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve", promptAddition: "Do not change the brown sleeve behind the flowers in shape or texture.", stackable: false },
-    { label: "VM 961", src: "/img/sleeves/vm961_v2.webp", type: "sleeve", stackable: false },
-    { label: "VM 968", src: "/img/sleeves/vm968_v2.webp", type: "sleeve", stackable: false },
-    { label: "VM 1029", src: "/img/sleeves/vm1029_v2.webp", type: "sleeve", stackable: false },
-    { label: "VM 1033", src: "/img/sleeves/vm1033_v2.webp", type: "sleeve", stackable: false },
+    { label: "Braun", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve", promptAddition: "Do not modify the brown paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
+    { label: "VM 961", src: "/img/sleeves/vm961_v2.webp", type: "sleeve", promptAddition: "Do not modify the brown-white paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
+    { label: "VM 968", src: "/img/sleeves/vm968_v2.webp", type: "sleeve", promptAddition: "Do not modify the light-brown paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
+    { label: "VM 1029", src: "/img/sleeves/vm1029_v2.webp", type: "sleeve", promptAddition: "Do not modify the green paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
+    { label: "VM 1033", src: "/img/sleeves/vm1033_v2.webp", type: "sleeve", promptAddition: "Do not modify the pink paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
   ],
   Roses: [
-    { label: "Devotion", src: "/img/roses/devotion.webp", type: "flower" },
-    { label: "Lady in Red", src: "/img/roses/lady_in_red.webp", type: "flower" },
-    { label: "Bit More", src: "/img/roses/bit_more.webp", type: "flower" },
-    { label: "Esperance", src: "/img/roses/esperance.webp", type: "flower" },
-    { label: "Pink Expression", src: "/img/roses/pinkexpression_v2.webp", type: "flower" },
-    { label: "Fascination", src: "/img/roses/fascination.webp", type: "flower" },
-    { label: "New Emotion", src: "/img/roses/new_emotion.webp", type: "flower" },
-    { label: "Peach Rose Ali", src: "/img/roses/peach_rose_ali.webp", type: "flower" },
-    { label: "Vicky", src: "/img/roses/vicky.webp", type: "flower" },
-    { label: "Marzipan", src: "/img/roses/marzipan.webp", type: "flower" },
-    { label: "Spectra", src: "/img/roses/spectra.webp", type: "flower" },
-    { label: "Aurora", src: "/img/roses/aurora.webp", type: "flower" },
-    { label: "Teddy's", src: "/img/roses/teddys.webp", type: "flower" },
-    { label: "Aly", src: "/img/roses/aly.webp", type: "flower" },
-    { label: "Shocking Blue", src: "/img/roses/shoking_blue.webp", type: "flower" },
+    {
+      label: "Devotion",
+      src: "/img/roses/devotion.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Lady in Red",
+      src: "/img/roses/lady_in_red.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Bit More",
+      src: "/img/roses/bit_more.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Esperance",
+      src: "/img/roses/esperance.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Pink Expression",
+      src: "/img/roses/pinkexpression_v2.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Fascination",
+      src: "/img/roses/fascination.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "New Emotion",
+      src: "/img/roses/new_emotion.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Peach Rose Ali",
+      src: "/img/roses/peach_rose_ali.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Vicky",
+      src: "/img/roses/vicky.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Marzipan",
+      src: "/img/roses/marzipan.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Spectra",
+      src: "/img/roses/spectra.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Aurora",
+      src: "/img/roses/aurora.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Teddy's",
+      src: "/img/roses/teddys.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Aly",
+      src: "/img/roses/aly.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
+    {
+      label: "Shocking Blue",
+      src: "/img/roses/shoking_blue.webp",
+      type: "flower",
+      promptAddition:
+        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      stackable: false,
+    },
   ],
   Sprayroses: [
     { label: "Fire Up", src: "/img/sprayroses/fireup.webp", type: "sprayrose" },
@@ -70,6 +233,7 @@ const data: Data = {
   Gypsophilla: [
     { label: "Gypsophilla Weiss", src: "/img/gyps/white.webp", type: "gypsophilla" },
     { label: "Gypsophilla Rosa", src: "/img/gyps/pink.webp", type: "gypsophilla" },
+    { label: "Gypsophilla Weiss-Gelb", src: "/img/gyps/yellow-white.webp", type: "gypsophilla" },
   ],
   "Sri Lanka": [
     { label: "Monstera Epipremnum", src: "/img/srilanka/monstera_ epipremnum.webp", type: "srilanka" },
