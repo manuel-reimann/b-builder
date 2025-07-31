@@ -245,14 +245,14 @@ export default function Canvas({
         });
 
         if (uploadError) {
-          toast.error("Upload to Supabase failed");
+          toast.error("Upload zur Datenbank fehlgeschlagen");
           return;
         }
 
         const { data: publicData } = supabase.storage.from("user-images").getPublicUrl(filename);
 
         if (!publicData?.publicUrl) {
-          toast.error("Could not retrieve public URL");
+          toast.error("Öffentliche URL konnte nicht abgerufen werden");
           return;
         }
 
@@ -296,7 +296,7 @@ export default function Canvas({
   // Unified click handler for the Generate button:
   const handleGenerateClick = () => {
     if (!userId) {
-      toast.info("Please login first");
+      toast.info("Bitte zuerst einloggen");
       setShowLoginModal(true);
       return;
     }
@@ -418,7 +418,7 @@ export default function Canvas({
           {/* Button to update an existing draft */}
           {currentDraftId ? (
             <button onClick={handleUpdateDraft} className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-yellow-700 bg-blue-100 hover:bg-blue-200 rounded-md">
-              Update Draft
+              Aktualisieren
             </button>
           ) : (
             /* Button to open modal for saving a new draft */
@@ -427,28 +427,28 @@ export default function Canvas({
                 if (userId) {
                   showSaveDraftModal();
                 } else {
-                  toast.info("Please login first");
+                  toast.info("Bitte zuerst einloggen");
                   setShowLoginModal(true);
                 }
               }}
               className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-blue hover:bg-gray-500 rounded-md"
             >
-              💾 <span>Save draft</span>
+              💾 <span> Speichern</span>
             </button>
           )}
           {/* Button to reset canvas to only the sleeve background */}
           <button
             onClick={() => {
               onResetCanvas();
-              toast.info("Canvas was reset");
+              toast.info("Canvas wurde zurückgesetzt");
             }}
             className="flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white bg-agrotropic-gray hover:bg-gray-400 rounded-md"
           >
-            ♻️ <span>Reset</span>
+            ♻️ <span>Zurücksetzen</span>
           </button>
           {/* Button to trigger generation action (with disabled and toast logic) */}
           <button onClick={handleGenerateClick} className={`flex items-center gap-2 px-3 py-1.5 text-lg font-medium text-white rounded-md ${!currentDraftId ? "bg-gray-300 cursor-not-allowed" : "bg-agrotropic-green hover:bg-green-900"}`}>
-            🎨 <span>Generate</span>
+            🎨 <span>Bild generieren</span>
           </button>
         </div>
       </div>

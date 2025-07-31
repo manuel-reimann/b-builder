@@ -67,7 +67,7 @@ export default function DraftsModal({
           &times;
         </button>
         {/* Modal title */}
-        <h2 className="mb-4 text-2xl font-semibold">My Drafts</h2>
+        <h2 className="mb-4 text-2xl font-semibold">Meine Entwürfe</h2>
         {/* Conditional rendering based on loading state and drafts availability */}
         {loading ? (
           <p>Loading...</p>

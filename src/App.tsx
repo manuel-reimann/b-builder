@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useOnlineStatus } from "./hooks/useOnlineStatus";
+import { useAspectRatio } from "./hooks/useAspectRatio";
 // Root of the app: manages layout and state for the entire application
 import "./App.css";
 import SidebarLeft from "./components/sidebar-left";
@@ -21,15 +22,13 @@ import "react-toastify/dist/ReactToastify.css";
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 function App() {
-  const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/sleeve1_v2.webp");
+  const [sleeveSrc, setSleeveSrc] = useState("/img/sleeves/vm961_v2.webp");
   const [backgroundSrc, setBackgroundSrc] = useState<string | null>(null);
 
   // Resolve full asset URL for section background
   const resolvedSectionBg: string | undefined = backgroundSrc ? (backgroundSrc.startsWith("http") || backgroundSrc.startsWith("/") ? backgroundSrc : `${import.meta.env.BASE_URL}img/bgs/${backgroundSrc}.webp`) : undefined;
-
   const [showDraftsModal, setShowDraftsModal] = useState(false);
   const [showSaveDraftModal, setShowSaveDraftModal] = useState(false);
-
   const [canvasItems, setCanvasItems] = useState<any[]>([
     {
       id: "sleeve",
@@ -41,7 +40,7 @@ function App() {
       rotation: 0,
       scale: 1,
       type: "sleeve",
-      label: "Braun",
+      label: "VM 961",
     },
   ]);
 
@@ -58,18 +57,15 @@ function App() {
     setCurrentDraftId(null);
   };
   const canvasContainerRef = useRef<HTMLDivElement>(null!);
-
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMyDesigns, setShowMyDesigns] = useState(false);
-
   const [user, setUser] = useState<any>(null);
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
   const [currentDraftTitle, setCurrentDraftTitle] = useState<string | null>(null);
   // Temporarily hold title until drafts modal is closed
   const [pendingDraftTitle, setPendingDraftTitle] = useState<string | null>(null);
-
   const [materialsCSV, setMaterialsCSV] = useState<string>("");
   void materialsCSV;
 
@@ -167,6 +163,7 @@ function App() {
   }, [showDraftsModal]);
 
   const isOnline = useOnlineStatus();
+  const isTooNarrow = useAspectRatio();
 
   return (
     <div className="flex flex-col h-screen app">
@@ -174,7 +171,7 @@ function App() {
         <nav className="nav backdrop-blur-sm ">
           <ul className="flex items-center space-x-6 ">
             <li onClick={() => window.location.reload()} className="text-lg transition-colors duration-200 cursor-pointer">
-              Start new
+              Neustart
             </li>
             <li>
               <span
@@ -182,13 +179,13 @@ function App() {
                   if (user) {
                     setShowDraftsModal(true);
                   } else {
-                    showToastOnceStrict("login-required", "Please login first", "info");
+                    showToastOnceStrict("login-required", "Bitte zuerst einloggen", "info");
                     setShowLoginModal(true);
                   }
                 }}
                 className="text-lg transition-colors duration-200 cursor-pointer"
               >
-                Drafts
+                Entwürfe
               </span>
             </li>
             <li
@@ -196,7 +193,7 @@ function App() {
                 if (user) {
                   setShowMyDesigns(true);
                 } else {
-                  showToastOnceStrict("login-required", "Please login first", "info");
+                  showToastOnceStrict("login-required", "Bitte zuerst einloggen", "info");
                   setShowLoginModal(true);
                 }
               }}
@@ -207,11 +204,11 @@ function App() {
             <li>
               {user ? (
                 <span onClick={() => setShowUserMenu(true)} className="text-lg transition-colors duration-200 cursor-pointer" role="button" tabIndex={0}>
-                  👋 Hello, {user.user_metadata?.name || "User"}
+                  👤 {user.user_metadata?.name || "Nutzer"}
                 </span>
               ) : (
                 <span onClick={() => setShowLoginModal(true)} className="text-lg transition-colors duration-200 cursor-pointer" role="button" tabIndex={0}>
-                  Login
+                  Einloggen
                 </span>
               )}
             </li>
@@ -358,6 +355,14 @@ function App() {
         />
       )}
 
+      {isTooNarrow && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 text-center bg-white/90 backdrop-blur">
+          <div className="max-w-md p-6 bg-white border border-yellow-300 shadow-lg rounded-xl">
+            <h2 className="mb-4 text-2xl font-bold text-yellow-700">Nicht für kleine Bildschirme optimiert</h2>
+            <p className="text-gray-700">Diese App ist für grössere Bildschirme konzipiert. Bitte verwende ein Gerät mit breiterem Display oder vergrössere das Browserfenster.</p>
+          </div>
+        </div>
+      )}
       {!isOnline && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 text-center bg-white/90 backdrop-blur">
           <div className="max-w-md p-6 bg-white border border-red-300 shadow-lg rounded-xl">

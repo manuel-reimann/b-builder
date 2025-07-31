@@ -50,7 +50,7 @@ export default function SidebarRight({
 
   return (
     <div>
-      <h2 className="mb-2 text-xl font-semibold ">Layers</h2>
+      <h2 className="mb-2 text-xl font-semibold ">Ebenen</h2>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext
@@ -134,11 +134,11 @@ function SortableItem({
       onMouseEnter={() => setHoveredItemId(item.id)}
       onMouseLeave={() => setHoveredItemId(null)}
       className={`border border-gray-300 px-3 py-2 rounded shadow-sm flex justify-between items-center cursor-pointer transition-colors duration-150 ${
-        selectedItemId === item.id ? "ring-2 ring-blue-400 bg-white" : hoveredItemId === item.id ? "bg-agrotropic-green text-white" : "bg-white"
+        selectedItemId === item.id ? " bg-agrotropic-green text-white" : hoveredItemId === item.id ? "bg-gray-300 cursor-pointer" : "bg-white"
       }`}
     >
       <div className="flex items-center justify-between w-full">
-        <span className="flex items-center gap-2 text-sm truncate">
+        <span className="flex items-center gap-2 truncate text-md">
           <img src={item.src} alt={item.label || "item thumbnail"} className="object-contain w-5 h-5" />
           {item.label ||
             item.src

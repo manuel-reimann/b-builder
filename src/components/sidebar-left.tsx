@@ -13,35 +13,35 @@ type Data = Record<string, DataItem[]>;
 const data: Data = {
   Backgrounds: [
     {
-      label: "Marmor Table",
+      label: "Marmortisch",
       src: "/img/bgs/marmor.webp",
       type: "background",
       promptAddition: "Create a white marble stone tabletop beneath the bouquet, top-down, with subtle veining and a soft contact shadow; keep the bouquet and paper wrap unchanged.",
       stackable: false,
     },
     {
-      label: "White",
+      label: "Weiss",
       src: "/img/bgs/white.webp",
       type: "background",
       promptAddition: "Use a clean, matte white tabletop beneath the bouquet, viewed from above. Keep it uniform and low-contrast with a soft contact shadow; no room geometry, no props.",
       stackable: false,
     },
     {
-      label: "Wood Table 1",
+      label: "Holztisch",
       src: "/img/bgs/empty1.webp",
       type: "background",
       promptAddition: "Use a pale wooden tabletop beneath the bouquet, seen from directly above, with fine grain and low contrast. Add a soft contact shadow; no room elements or strong perspective cues.",
       stackable: false,
     },
     {
-      label: "Wood Table 2",
+      label: "Weiss lackierter Holztisch",
       src: "/img/bgs/empty2.webp",
       type: "background",
       promptAddition: "Place the bouquet on a white-painted wooden tabletop from an overhead view, with faint plank lines and very low texture. Include a soft contact shadow; no furniture, no angled room geometry.",
       stackable: false,
     },
     {
-      label: "Florist Table 1",
+      label: "Floristentisch",
       src: "/img/bgs/florist3.webp",
       type: "background",
       promptAddition:
@@ -49,7 +49,7 @@ const data: Data = {
       stackable: false,
     },
     {
-      label: "Florist Table 2",
+      label: "Floristentisch 2",
       src: "/img/bgs/florist7.webp",
       type: "background",
       promptAddition:
@@ -57,7 +57,7 @@ const data: Data = {
       stackable: false,
     },
     {
-      label: "Christmas Table",
+      label: "Weihnachtstisch",
       src: "/img/bgs/christmas2.webp",
       type: "background",
       promptAddition:
@@ -65,7 +65,7 @@ const data: Data = {
       stackable: false,
     },
     {
-      label: "Christmas Table 2",
+      label: "Weihnachtstisch 2",
       src: "/img/bgs/christmas3.webp",
       type: "background",
       promptAddition:
@@ -73,14 +73,14 @@ const data: Data = {
       stackable: false,
     },
     {
-      label: "Valentine Table 1",
+      label: "Valentinstisch",
       src: "/img/bgs/valentine1.webp",
       type: "background",
       promptAddition: "Use a Valentine-inspired tabletop from a top-down view with tiny, low-contrast heart details near the edges only. Keep all decor subtle and secondary; add a soft contact shadow and avoid any room elements.",
       stackable: false,
     },
     {
-      label: "Valentine Table 2",
+      label: "Valentinstisch 2",
       src: "/img/bgs/valentine2.webp",
       type: "background",
       promptAddition:
@@ -89,8 +89,8 @@ const data: Data = {
     },
   ],
   Sleeves: [
-    { label: "Braun", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve", promptAddition: "Do not modify the brown paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
     { label: "VM 961", src: "/img/sleeves/vm961_v2.webp", type: "sleeve", promptAddition: "Do not modify the brown-white paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
+    { label: "VM 964", src: "/img/sleeves/sleeve1_v2.webp", type: "sleeve", promptAddition: "Do not modify the brown paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
     { label: "VM 968", src: "/img/sleeves/vm968_v2.webp", type: "sleeve", promptAddition: "Do not modify the light-brown paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
     { label: "VM 1029", src: "/img/sleeves/vm1029_v2.webp", type: "sleeve", promptAddition: "Do not modify the green paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
     { label: "VM 1033", src: "/img/sleeves/vm1033_v2.webp", type: "sleeve", promptAddition: "Do not modify the pink paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
@@ -254,13 +254,13 @@ const data: Data = {
     { label: "Silvester 2", src: "/img/flowerplugs/silvester2.webp", type: "plug" },
   ],
   Chrysanthemums: [
-    { label: "Chrysanthemums White", src: "/img/chrysanthemums/chrysanthemums_white.webp", type: "chrysanthemum" },
-    { label: "Chrysanthemums Purple", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum" },
+    { label: "Weisse Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_white.webp", type: "chrysanthemum" },
+    { label: "Lila Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum" },
   ],
   Filler: [
-    { label: "Hypericum", src: "/img/filler/hypericum.webp", type: "filler" },
-    { label: "Eucalyptus", src: "/img/filler/eucalyptus.webp", type: "filler", promptAddition: "You may adjust the angle of the Eucalyptus for enhanced realism.", stackable: true },
-    { label: "Delphinium", src: "/img/filler/delphinium.webp", type: "filler", promptAddition: "You may adjust the size of the Delphinium for a better overall look", stackable: true },
+    { label: "Johanniskraut", src: "/img/filler/hypericum.webp", type: "filler" },
+    { label: "Eukalyptus", src: "/img/filler/eucalyptus.webp", type: "filler", promptAddition: "You may adjust the angle of the Eucalyptus for enhanced realism.", stackable: true },
+    { label: "Rittersporn", src: "/img/filler/delphinium.webp", type: "filler", promptAddition: "You may adjust the size of the Delphinium for a better overall look", stackable: true },
     { label: "Lillie", src: "/img/filler/lillie.webp", type: "filler" },
     { label: "Veronica", src: "/img/filler/veronica.webp", type: "filler" },
   ],
@@ -275,6 +275,18 @@ export const sleeveAssets: DataItem[] = data.Sleeves;
 export const allAssets: DataItem[] = Object.values(data).flat();
 
 const DESIGN_CATEGORIES = ["Backgrounds", "Sleeves"];
+
+const CATEGORY_LABELS: Record<string, string> = {
+  Backgrounds: "Hintergründe",
+  Sleeves: "Sleeves",
+  Roses: "Rosen",
+  Sprayroses: "Sprayrosen",
+  Gypsophilla: "Schleierkraut",
+  "Sri Lanka": "Sri Lanka Grün",
+  "Flower Plugs": "Stecker",
+  Chrysanthemums: "Chrysanthemen",
+  Filler: "Füllmaterial",
+};
 
 export default function SidebarLeft({
   setCanvasItems,
@@ -350,7 +362,7 @@ export default function SidebarLeft({
         <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group">
           <div className="flex items-center gap-2">
             <img src={data[category][0].src} alt={`${category} icon`} className="object-contain w-5 h-5" />
-            <span>{category}</span>
+            <span>{CATEGORY_LABELS[category] || category}</span>
           </div>
           <span className="ml-auto transition-transform duration-300 group-data-[state=open]:rotate-180">⌄</span>
         </AccordionTrigger>
@@ -378,7 +390,7 @@ export default function SidebarLeft({
                 className="flex flex-col items-center w-full p-3 text-center transition-all duration-300 rounded-lg cursor-pointer hover:bg-gray-100 hover:backdrop-blur-sm"
               >
                 <img src={src} alt={label} className="object-contain w-16 h-16 mb-1" />
-                <span className="text-sm">{label.replace(/\.webp$/, "")}</span>
+                <span className="text-sm">{label}</span>
               </div>
             ))}
           </div>
@@ -389,14 +401,14 @@ export default function SidebarLeft({
 
   return (
     <>
-      <h2 className="mb-2 text-xl font-semibold">Set the mood</h2>
+      <h2 className="mb-2 text-xl font-semibold">Setze die Stimmung</h2>
       <Accordion type="single" collapsible className="flex flex-col gap-2 mb-6">
         {Object.entries(data)
           .filter(([category]) => DESIGN_CATEGORIES.includes(category))
           .map(([category, items]) => renderAccordionItem(category, items, handleAddImage))}
       </Accordion>
 
-      <h2 className="mb-2 text-xl font-semibold">Assets</h2>
+      <h2 className="mb-2 text-xl font-semibold">Werkstoffe</h2>
       <Accordion type="single" collapsible className="flex flex-col gap-2">
         {Object.entries(data)
           .filter(([category]) => !DESIGN_CATEGORIES.includes(category))
