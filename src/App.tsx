@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useOnlineStatus } from "./hooks/useOnlineStatus";
 // Root of the app: manages layout and state for the entire application
 import "./App.css";
 import SidebarLeft from "./components/sidebar-left";
@@ -164,6 +165,8 @@ function App() {
       setPendingDraftTitle(null);
     }
   }, [showDraftsModal]);
+
+  const isOnline = useOnlineStatus();
 
   return (
     <div className="flex flex-col h-screen app">
@@ -353,6 +356,15 @@ function App() {
             }
           }}
         />
+      )}
+
+      {!isOnline && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 text-center bg-white/90 backdrop-blur">
+          <div className="max-w-md p-6 bg-white border border-red-300 shadow-lg rounded-xl">
+            <h2 className="mb-4 text-2xl font-bold text-red-600">Keine Internetverbindung</h2>
+            <p className="text-gray-700">Bitte überprüfe deine Verbindung. Die App ist derzeit gesperrt.</p>
+          </div>
+        </div>
       )}
     </div>
   );
