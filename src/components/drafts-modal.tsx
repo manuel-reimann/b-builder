@@ -9,21 +9,7 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL!, import.meta.env.VITE_SUPABASE_ANON_KEY!);
 
 // DraftsModal component props definition and component itself
-export default function DraftsModal({
-  userId,
-  onClose,
-  onLoadDraft,
-  setSleeveSrc,
-  onSelectDraftId,
-  currentDraftId,
-}: {
-  userId: string;
-  onClose: () => void;
-  onLoadDraft: (items: CanvasItem[], sleeveSrc?: string, draftId?: string, draftTitle?: string, backgroundImage?: string) => void;
-  setSleeveSrc: (src: string) => void;
-  onSelectDraftId: (id?: string | null) => void;
-  currentDraftId: string | null;
-}) {
+export default function DraftsModal({ userId, onClose, onLoadDraft, setSleeveSrc, onSelectDraftId, currentDraftId }: { userId: string; onClose: () => void; onLoadDraft: (items: CanvasItem[], sleeveSrc?: string, draftId?: string, draftTitle?: string, backgroundImage?: string) => void; setSleeveSrc: (src: string) => void; onSelectDraftId: (id?: string | null) => void; currentDraftId: string | null }) {
   // State to hold the list of drafts fetched from the database
   const [drafts, setDrafts] = useState<any[]>([]);
   // Loading state to indicate whether drafts are being fetched
@@ -130,14 +116,9 @@ export default function DraftsModal({
                           // Remove background item from canvas items
                           const canvasItems: CanvasItem[] = allItems.filter((item) => item.type !== "background");
                           // Determine final background src: prefer the element's src, fall back to stored key only if it's a valid url or filename
-                          const finalBackgroundSrc: string | undefined =
-                            backgroundItemFromElements?.src ?? (backgroundKey && (backgroundKey.includes(".") || backgroundKey.startsWith("/") || backgroundKey.startsWith("http")) ? backgroundKey : undefined);
+                          const finalBackgroundSrc: string | undefined = backgroundItemFromElements?.src ?? (backgroundKey && (backgroundKey.includes(".") || backgroundKey.startsWith("/") || backgroundKey.startsWith("http")) ? backgroundKey : undefined);
                           // Resolve full URL for legacy or key-based backgrounds
-                          const resolvedBackgroundUrl: string | undefined = finalBackgroundSrc
-                            ? finalBackgroundSrc.startsWith("http") || finalBackgroundSrc.startsWith("/")
-                              ? finalBackgroundSrc
-                              : `${import.meta.env.BASE_URL}img/bgs/${finalBackgroundSrc}.webp`
-                            : undefined;
+                          const resolvedBackgroundUrl: string | undefined = finalBackgroundSrc ? (finalBackgroundSrc.startsWith("http") || finalBackgroundSrc.startsWith("/") ? finalBackgroundSrc : `${import.meta.env.BASE_URL}img/bgs/${finalBackgroundSrc}.webp`) : undefined;
 
                           // Apply background
                           if (resolvedBackgroundUrl) {
@@ -189,7 +170,7 @@ export default function DraftsModal({
                             [
                               {
                                 id: "sleeve",
-                                src: "/img/sleeves/sleeve1_v2.webp",
+                                src: "/img/sleeves/vm961_v2.webp",
                                 x: 0,
                                 y: 0,
                                 maxWidth: 800,

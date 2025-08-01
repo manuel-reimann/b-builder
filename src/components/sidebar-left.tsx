@@ -44,32 +44,28 @@ const data: Data = {
       label: "Floristentisch",
       src: "/img/bgs/florist3.webp",
       type: "background",
-      promptAddition:
-        "Show a florist’s workbench from directly above: a neutral benchtop with a few small tools at the far edges only, partially cropped and softly defocused. Do not let tools overlap the bouquet; add a soft contact shadow and avoid room perspective.",
+      promptAddition: "Show a florist’s workbench from directly above: a neutral benchtop with a few small tools at the far edges only, partially cropped and softly defocused. Do not let tools overlap the bouquet; add a soft contact shadow and avoid room perspective.",
       stackable: false,
     },
     {
       label: "Floristentisch 2",
       src: "/img/bgs/florist7.webp",
       type: "background",
-      promptAddition:
-        "Show a florist’s workbench from directly above: a neutral benchtop with a few small tools at the far edges only, partially cropped and softly defocused. Do not let tools overlap the bouquet; add a soft contact shadow and avoid room perspective.",
+      promptAddition: "Show a florist’s workbench from directly above: a neutral benchtop with a few small tools at the far edges only, partially cropped and softly defocused. Do not let tools overlap the bouquet; add a soft contact shadow and avoid room perspective.",
       stackable: false,
     },
     {
       label: "Weihnachtstisch",
       src: "/img/bgs/christmas2.webp",
       type: "background",
-      promptAddition:
-        "Use a subtle Christmas-themed tabletop seen from above: muted, low-contrast decor near the edges only (e.g., tiny gold speckles or soft bokeh), staying secondary to the bouquet. Add a gentle contact shadow; no walls, furniture or strong perspective.",
+      promptAddition: "Use a subtle Christmas-themed tabletop seen from above: muted, low-contrast decor near the edges only (e.g., tiny gold speckles or soft bokeh), staying secondary to the bouquet. Add a gentle contact shadow; no walls, furniture or strong perspective.",
       stackable: false,
     },
     {
       label: "Weihnachtstisch 2",
       src: "/img/bgs/christmas3.webp",
       type: "background",
-      promptAddition:
-        "Create a festive tabletop from a top-down view with lightly scattered holiday elements at the far edges (e.g., a hint of ribbon or miniature ornaments), softly defocused and low-contrast. Keep the bouquet clear; add a soft contact shadow and avoid any overlapping props.",
+      promptAddition: "Create a festive tabletop from a top-down view with lightly scattered holiday elements at the far edges (e.g., a hint of ribbon or miniature ornaments), softly defocused and low-contrast. Keep the bouquet clear; add a soft contact shadow and avoid any overlapping props.",
       stackable: false,
     },
     {
@@ -83,8 +79,7 @@ const data: Data = {
       label: "Valentinstisch 2",
       src: "/img/bgs/valentine2.webp",
       type: "background",
-      promptAddition:
-        "Background only: keep the bouquet and paper wrap unchanged. From a top-down view, use a romantic tabletop with a gentle red/pink accent field and tiny heart motifs confined to the margins, softly defocused and low-contrast; add a soft contact shadow and avoid any room elements.",
+      promptAddition: "Background only: keep the bouquet and paper wrap unchanged. From a top-down view, use a romantic tabletop with a gentle red/pink accent field and tiny heart motifs confined to the margins, softly defocused and low-contrast; add a soft contact shadow and avoid any room elements.",
       stackable: false,
     },
   ],
@@ -100,120 +95,105 @@ const data: Data = {
       label: "Devotion",
       src: "/img/roses/devotion.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Lady in Red",
       src: "/img/roses/lady_in_red.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Bit More",
       src: "/img/roses/bit_more.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Esperance",
       src: "/img/roses/esperance.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Pink Expression",
       src: "/img/roses/pinkexpression_v2.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Fascination",
       src: "/img/roses/fascination.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "New Emotion",
       src: "/img/roses/new_emotion.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Peach Rose Ali",
       src: "/img/roses/peach_rose_ali.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Vicky",
       src: "/img/roses/vicky.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Marzipan",
       src: "/img/roses/marzipan.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Spectra",
       src: "/img/roses/spectra.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Aurora",
       src: "/img/roses/aurora.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Teddy's",
       src: "/img/roses/teddys.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Aly",
       src: "/img/roses/aly.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
     {
       label: "Shocking Blue",
       src: "/img/roses/shoking_blue.webp",
       type: "flower",
-      promptAddition:
-        "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent heads. Do not add any background greenery or scenery; do not place leaves outside or behind the sleeve.",
+      promptAddition: "Add a small amount of rose leaflets tucked between heads and partially occluded by petals; use rose-type leaflets only (small, serrated, on short petioles). Do not introduce non-rose foliage.",
       stackable: false,
     },
   ],
@@ -236,16 +216,66 @@ const data: Data = {
     { label: "Gypsophilla Weiss-Gelb", src: "/img/gyps/yellow-white.webp", type: "gypsophilla" },
   ],
   "Sri Lanka": [
-    { label: "Monstera Epipremnum", src: "/img/srilanka/monstera_ epipremnum.webp", type: "srilanka" },
-    { label: "Dracaena Sanderiana White", src: "/img/srilanka/dracaena_sanderiana_white.webp", type: "srilanka" },
-    { label: "Dracaena surculosa Florida Beauty", src: "/img/srilanka/ds_florida_beauty.webp", type: "srilanka" },
-    { label: "Chrysalidocarpus lutescens", src: "/img/srilanka/kentia.webp", type: "srilanka" },
-    { label: "Polyscias scutellaria", src: "/img/srilanka/polyscias_scutellaria.webp", type: "srilanka" },
-    { label: "Cordyline fruticosa Indian Summer", src: "/img/srilanka/cordyline_fruticosa_indian_summer.webp", type: "srilanka" },
-    { label: "Cordyline fruticosa Red", src: "/img/srilanka/cordyline_fruticosa_red.webp", type: "srilanka" },
-    { label: "Cordyline fruticosa Yellow Flash", src: "/img/srilanka/cordyline_fruticosa_yellow_flash.webp", type: "srilanka" },
-    { label: "Cordyline Fruticosa", src: "/img/srilanka/cordyline_fruticosa.webp", type: "srilanka" },
-    { label: "Cordyline Fruticosa Red Majesty", src: "/img/srilanka/cordyline_fruticosa_red_majesty.webp", type: "srilanka" },
+    {
+      label: "Monstera Epipremnum",
+      src: "/img/srilanka/monstera_ epipremnum.webp",
+      type: "srilanka",
+      promptAddition: "Preserve the existing vine foliage with heart-shaped leaves; do not recolor, replace, or convert it into rose leaves.",
+    },
+    {
+      label: "Dracaena Sanderiana White",
+      src: "/img/srilanka/dracaena_sanderiana_white.webp",
+      type: "srilanka",
+      promptAddition: "Preserve green leaves with white longitudinal stripes; no recolor, no replacement, and no conversion into rose foliage.",
+    },
+    {
+      label: "Dracaena surculosa Florida Beauty",
+      src: "/img/srilanka/ds_florida_beauty.webp",
+      type: "srilanka",
+      promptAddition: "Keep the yellow-speckled variegation on dark green leaves; do not simplify to plain green, recolor, or convert into rose leaves.",
+    },
+    {
+      label: "Chrysalidocarpus lutescens",
+      src: "/img/srilanka/kentia.webp",
+      type: "srilanka",
+      promptAddition: "Preserve palm-like fronds with many narrow leaflets; do not recolor or replace, and do not reinterpret them as petals.",
+    },
+    {
+      label: "Polyscias scutellaria",
+      src: "/img/srilanka/polyscias_scutellaria.webp",
+      type: "srilanka",
+      promptAddition: "Preserve rounded, shield-like leaflets with their current color; no recolor, no replacement, and no conversion into rose foliage.",
+    },
+    {
+      label: "Cordyline fruticosa Indian Summer",
+      src: "/img/srilanka/cordyline_fruticosa_indian_summer.webp",
+      type: "srilanka",
+      promptAddition: "Preserve strap-like cordyline leaves with warm mixed tones and a glossy planar surface; do not convert into generic green leaves or petals, and do not recolor.",
+    },
+    {
+      label: "Cordyline fruticosa Red",
+      src: "/img/srilanka/cordyline_fruticosa_red.webp",
+      type: "srilanka",
+      promptAddition: "Preserve deep burgundy strap leaves with clean margins and a glossy surface; no green shift and no reinterpretation as petals.",
+    },
+    {
+      label: "Cordyline fruticosa Yellow Flash",
+      src: "/img/srilanka/cordyline_fruticosa_yellow_flash.webp",
+      type: "srilanka",
+      promptAddition: "Preserve strap leaves with bright yellow-green variegation; do not simplify to plain green, recolor, or replace.",
+    },
+    {
+      label: "Cordyline Fruticosa",
+      src: "/img/srilanka/cordyline_fruticosa.webp",
+      type: "srilanka",
+      promptAddition: "Preserve long, planar, glossy cordyline leaves; keep the current color and do not convert them into rose foliage.",
+    },
+    {
+      label: "Cordyline Fruticosa Red Majesty",
+      src: "/img/srilanka/cordyline_fruticosa_red_majesty.webp",
+      type: "srilanka",
+      promptAddition: "Preserve rich burgundy strap leaves with narrow lighter margins; do not recolor, replace, or reinterpret them as petals.",
+    },
   ],
   "Flower Plugs": [
     { label: "Herzstecker", src: "/img/flowerplugs/herz_glaenzend.webp", type: "plug" },
@@ -259,8 +289,20 @@ const data: Data = {
   ],
   Filler: [
     { label: "Johanniskraut", src: "/img/filler/hypericum.webp", type: "filler" },
-    { label: "Eukalyptus", src: "/img/filler/eucalyptus.webp", type: "filler", promptAddition: "You may adjust the angle of the Eucalyptus for enhanced realism.", stackable: true },
-    { label: "Rittersporn", src: "/img/filler/delphinium.webp", type: "filler", promptAddition: "You may adjust the size of the Delphinium for a better overall look", stackable: true },
+    {
+      label: "Eukalyptus",
+      src: "/img/filler/eucalyptus.webp",
+      type: "filler",
+      promptAddition: "If eucalyptus is present, you may slightly adjust its orientation for natural flow; do not change its species, leaf shape, or color, and do not alter other foliage.",
+      stackable: true,
+    },
+    {
+      label: "Rittersporn",
+      src: "/img/filler/delphinium.webp",
+      type: "filler",
+      promptAddition: "You may slightly adjust the apparent size of the delphinium for balance, without changing its color, position, or replacing any materials.",
+      stackable: true,
+    },
     { label: "Lillie", src: "/img/filler/lillie.webp", type: "filler" },
     { label: "Veronica", src: "/img/filler/veronica.webp", type: "filler" },
   ],
@@ -288,18 +330,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   Filler: "Füllmaterial",
 };
 
-export default function SidebarLeft({
-  setCanvasItems,
-  setSleeveSrc,
-  setBackgroundSrc,
-  canvasContainerRef,
-}: {
-  setCanvasItems: Function;
-  setSleeveSrc: React.Dispatch<React.SetStateAction<string>>;
-  setBackgroundSrc: React.Dispatch<React.SetStateAction<string | null>>;
-  canvasContainerRef: React.RefObject<HTMLDivElement | null>;
-  showOnly?: string[];
-}) {
+export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroundSrc, canvasContainerRef }: { setCanvasItems: Function; setSleeveSrc: React.Dispatch<React.SetStateAction<string>>; setBackgroundSrc: React.Dispatch<React.SetStateAction<string | null>>; canvasContainerRef: React.RefObject<HTMLDivElement | null>; showOnly?: string[] }) {
   const handleAddImage = (src: string, label: string, type: ItemType = "flower", promptAddition?: string, stackable: boolean = true) => {
     const img = new window.Image();
     img.src = src;
