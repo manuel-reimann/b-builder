@@ -69,32 +69,40 @@ function App() {
   const [materialsCSV, setMaterialsCSV] = useState<string>("");
   void materialsCSV;
 
-  const saveDraft = async (titleOverride?: string): Promise<void> => {
+  const saveDraft = async (titleOverride?: string, backgroundOverride?: string): Promise<void> => {
     if (!user || !canvasItems.length) return;
 
     const sleeveItem = canvasItems.find((item) => item.type === "sleeve");
     if (!sleeveItem) return;
 
-    const backgroundItem =
-      backgroundSrc !== null
-        ? {
-            id: "background",
-            src: backgroundSrc,
-            x: 0,
-            y: 0,
-            maxWidth: 800,
-            maxHeight: 800,
-            rotation: 0,
-            scale: 1,
-            type: "background",
-            label: "Hintergrund",
-          }
-        : null;
-
+    // Determine background source, using override if provided
+    const bgSrc = backgroundOverride !== undefined ? backgroundOverride : backgroundSrc;
+    const backgroundItem = bgSrc
+      ? {
+          id: "background",
+          src: bgSrc,
+          x: 0,
+          y: 0,
+          maxWidth: 800,
+          maxHeight: 800,
+          rotation: 0,
+          scale: 1,
+          type: "background",
+          label: "Hintergrund",
+        }
+      : null;
     const allItems = backgroundItem ? [...canvasItems, backgroundItem] : [...canvasItems];
 
     try {
-      const result = await saveDraftToSupabase(user.id, allItems, sleeveItem.src, titleOverride ?? undefined, currentDraftId ?? undefined);
+      const result = await saveDraftToSupabase(
+        user.id,
+        allItems,
+        sleeveItem.src,
+        // Pass background override or existing backgroundSrc
+        backgroundOverride !== undefined ? backgroundOverride : backgroundSrc || undefined,
+        titleOverride ?? undefined,
+        currentDraftId ?? undefined
+      );
 
       if (result && result.success) {
         // Always update current draft title
@@ -218,13 +226,7 @@ function App() {
 
       <main className="flex flex-1 overflow-hidden main">
         <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-left scrollbar-none">
-          <SidebarLeft
-            setCanvasItems={setCanvasItems}
-            canvasContainerRef={canvasContainerRef}
-            setSleeveSrc={setSleeveSrc}
-            setBackgroundSrc={setBackgroundSrc}
-            showOnly={["backgrounds", "sleeves", "roses", "sprayroses", "gypsophilla", "srilanka", "plugs", "chrysanthemums", "filler"]}
-          />
+          <SidebarLeft setCanvasItems={setCanvasItems} canvasContainerRef={canvasContainerRef} setSleeveSrc={setSleeveSrc} setBackgroundSrc={setBackgroundSrc} showOnly={["backgrounds", "sleeves", "roses", "sprayroses", "gypsophilla", "srilanka", "plugs", "chrysanthemums", "filler"]} />
         </aside>
 
         <section

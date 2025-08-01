@@ -16,17 +16,10 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env
  * @param draftId Optional ID of existing draft to update
  * @returns { success: boolean, newDraftId?: string }
  */
-export async function saveDraftToSupabase(
-  userId: string,
-  items: any[],
-  sleeveSrc: string,
-  title?: string,
-  draftId?: string
-): Promise<{ success: boolean; newDraftId?: string }> {
+export async function saveDraftToSupabase(userId: string, items: any[], sleeveSrc: string, backgroundSrc?: string, title?: string, draftId?: string): Promise<{ success: boolean; newDraftId?: string }> {
   try {
-    // Extract background source from items (assumes item.type === 'background')
-    const backgroundItem = items.find((item) => item.type === "background");
-    const backgroundSrc = backgroundItem?.src || null;
+    // Use provided backgroundSrc parameter, falling back to item if undefined
+    const backgroundUrl = backgroundSrc ?? items.find((item) => item.type === "background")?.src ?? null;
 
     // Remove background item from elements array
     const elements = items.filter((item) => item.type !== "background");
@@ -37,7 +30,7 @@ export async function saveDraftToSupabase(
       user_id: userId,
       elements: JSON.parse(JSON.stringify(elements)),
       sleeve: sleeveSrc,
-      background: backgroundSrc,
+      background: backgroundUrl,
     };
 
     // Prepare payloads for insert or update
