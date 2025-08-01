@@ -61,8 +61,8 @@ export default function UserMenuModal({ user, onClose, onLogout, refreshUser }: 
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
-      <div className="bg-white w-96 max-h-[80vh] overflow-y-auto p-6 rounded shadow-lg relative">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50" onClick={onClose}>
+      <div className="bg-white w-96 max-h-[80vh] overflow-y-auto p-6 rounded shadow-lg relative" onClick={(e) => e.stopPropagation()}>
         {/* Greeting section */}
         <p className="mb-4 text-lg font-semibold text-gray-800">Hallo {name || "Nutzer"}</p>
 
@@ -106,9 +106,9 @@ export default function UserMenuModal({ user, onClose, onLogout, refreshUser }: 
         {message && <p className={`mb-2 text-sm ${message.toLowerCase().includes("nicht") || message.toLowerCase().includes("bitte") ? "text-red-600" : "text-green-600"}`}>{message}</p>}
 
         {/* Close button (X) */}
-        <button onClick={onClose} className="absolute text-gray-500 top-3 right-3 hover:text-black">
-          ✕
-        </button>
+        <span onClick={onClose} className="absolute p-1 text-3xl leading-none transition-colors rounded-full cursor-pointer top-2 right-4 hover:text-red-600" aria-label="Schliessen">
+          x
+        </span>
 
         {/* Logout button */}
         <button onClick={onLogout} className="block w-48 px-4 py-2 mx-auto mt-4 text-white bg-red-600 rounded hover:bg-red-700">

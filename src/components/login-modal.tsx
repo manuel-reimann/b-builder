@@ -32,9 +32,9 @@ export default function LoginModal({ onClose, onLogin, onSwitchToSignup }: { onC
         className="relative p-6 bg-white rounded shadow w-80"
         onClick={(e) => e.stopPropagation()} // close inside of modal is not triggered by outside click
       >
-        <button onClick={onClose} className="absolute text-xl text-gray-500 bg-red-100 top-2 right-2 bg-none hover:bg-gray-100 hover:text-red-600" aria-label="Schliessen">
-          &times;
-        </button>
+        <span onClick={onClose} className="absolute p-1 text-3xl leading-none transition-colors rounded-full cursor-pointer top-2 right-4 hover:text-red-600" aria-label="Schliessen">
+          x
+        </span>
         <h2 className="mb-4 text-lg font-semibold">Login</h2>
         <input type="email" placeholder="E-Mail" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full p-2 mb-2 border rounded" />
         <input type="password" placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full p-2 mb-4 border rounded" />
