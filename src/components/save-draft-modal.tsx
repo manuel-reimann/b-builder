@@ -2,7 +2,7 @@ import { useState } from "react";
 
 type SaveDraftModalProps = {
   onClose: () => void;
-  onSave: (title: string, backgroundSrc?: string) => void;
+  onSave: (title: string) => void;
 };
 
 export default function SaveDraftModal({ onClose, onSave }: SaveDraftModalProps) {
@@ -22,13 +22,7 @@ export default function SaveDraftModal({ onClose, onSave }: SaveDraftModalProps)
             onClick={() => {
               const trimmedTitle = title.trim();
               if (trimmedTitle) {
-                let fallbackBg = "";
-                try {
-                  const bgImage = getComputedStyle(document.body).backgroundImage;
-                  const match = bgImage.match(/url\(["']?(.*?)["']?\)/);
-                  if (match) fallbackBg = match[1];
-                } catch {}
-                onSave(trimmedTitle, fallbackBg);
+                onSave(trimmedTitle);
                 onClose(); // Close modal immediately after save
               }
             }}

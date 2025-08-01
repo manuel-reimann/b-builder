@@ -77,8 +77,8 @@ function App() {
     const sleeveItem = canvasItems.find((item) => item.type === "sleeve");
     if (!sleeveItem) return;
 
-    // Determine background source, using override if provided, or fallback to default
-    const bgSrc = backgroundOverride !== undefined ? backgroundOverride : backgroundSrc || DEFAULT_BACKGROUND;
+    // Use override only when it is a non-empty string, otherwise use selected or default background
+    const bgSrc = backgroundOverride && backgroundOverride.trim() !== "" ? backgroundOverride : backgroundSrc || DEFAULT_BACKGROUND;
     const backgroundItem = bgSrc
       ? {
           id: "background",
@@ -286,7 +286,7 @@ function App() {
         <DraftsModal
           userId={user.id}
           onClose={() => setShowDraftsModal(false)}
-          onLoadDraft={(items: any[], sleeveSrc?: string, draftId?: string, backgroundSrc?: string, draftTitle?: string) => {
+          onLoadDraft={(items: any[], sleeveSrc?: string, draftId?: string, draftBackground?: string, draftTitle?: string) => {
             // Hydrate loaded items with promptAddition and stackable flags
             const hydratedItems = items.map((item: any) => {
               const def = allAssets.find((a) => a.src === item.src && a.type === item.type);
@@ -298,9 +298,9 @@ function App() {
             });
             const backgroundItem = hydratedItems.find((item) => item.type === "background");
 
-            if (backgroundSrc) {
-              console.log("🎯 Using backgroundSrc directly:", backgroundSrc);
-              setBackgroundSrc(backgroundSrc);
+            if (draftBackground) {
+              console.log("🎯 Using draftBackground directly:", draftBackground);
+              setBackgroundSrc(draftBackground);
             } else if (backgroundItem?.src) {
               console.log("🎯 Using backgroundItem.src fallback:", backgroundItem.src);
               setBackgroundSrc(backgroundItem.src);
