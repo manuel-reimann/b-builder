@@ -132,7 +132,7 @@ export default function DraftsModal({ userId, onClose, onLoadDraft, setSleeveSrc
                           const sleeveSrc: string = draft.sleeve || "";
                           console.log("[DraftsModal] onLoadDraft args =", { canvasItems, sleeveSrc, draftId: draft.id, draftTitle: draft.title, backgroundImage: resolvedBackgroundUrl });
                           setSleeveSrc(sleeveSrc);
-                          onLoadDraft(canvasItems, sleeveSrc, draft.id, draft.title, resolvedBackgroundUrl);
+                          onLoadDraft(canvasItems, sleeveSrc, draft.id, resolvedBackgroundUrl, draft.title);
                           // Show success toast notification
                           toast.success("Entwurf geladen");
                           // Set the currently selected draft ID
