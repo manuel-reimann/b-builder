@@ -18,18 +18,14 @@ export function buildPrompt(items: CanvasItem[]): string {
   // - stackers: accumulates snippets for stackable types (e.g., filler flowers)
   const overrides: Record<string, string> = {};
   const stackers: string[] = [];
-  // Track which stackable types have been added to avoid duplicates
-  const seenStackTypes: Set<string> = new Set();
   // Iterate through each item, collecting its prompt addition based on its stackable flag
   items.forEach((item) => {
     if (!item.promptAddition) return;
     if (item.stackable === false) {
       overrides[item.type] = item.promptAddition;
     } else {
-      if (!seenStackTypes.has(item.type)) {
-        stackers.push(item.promptAddition);
-        seenStackTypes.add(item.type);
-      }
+      // For stackable items, include every snippet; dedupe later handles exact duplicates
+      stackers.push(item.promptAddition);
     }
   });
   // Combine all overrides and stackers for prompt stacking
