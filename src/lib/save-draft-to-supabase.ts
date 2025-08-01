@@ -1,6 +1,8 @@
 // save-draft-to-supabase.ts
 import { createClient } from "@supabase/supabase-js";
 
+const DEFAULT_BACKGROUND = "/img/bgs/white.webp";
+
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 /**
@@ -18,8 +20,8 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env
  */
 export async function saveDraftToSupabase(userId: string, items: any[], sleeveSrc: string, backgroundSrc?: string, title?: string, draftId?: string): Promise<{ success: boolean; newDraftId?: string }> {
   try {
-    // Use provided backgroundSrc parameter, falling back to item if undefined
-    const backgroundUrl = backgroundSrc ?? items.find((item) => item.type === "background")?.src ?? null;
+    // Use provided backgroundSrc, then any background item, falling back to default
+    const backgroundUrl = backgroundSrc ?? items.find((item) => item.type === "background")?.src ?? DEFAULT_BACKGROUND;
 
     // Remove background item from elements array
     const elements = items.filter((item) => item.type !== "background");
