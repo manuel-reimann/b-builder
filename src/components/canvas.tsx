@@ -425,6 +425,8 @@ export default function Canvas({
             <button
               onClick={() => {
                 if (userId) {
+                  // Deselect any selected canvas item before opening save modal
+                  setSelectedItemId(null);
                   showSaveDraftModal();
                 } else {
                   toast.info("Bitte zuerst einloggen");
