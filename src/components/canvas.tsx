@@ -213,10 +213,6 @@ export default function Canvas({
     }
 
     console.log("💬 Generated AI Prompt:", prompt);
-    // DEBUG: count occurrences of the green wrap guard phrase
-    const guardPhrase = "Do not modify the green paper wrap — keep its shape";
-    const occurrences = (prompt.match(new RegExp(guardPhrase, "g")) || []).length;
-    console.log(`🚨 Guard phrase occurrences (${guardPhrase}):`, occurrences);
     console.log(`📦 Prepared image payload size: ${dataUrl.length} characters`);
     console.log(`🐦 Image payload preview: ${dataUrl.slice(0, 60)}...`);
     const materialEntries = items.map(

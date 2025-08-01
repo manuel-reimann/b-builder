@@ -32,10 +32,13 @@ export function buildPrompt(items: CanvasItem[]): string {
       }
     }
   });
-  // Build snippet segment from overrides and stackers, deduplicating identical snippets
-  const allSnippets = [...Object.values(overrides), ...stackers];
+  // Exclude background and sleeve overrides here; these are appended separately
+  const overrideSnippets = Object.entries(overrides)
+    .filter(([type]) => type !== "background" && type !== "sleeve")
+    .map(([, snippet]) => snippet);
+  const allSnippets = [...overrideSnippets, ...stackers];
   const uniqueSnippets = Array.from(new Set(allSnippets));
-  console.log("DEBUG Prompt Overrides:", Object.values(overrides));
+  console.log("DEBUG Prompt Overrides (sans BG/Sleeve):", overrideSnippets);
   console.log("DEBUG Prompt Stackers:", stackers);
   console.log("DEBUG All Snippets Before Dedup:", allSnippets);
   console.log("DEBUG Unique Snippets After Dedup:", uniqueSnippets);
