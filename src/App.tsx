@@ -19,6 +19,8 @@ import { ToastContainer } from "react-toastify";
 import { showToastOnceStrict } from "./lib/toastUtils";
 import "react-toastify/dist/ReactToastify.css";
 
+const DEFAULT_BACKGROUND = "/img/bgs/white.webp";
+
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 function App() {
@@ -75,8 +77,8 @@ function App() {
     const sleeveItem = canvasItems.find((item) => item.type === "sleeve");
     if (!sleeveItem) return;
 
-    // Determine background source, using override if provided
-    const bgSrc = backgroundOverride !== undefined ? backgroundOverride : backgroundSrc;
+    // Determine background source, using override if provided, or fallback to default
+    const bgSrc = backgroundOverride !== undefined ? backgroundOverride : backgroundSrc || DEFAULT_BACKGROUND;
     const backgroundItem = bgSrc
       ? {
           id: "background",
@@ -94,15 +96,7 @@ function App() {
     const allItems = backgroundItem ? [...canvasItems, backgroundItem] : [...canvasItems];
 
     try {
-      const result = await saveDraftToSupabase(
-        user.id,
-        allItems,
-        sleeveItem.src,
-        // Pass background override or existing backgroundSrc
-        backgroundOverride !== undefined ? backgroundOverride : backgroundSrc || undefined,
-        titleOverride ?? undefined,
-        currentDraftId ?? undefined
-      );
+      const result = await saveDraftToSupabase(user.id, allItems, sleeveItem.src, bgSrc, titleOverride ?? undefined, currentDraftId ?? undefined);
 
       if (result && result.success) {
         // Always update current draft title
