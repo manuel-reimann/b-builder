@@ -79,7 +79,7 @@ const data: Data = {
       label: "Valentinstisch 2",
       src: "/img/bgs/valentine2.webp",
       type: "background",
-      promptAddition: "Background only: keep the bouquet and paper wrap unchanged. From a top-down view, use a romantic tabletop with a gentle red/pink accent field and tiny heart motifs confined to the margins, softly defocused and low-contrast; add a soft contact shadow and avoid any room elements.",
+      promptAddition: "From a top-down view, use a romantic tabletop with a gentle red/pink accent field and tiny heart motifs confined to the margins, softly defocused and low-contrast; add a soft contact shadow and avoid any room elements.",
       stackable: false,
     },
   ],
