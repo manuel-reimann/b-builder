@@ -22,6 +22,7 @@ export async function saveDraftToSupabase(userId: string, items: any[], sleeveSr
   try {
     // Use provided backgroundSrc, then any background item, falling back to default
     const backgroundUrl = backgroundSrc ?? items.find((item) => item.type === "background")?.src ?? DEFAULT_BACKGROUND;
+    console.log("🔍 [saveDraftToSupabase] backgroundUrl =", backgroundUrl);
 
     // Remove background item from elements array
     const elements = items.filter((item) => item.type !== "background");
