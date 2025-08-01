@@ -113,8 +113,8 @@ export default function DraftsModal({ userId, onClose, onLoadDraft, setSleeveSrc
                           // Extract all items and identify the background item
                           const allItems: CanvasItem[] = Array.isArray(draft.elements) ? draft.elements : [];
                           const backgroundItemFromElements = allItems.find((item) => item.type === "background" || (typeof item.src === "string" && item.src.startsWith("/img/bgs/")));
-                          // Remove background and sleeve items from canvas items
-                          const canvasItems: CanvasItem[] = allItems.filter((item) => item.type !== "background" && item.type !== "sleeve");
+                          // Remove background items from canvas items (do not exclude sleeve items)
+                          const canvasItems: CanvasItem[] = allItems.filter((item) => item.type !== "background");
                           // Determine final background src: prefer the element's src, fall back to stored key only if it's a valid url or filename
                           const finalBackgroundSrc: string | undefined = backgroundItemFromElements?.src ?? (backgroundKey && (backgroundKey.includes(".") || backgroundKey.startsWith("/") || backgroundKey.startsWith("http")) ? backgroundKey : undefined);
                           // Resolve full URL for legacy or key-based backgrounds

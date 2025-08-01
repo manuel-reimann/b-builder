@@ -20,8 +20,8 @@ export function buildPrompt(items: CanvasItem[]): string {
   const stackers: string[] = [];
   // Iterate through each item, collecting its prompt addition based on its stackable flag
   items.forEach((item) => {
-    if (!item.promptAddition) return;
-    if (item.stackable === false && item.type !== "sleeve") {
+    if (!item.promptAddition || item.type === "sleeve") return;
+    if (item.stackable === false) {
       overrides[item.type] = item.promptAddition;
     } else {
       // For stackable items, include every snippet; dedupe later handles exact duplicates
