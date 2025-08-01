@@ -11,8 +11,7 @@ import { CanvasItem } from "../components/canvas";
  */
 export function buildPrompt(items: CanvasItem[]): string {
   // Base prompt: always include this description to maintain core realism requirements
-  const basePrompt =
-    "Enhance the image to a photorealistic finish. Do not change the flower types, colors, number, positions or spacing, and do not add or remove any elements. Add only subtle shading and fine surface detail. Preserve the existing light direction and overall focus characteristics; reinforce gentle occlusion shadows where petals overlap.";
+  const basePrompt = "Enhance the image to a photorealistic finish. Do not change the flower types, colors, number, positions or spacing, and do not add or remove any elements. Add only subtle shading and fine surface detail. Preserve the existing light direction and overall focus characteristics; reinforce gentle occlusion shadows where petals overlap.";
 
   // Prepare collections for prompt snippets:
   // - overrides: stores the latest snippet for non-stackable types (e.g., backgrounds, sleeves)
@@ -33,8 +32,10 @@ export function buildPrompt(items: CanvasItem[]): string {
       }
     }
   });
-  // Build snippet segment from overrides and stackers
-  const combinedSnippets = [...Object.values(overrides), ...stackers].join(" ").trim();
+  // Build snippet segment from overrides and stackers, deduplicating identical snippets
+  const allSnippets = [...Object.values(overrides), ...stackers];
+  const uniqueSnippets = Array.from(new Set(allSnippets));
+  const combinedSnippets = uniqueSnippets.join(" ").trim();
   const snippetSegment = combinedSnippets ? ` ${combinedSnippets}` : "";
 
   // Return the base prompt concatenated with any custom snippet segment
