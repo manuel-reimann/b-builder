@@ -131,7 +131,7 @@ export default function DraftsModal({ userId, onClose, onLoadDraft, setSleeveSrc
                           // Sleeve remains separate
                           const sleeveSrc: string = draft.sleeve || "";
                           setSleeveSrc(sleeveSrc);
-                          onLoadDraft(canvasItems, sleeveSrc, draft.id, resolvedBackgroundUrl, draft.title);
+                          onLoadDraft(canvasItems, sleeveSrc, draft.id, draft.title, resolvedBackgroundUrl);
                           // Show success toast notification
                           toast.success("Entwurf geladen");
                           // Set the currently selected draft ID
