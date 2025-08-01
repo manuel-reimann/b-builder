@@ -35,6 +35,10 @@ export function buildPrompt(items: CanvasItem[]): string {
   // Build snippet segment from overrides and stackers, deduplicating identical snippets
   const allSnippets = [...Object.values(overrides), ...stackers];
   const uniqueSnippets = Array.from(new Set(allSnippets));
+  console.log("DEBUG Prompt Overrides:", Object.values(overrides));
+  console.log("DEBUG Prompt Stackers:", stackers);
+  console.log("DEBUG All Snippets Before Dedup:", allSnippets);
+  console.log("DEBUG Unique Snippets After Dedup:", uniqueSnippets);
   const combinedSnippets = uniqueSnippets.join(" ").trim();
   const snippetSegment = combinedSnippets ? ` ${combinedSnippets}` : "";
 
