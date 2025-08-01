@@ -95,23 +95,7 @@ export default function SidebarRight({
 }
 
 // Represents a draggable item in the right-side layer list, supporting select, hover, duplicate, and delete operations
-function SortableItem({
-  item,
-  onDelete,
-  onDuplicate,
-  selectedItemId,
-  setSelectedItemId,
-  hoveredItemId,
-  setHoveredItemId,
-}: {
-  item: CanvasItem;
-  onDelete: (id: string) => void;
-  onDuplicate: (item: CanvasItem) => void;
-  selectedItemId: string | null;
-  setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>;
-  hoveredItemId: string | null;
-  setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>>;
-}) {
+function SortableItem({ item, onDelete, onDuplicate, selectedItemId, setSelectedItemId, hoveredItemId, setHoveredItemId }: { item: CanvasItem; onDelete: (id: string) => void; onDuplicate: (item: CanvasItem) => void; selectedItemId: string | null; setSelectedItemId: React.Dispatch<React.SetStateAction<string | null>>; hoveredItemId: string | null; setHoveredItemId: React.Dispatch<React.SetStateAction<string | null>> }) {
   // Enables drag-and-drop functionality for the layer item
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
 
@@ -133,9 +117,7 @@ function SortableItem({
       onClick={() => setSelectedItemId(item.id)}
       onMouseEnter={() => setHoveredItemId(item.id)}
       onMouseLeave={() => setHoveredItemId(null)}
-      className={`border border-gray-300 px-3 py-2 rounded shadow-sm flex justify-between items-center cursor-pointer transition-colors duration-150 ${
-        selectedItemId === item.id ? " bg-agrotropic-green text-white" : hoveredItemId === item.id ? "bg-gray-300 cursor-pointer" : "bg-white"
-      }`}
+      className={`border border-gray-300 px-3 py-2 rounded shadow-sm flex justify-between items-center cursor-pointer transition-colors duration-150 ${selectedItemId === item.id ? " bg-agrotropic-green text-white" : hoveredItemId === item.id ? "bg-gray-300 cursor-pointer" : "bg-white"}`}
     >
       <div className="flex items-center justify-between w-full">
         <span className="flex items-center gap-2 truncate text-md">
@@ -179,17 +161,23 @@ function SortableItem({
   );
 }
 
-// Generates a CSV string from all canvas items, including the sleeve
+// Generates a CSV string from all canvas items, grouping duplicate labels and outputting counts
 function generateMaterialsCSV(items: CanvasItem[]): string {
-  return items
-    .map(
-      (item) =>
-        item.label ||
-        item.src
-          .split("/")
-          .pop()
-          ?.replace(/\.[^/.]+$/, "")
-    )
-    .filter(Boolean)
+  // Count occurrences of each label
+  const counts: Record<string, number> = {};
+  items.forEach((item) => {
+    const label =
+      item.label ||
+      item.src
+        .split("/")
+        .pop()
+        ?.replace(/\.[^/.]+$/, "");
+    if (label) {
+      counts[label] = (counts[label] || 0) + 1;
+    }
+  });
+  // Build CSV entries with counts
+  return Object.entries(counts)
+    .map(([label, count]) => (count > 1 ? `${count} x ${label}` : label))
     .join(",");
 }
