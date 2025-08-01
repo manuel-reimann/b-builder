@@ -32,15 +32,11 @@ export function buildPrompt(items: CanvasItem[]): string {
       }
     }
   });
-  // Exclude background and sleeve overrides here; these are appended separately
-  const overrideSnippets = Object.entries(overrides)
-    .filter(([type]) => type !== "background" && type !== "sleeve")
-    .map(([, snippet]) => snippet);
-  const allSnippets = [...overrideSnippets, ...stackers];
-  const uniqueSnippets = Array.from(new Set(allSnippets));
-  console.log("DEBUG Prompt Overrides (sans BG/Sleeve):", overrideSnippets);
+  // Combine all overrides and stackers for prompt stacking
+  const allSnippets = [...Object.values(overrides), ...stackers];
   console.log("DEBUG Prompt Stackers:", stackers);
   console.log("DEBUG All Snippets Before Dedup:", allSnippets);
+  const uniqueSnippets = Array.from(new Set(allSnippets));
   console.log("DEBUG Unique Snippets After Dedup:", uniqueSnippets);
   const combinedSnippets = uniqueSnippets.join(" ").trim();
   const snippetSegment = combinedSnippets ? ` ${combinedSnippets}` : "";
