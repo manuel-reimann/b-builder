@@ -20,6 +20,7 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env
  */
 export async function saveDraftToSupabase(userId: string, items: any[], sleeveSrc: string, backgroundSrc?: string, title?: string, draftId?: string): Promise<{ success: boolean; newDraftId?: string }> {
   try {
+    console.log("[saveDraftToSupabase] args =", { userId, items, sleeveSrc, backgroundSrc, title, draftId });
     // Use provided backgroundSrc, then any background item, falling back to default
     const backgroundUrl = (backgroundSrc && backgroundSrc.trim() !== "" ? backgroundSrc : items.find((item) => item.type === "background")?.src) ?? DEFAULT_BACKGROUND;
     console.log("🔍 [saveDraftToSupabase] backgroundUrl =", backgroundUrl);

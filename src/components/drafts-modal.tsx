@@ -130,6 +130,7 @@ export default function DraftsModal({ userId, onClose, onLoadDraft, setSleeveSrc
 
                           // Sleeve remains separate
                           const sleeveSrc: string = draft.sleeve || "";
+                          console.log("[DraftsModal] onLoadDraft args =", { canvasItems, sleeveSrc, draftId: draft.id, draftTitle: draft.title, backgroundImage: resolvedBackgroundUrl });
                           setSleeveSrc(sleeveSrc);
                           onLoadDraft(canvasItems, sleeveSrc, draft.id, draft.title, resolvedBackgroundUrl);
                           // Show success toast notification

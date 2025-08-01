@@ -96,6 +96,7 @@ function App() {
     const allItems = backgroundItem ? [...canvasItems, backgroundItem] : [...canvasItems];
 
     try {
+      console.log("[App.saveDraft] backgroundOverride =", backgroundOverride, "backgroundSrc =", backgroundSrc, "bgSrc =", bgSrc);
       const result = await saveDraftToSupabase(user.id, allItems, sleeveItem.src, bgSrc, titleOverride ?? undefined, currentDraftId ?? undefined);
 
       if (result && result.success) {
