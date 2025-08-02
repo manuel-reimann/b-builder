@@ -289,6 +289,7 @@ const data: Data = {
   ],
   "Flower Plugs": [
     { label: "Herzstecker", src: "/img/flowerplugs/herz_glaenzend.webp", type: "plug" },
+    { label: "Love", src: "/img/flowerplugs/love.webp", type: "plug" },
     { label: "Osterhase", src: "/img/flowerplugs/ostern.webp", type: "plug" },
     { label: "Silvester", src: "/img/flowerplugs/silvester.webp", type: "plug" },
     { label: "Silvester 2", src: "/img/flowerplugs/silvester2.webp", type: "plug" },
