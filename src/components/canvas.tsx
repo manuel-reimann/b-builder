@@ -204,12 +204,11 @@ export default function Canvas({
       }
     }
 
-    // Append background-specific snippet if defined
-    if (backgroundSrc) {
-      const bgDef = backgroundAssets.find((b: any) => b.src === backgroundSrc);
-      if (bgDef?.promptAddition) {
-        prompt += ` ${bgDef.promptAddition}`;
-      }
+    // Append background-specific snippet (use default if none selected)
+    const usedBgSrc = backgroundSrc || "/img/bgs/white.webp"; // default white background
+    const bgDef = backgroundAssets.find((b: any) => b.src === usedBgSrc);
+    if (bgDef?.promptAddition) {
+      prompt += ` ${bgDef.promptAddition}`;
     }
 
     console.log("💬 Generated AI Prompt:", prompt);
