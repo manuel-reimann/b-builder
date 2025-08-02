@@ -62,7 +62,7 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
                 {/* Buttons row */}
                 <div className="grid w-full grid-cols-1 gap-2 mt-2 sm:grid-cols-2 lg:grid-cols-3">
                   <button onClick={() => window.open(design.image_url, "_blank")} className="w-full px-4 py-2 text-base font-medium text-white truncate rounded bg-agrotropic-blue hover:bg-agrotropic-blue/80 text-ellipsis whitespace-nowrap">
-                    Bild herunterladen
+                    Download
                   </button>
                   <button
                     onClick={() => {
@@ -76,7 +76,7 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
                     }}
                     className="w-full px-4 py-2 text-base font-medium text-white truncate rounded bg-agrotropic-green hover:bg-green-900 text-ellipsis whitespace-nowrap"
                   >
-                    Werkstoffe (CSV)
+                    CSV
                   </button>
                   <button
                     onClick={async () => {

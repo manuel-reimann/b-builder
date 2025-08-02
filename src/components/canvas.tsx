@@ -215,16 +215,23 @@ export default function Canvas({
     console.log("💬 Generated AI Prompt:", prompt);
     console.log(`📦 Prepared image payload size: ${dataUrl.length} characters`);
     console.log(`🐦 Image payload preview: ${dataUrl.slice(0, 60)}...`);
-    const materialEntries = items.map(
-      (item) =>
+    // Group duplicate labels and format counts
+    const counts: Record<string, number> = {};
+    items.forEach((item) => {
+      const name =
         item.label ||
         item.src
           .split("/")
           .pop()
           ?.replace(/\.[^/.]+$/, "") ||
-        ""
-    );
-    const materials_csv = materialEntries.join(", ");
+        "";
+      if (name) {
+        counts[name] = (counts[name] || 0) + 1;
+      }
+    });
+    const materials_csv = Object.entries(counts)
+      .map(([name, count]) => (count > 1 ? `${count} x ${name}` : name))
+      .join(", ");
 
     console.log("📤 Sending request to Flux API with prompt and image payload");
     const result = await generateImageWithFlux({ prompt, imageBase64: dataUrl });
