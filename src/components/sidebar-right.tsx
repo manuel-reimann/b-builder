@@ -2,7 +2,6 @@ import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from 
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CanvasItem } from "./canvas";
-import { useEffect } from "react";
 
 export default function SidebarRight({
   items,
@@ -11,7 +10,6 @@ export default function SidebarRight({
   setSelectedItemId,
   hoveredItemId,
   setHoveredItemId,
-  setMaterialsCSV,
 }: {
   items: CanvasItem[];
   setCanvasItems: React.Dispatch<React.SetStateAction<CanvasItem[]>>;
@@ -26,14 +24,6 @@ export default function SidebarRight({
   const elementItems = items.filter((item) => item.type !== "sleeve");
   const reversedElementItems = [...elementItems].reverse(); // newest on top
 
-  // Update global materials_csv string whenever canvas items change
-  useEffect(() => {
-    const csv = generateMaterialsCSV(items);
-    // Optional: expose it via window or other global handler if needed
-    console.log("Updated materials CSV:", csv);
-    setMaterialsCSV(csv);
-  }, [items]);
-
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
 
@@ -46,7 +36,6 @@ export default function SidebarRight({
       setCanvasItems(updated);
     }
   };
-  // CSV generation logic moved to useEffect above
 
   return (
     <div>
@@ -159,25 +148,4 @@ function SortableItem({ item, onDelete, onDuplicate, selectedItemId, setSelected
       </div>
     </div>
   );
-}
-
-// Generates a CSV string from all canvas items, grouping duplicate labels and outputting counts
-function generateMaterialsCSV(items: CanvasItem[]): string {
-  // Count occurrences of each label
-  const counts: Record<string, number> = {};
-  items.forEach((item) => {
-    const label =
-      item.label ||
-      item.src
-        .split("/")
-        .pop()
-        ?.replace(/\.[^/.]+$/, "");
-    if (label) {
-      counts[label] = (counts[label] || 0) + 1;
-    }
-  });
-  // Build CSV entries with counts
-  return Object.entries(counts)
-    .map(([label, count]) => (count > 1 ? `${count} x ${label}` : label))
-    .join(",");
 }
