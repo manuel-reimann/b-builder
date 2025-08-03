@@ -53,7 +53,7 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
             {designs.map((design) => (
               <div key={design.id} className="flex flex-col items-center p-4 border rounded shadow">
                 {/* Preview image of the design */}
-                <img src={design.image_url} alt="Design Preview" className="object-cover w-full h-full mb-2 rounded" />
+                <img src={design.image_url} alt="Design Preview" loading="lazy" className="object-cover w-full aspect-[3/2] mb-2 rounded" />
                 {/* Title and creation date row */}
                 <div className="flex items-center justify-between w-full mb-2">
                   <p className="text-lg font-semibold text-agrotropic-blue">{design.title || "Ohne Titel"}</p>
