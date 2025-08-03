@@ -7,6 +7,8 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
   const [designs, setDesigns] = useState<any[]>([]);
   // State to track loading status
   const [loading, setLoading] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
+  const [blobUrls, setBlobUrls] = useState<Record<string, string>>({});
 
   // Fetch designs from Supabase when component mounts
   useEffect(() => {
@@ -27,6 +29,20 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
 
     fetchDesigns();
   }, []);
+
+  useEffect(() => {
+    designs.forEach((design) => {
+      if (!blobUrls[design.id]) {
+        fetch(design.image_url)
+          .then((res) => res.blob())
+          .then((blob) => {
+            const url = URL.createObjectURL(blob);
+            setBlobUrls((prev) => ({ ...prev, [design.id]: url }));
+          })
+          .catch((error) => console.error("Fehler beim Vorladen des Bild-Blobs:", error));
+      }
+    });
+  }, [designs]);
 
   return (
     // Modal backdrop covering entire screen
@@ -60,24 +76,44 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
                   <p className="text-gray-600 text-md">{new Date(design.created_at).toLocaleDateString()}</p>
                 </div>
                 {/* Buttons row */}
-                <div className="grid w-full grid-cols-1 gap-2 mt-2 sm:grid-cols-2 lg:grid-cols-3">
-                  <button onClick={() => window.open(design.image_url, "_blank")} className="w-full px-4 py-2 text-base font-medium text-white truncate rounded bg-agrotropic-blue hover:bg-agrotropic-blue/80 text-ellipsis whitespace-nowrap">
-                    Download
-                  </button>
-                  <button
-                    onClick={() => {
-                      const blob = new Blob([design.materials_csv], { type: "text/csv" });
-                      const url = URL.createObjectURL(blob);
-                      const a = document.createElement("a");
-                      a.href = url;
-                      a.download = `${design.title || "design"}.csv`;
-                      a.click();
-                      URL.revokeObjectURL(url);
-                    }}
-                    className="w-full px-4 py-2 text-base font-medium text-white truncate rounded bg-agrotropic-green hover:bg-green-900 text-ellipsis whitespace-nowrap"
-                  >
-                    CSV
-                  </button>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <div className="relative inline-flex">
+                    <button
+                      onClick={() => {
+                        const url = blobUrls[design.id];
+                        if (!url) return;
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = design.title || "design";
+                        a.click();
+                      }}
+                      className="px-4 py-2 text-base font-medium text-white !rounded-r-none bg-agrotropic-blue hover:bg-agrotropic-blue/80"
+                    >
+                      Download Bild
+                    </button>
+                    <button onClick={() => setDropdownOpen(dropdownOpen === design.id ? null : design.id)} className="px-4 py-2 text-white text-sm !rounded-l-none bg-agrotropic-blue hover:bg-agrotropic-blue/80" aria-label="Mehr Optionen">
+                      ▼
+                    </button>
+                    {dropdownOpen === design.id && (
+                      <div className="absolute left-0 z-10 w-full mt-1 transition duration-150 ease-out bg-white border border-gray-200 rounded-md shadow-lg top-full">
+                        <button
+                          onClick={() => {
+                            const blob = new Blob([design.materials_csv], { type: "text/csv" });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = `${design.title || "design"}.csv`;
+                            a.click();
+                            URL.revokeObjectURL(url);
+                            setDropdownOpen(null);
+                          }}
+                          className="block w-full px-2 py-2 text-base font-medium text-white truncate transition bg-agrotropic-blue hover:bg-agrotropic-blue/80"
+                        >
+                          Werkstücke (.csv)
+                        </button>
+                      </div>
+                    )}
+                  </div>
                   <button
                     onClick={async () => {
                       const confirmDelete = window.confirm("Möchtest du dieses Design wirklich löschen?");
@@ -90,7 +126,7 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
                         setDesigns((prev) => prev.filter((d) => d.id !== design.id));
                       }
                     }}
-                    className="w-full px-4 py-2 text-base font-medium text-white truncate bg-red-500 rounded hover:bg-red-600 text-ellipsis whitespace-nowrap"
+                    className="px-4 py-2 text-base font-medium text-white bg-red-500 rounded hover:bg-red-600"
                   >
                     Löschen
                   </button>
