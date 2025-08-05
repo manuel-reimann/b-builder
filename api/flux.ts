@@ -14,6 +14,14 @@ export const config = {
 };
 
 export async function POST(req: Request): Promise<Response> {
+  // Simulation flag for Flux API failure
+  if (process.env.SIMULATE_FLUX_FAILURE === "true") {
+    console.warn("⚠️ Simulated Flux failure enabled.");
+    return new Response(JSON.stringify({ error: "Simulierte Flux-Überlastung" }), {
+      status: 503,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
   const body = await req.json();
   const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
   console.log("Incoming request body:", body);
