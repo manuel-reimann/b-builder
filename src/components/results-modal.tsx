@@ -44,8 +44,6 @@ export default function ResultModal({ open, onClose, imageUrl, title }: ResultMo
   };
 
   if (!open) return null;
-  console.log("🧱 ResultModal rendering with title:", title);
-  console.log("🧱 ResultModal rendering. Image URL:", imageUrl);
 
   return (
     <div key={title} className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

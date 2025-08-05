@@ -235,7 +235,7 @@ export default function Canvas({
     console.log("📤 Sending request to Flux API with prompt and image payload");
     const result = await generateImageWithFlux({ prompt, imageBase64: dataUrl });
     console.log("📥 Flux API result:", result);
-    if (result?.error?.details?.overloaded) {
+    if (result?.details?.overloaded) {
       console.warn("⚠️ Flux API meldet Überlastung:", result);
       toast.error("Flux ist momentan überlastet. Bitte versuche es in ein paar Sekunden erneut.");
       return;
