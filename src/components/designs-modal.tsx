@@ -48,7 +48,7 @@ export default function MyDesignsModal({ userId, onClose }: { userId: string; on
     // Modal backdrop covering entire screen
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
       {/* Modal container with white background and scrollable content */}
-      <div className="bg-white w-3/4 max-h-[80vh] overflow-y-auto p-6 rounded shadow-lg relative" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white w-3/4 max-h-[80vh] min-h-[60vh] overflow-y-auto p-6 rounded shadow-lg relative" onClick={(e) => e.stopPropagation()}>
         {/* Close button in top-right corner */}
         <span onClick={onClose} className="absolute p-1 text-3xl leading-none transition-colors rounded-full cursor-pointer top-2 right-4 hover:text-red-600" aria-label="Schliessen">
           x
