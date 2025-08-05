@@ -247,7 +247,6 @@ export default function Canvas({
         generationError: true,
         imageUrl: null,
       }));
-      return;
     }
 
     if (result && result.image) {

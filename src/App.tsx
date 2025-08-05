@@ -61,6 +61,12 @@ function App() {
   const canvasContainerRef = useRef<HTMLDivElement>(null!);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const [loginInfoMessage, setLoginInfoMessage] = useState<string>("");
+  const handleSwitchToLogin = (msg: string) => {
+    setLoginInfoMessage(msg);
+    setShowSignupModal(false);
+    setShowLoginModal(true);
+  };
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMyDesigns, setShowMyDesigns] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -265,22 +271,15 @@ function App() {
         <LoginModal
           onClose={() => setShowLoginModal(false)}
           onLogin={(user) => setUser(user)}
+          infoMessage={loginInfoMessage}
           onSwitchToSignup={() => {
             setShowLoginModal(false);
             setShowSignupModal(true);
+            setLoginInfoMessage("");
           }}
         />
       )}
-      {showSignupModal && (
-        <SignupModal
-          onClose={() => setShowSignupModal(false)}
-          onSignup={(user) => setUser(user)}
-          onSwitchToLogin={() => {
-            setShowSignupModal(false);
-            setShowLoginModal(true);
-          }}
-        />
-      )}
+      {showSignupModal && <SignupModal onClose={() => setShowSignupModal(false)} onSwitchToLogin={handleSwitchToLogin} />}
       {user && showMyDesigns && <MyDesignsModal userId={user.id} onClose={() => setShowMyDesigns(false)} />}
       {user && showDraftsModal && (
         <DraftsModal
