@@ -72,18 +72,6 @@ function App() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_IN") {
-        setShowConfirmModal(true);
-        // Remove query params so modal doesn’t re-open on reload
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-    });
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
-  useEffect(() => {
     const params = new URLSearchParams(window.location.hash.slice(1));
     if (params.get("type") === "signup") {
       setShowConfirmModal(true);
