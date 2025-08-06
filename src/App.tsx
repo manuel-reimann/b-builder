@@ -9,6 +9,7 @@ import SidebarRight from "./components/sidebar-right";
 import Canvas from "./components/canvas";
 import LoginModal from "./components/login-modal";
 import SignupModal from "./components/signup-modal";
+import ConfirmModal from "./components/confirm-modal";
 import { createClient } from "@supabase/supabase-js";
 import UserMenuModal from "./components/user-menu-modal";
 import MyDesignsModal from "./components/designs-modal";
@@ -68,6 +69,27 @@ function App() {
     setShowLoginModal(true);
   };
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN" && window.location.search.includes("type=signup")) {
+        setShowConfirmModal(true);
+        // Remove query params so modal doesn’t re-open on reload
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    });
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("type") === "signup") {
+      setShowConfirmModal(true);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
   const [showMyDesigns, setShowMyDesigns] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
@@ -326,6 +348,7 @@ function App() {
       )}
 
       {showSaveDraftModal && <SaveDraftModal onClose={() => setShowSaveDraftModal(false)} onSave={saveDraft} />}
+      {showConfirmModal && <ConfirmModal open={showConfirmModal} onClose={() => setShowConfirmModal(false)} />}
       <ToastContainer limit={3} position="bottom-center" autoClose={2000} hideProgressBar={false} closeOnClick draggable pauseOnHover closeButton={true} newestOnTop />
 
       {user && showUserMenu && (
