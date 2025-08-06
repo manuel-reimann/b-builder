@@ -12,10 +12,10 @@ const ConfirmModal: FC<ConfirmModalProps> = ({ open, onClose }) => {
       <div className="p-6 bg-white rounded shadow w-96">
         <h2 className="mb-4 text-lg font-semibold">Bestätigung erfolgreich</h2>
         <p>Dein Account wurde bestätigt und du bist jetzt eingeloggt. Viel Spass!</p>
-        <p className="mt-2 text-sm text-gray-600">Hinweis: Generative KI kann Fehler machen.</p>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-2 text-sm text-gray-600 text-bold">Hinweis: Generative KI kann Fehler machen.</p>
+        <p className="mt-2 text-sm text-red-400">
           Fehler entstehen häufig durch schwierige Ausgangsbilder oder Modellannahmen. Erfahre mehr dazu:{" "}
-          <a href="https://builtin.com/artificial-intelligence/hallucination-ai" target="_blank" rel="noopener noreferrer" className="text-agrotropic-blue hover:underline">
+          <a href="https://medium.com/@colin.fraser/hallucinations-errors-and-dreams-c281a66f3c35" target="_blank" rel="noopener noreferrer" className="text-agrotropic-blue hover:underline">
             Warum Bilder manchmal nicht exakt sind
           </a>
           .
