@@ -2,7 +2,7 @@
 import { generateImageWithFlux } from "../utils/flux-client"; // Import the Flux API client for image generation <------
 import ResultModal from "./results-modal";
 import { buildPrompt } from "../utils/export-prompt"; // Import the prompt builder utility
-import { backgroundAssets, sleeveAssets } from "./sidebar-left";
+import { backgroundAssets, sleeveAssets, allAssets } from "./sidebar-left";
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer } from "react-konva";
 import StaticSleeveImage from "./static-sleeve-image";
@@ -364,22 +364,11 @@ export default function Canvas({
         img.src = src;
 
         img.onload = () => {
-          // Dynamische Item-Grösse nur für reguläre Items, nicht für Sleeves
+          // Dynamische Item-Grösse nur für reguläre Items, nicht für Sleeves und Backgrounds
           let maxHeight = 150;
-          if (type !== "sleeve") {
-            // Suche das Asset in allen definierten Assets (nicht nur backgroundAssets)
-            const allAssets = [
-              ...backgroundAssets,
-              ...sleeveAssets,
-            ];
-            // Füge weitere Asset-Listen hinzu, falls vorhanden
-            // Wenn es globale allAssets gibt, diese verwenden, sonst nur background und sleeve
-            // Hier als Beispiel: alle Assets, die nicht "sleeve" oder "background" sind
-            // (Falls allAssets global verfügbar ist, ggf. importieren)
-            const assetDef = [...backgroundAssets, ...sleeveAssets].concat(
-              allAssets.filter((a: any) => a.type !== "sleeve" && a.type !== "background")
-            ).find((a: any) => a.src === src);
-            if (assetDef && assetDef.size) {
+          if (type !== "sleeve" && type !== "background") {
+            const assetDef = allAssets.find((a: any) => a.src === src);
+            if (assetDef?.size) {
               maxHeight = assetDef.size;
             }
           }
