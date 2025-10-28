@@ -367,7 +367,18 @@ export default function Canvas({
           // Dynamische Item-Grösse nur für reguläre Items, nicht für Sleeves
           let maxHeight = 150;
           if (type !== "sleeve") {
-            const assetDef = backgroundAssets.find((a: any) => a.src === src);
+            // Suche das Asset in allen definierten Assets (nicht nur backgroundAssets)
+            const allAssets = [
+              ...backgroundAssets,
+              ...sleeveAssets,
+            ];
+            // Füge weitere Asset-Listen hinzu, falls vorhanden
+            // Wenn es globale allAssets gibt, diese verwenden, sonst nur background und sleeve
+            // Hier als Beispiel: alle Assets, die nicht "sleeve" oder "background" sind
+            // (Falls allAssets global verfügbar ist, ggf. importieren)
+            const assetDef = [...backgroundAssets, ...sleeveAssets].concat(
+              allAssets.filter((a: any) => a.type !== "sleeve" && a.type !== "background")
+            ).find((a: any) => a.src === src);
             if (assetDef && assetDef.size) {
               maxHeight = assetDef.size;
             }
