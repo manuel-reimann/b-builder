@@ -364,14 +364,15 @@ export default function Canvas({
         img.src = src;
 
         img.onload = () => {
-          // Dynamische Item-Grösse basierend auf Asset-Definition
+          // Dynamische Item-Grösse nur für reguläre Items, nicht für Sleeves
           let maxHeight = 150;
-          const assetDef =
-            [...backgroundAssets, ...sleeveAssets].find((a: any) => a.src === src);
-          if (assetDef && assetDef.size) {
-            maxHeight = assetDef.size;
+          if (type !== "sleeve") {
+            const assetDef = backgroundAssets.find((a: any) => a.src === src);
+            if (assetDef && assetDef.size) {
+              maxHeight = assetDef.size;
+            }
           }
-          const scaleFactor = Math.min(1, maxHeight / img.height);
+          const scaleFactor = maxHeight / img.height;
           const scaledWidth = img.width * scaleFactor;
           const scaledHeight = img.height * scaleFactor;
 
