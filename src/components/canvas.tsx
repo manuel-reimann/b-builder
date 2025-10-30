@@ -368,8 +368,8 @@ export default function Canvas({
           let maxHeight = 150;
           if (type !== "sleeve" && type !== "background") {
             const assetDef = allAssets.find((a: any) => a.src === src);
-            if (assetDef?.scale) {
-              maxHeight = assetDef.scale;
+            if (assetDef?.size) {
+              maxHeight = assetDef.size;
             }
           }
           const scaleFactor = maxHeight / img.height;
