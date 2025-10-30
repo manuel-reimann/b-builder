@@ -8,7 +8,7 @@ type DataItem = {
   type: ItemType;
   promptAddition?: string;
   stackable?: boolean;
-  size?: number;
+  scale?: number;
 };
 type Data = Record<string, DataItem[]>;
 const data: Data = {
@@ -244,7 +244,7 @@ const data: Data = {
     { label: "Sweet Dreams", src: "/img/sprayroses/sweet_dreams.webp", type: "sprayrose" },
   ],
   Gypsophilla: [
-    { label: "Gypsophilla Weiss", src: "/img/gyps/white.webp", type: "gypsophilla", size: 600 },
+    { label: "Gypsophilla Weiss", src: "/img/gyps/white.webp", type: "gypsophilla", scale: 600 },
     { label: "Gypsophilla Rosa", src: "/img/gyps/pink.webp", type: "gypsophilla" },
     { label: "Gypsophilla Weiss-Gelb", src: "/img/gyps/yellow-white.webp", type: "gypsophilla" },
   ],
