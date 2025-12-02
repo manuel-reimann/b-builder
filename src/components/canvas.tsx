@@ -30,6 +30,8 @@ export interface CanvasItem {
     | "plug" // Flower plugs or accessories
     | "chrysanthemum" // Chrysanthemums
     | "lilien" // Lilien
+    | "hortensien" // Hortensien
+    | "spraynelken" // Spraynelken
     | "filler" // Generic filler greens
     | "background"; // Optional background image
   sleeveSrc: string; // Optional separate sleeve source (only used for sleeve-type)

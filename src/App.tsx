@@ -237,7 +237,7 @@ function App() {
 
       <main className="flex flex-1 overflow-hidden main">
         <aside className="w-1/4 max-w-xs p-4 overflow-y-auto sidebar-left scrollbar-none">
-          <SidebarLeft setCanvasItems={setCanvasItems} canvasContainerRef={canvasContainerRef} setSleeveSrc={setSleeveSrc} setBackgroundSrc={setBackgroundSrc} showOnly={["backgrounds", "sleeves", "roses", "sprayroses", "gypsophilla", "srilanka", "plugs", "chrysanthemums", "lilien", "filler"]} />
+          <SidebarLeft setCanvasItems={setCanvasItems} canvasContainerRef={canvasContainerRef} setSleeveSrc={setSleeveSrc} setBackgroundSrc={setBackgroundSrc} showOnly={["backgrounds", "sleeves", "roses", "sprayroses", "gypsophilla", "srilanka", "plugs", "chrysanthemums", "lilien", "hortensien", "spraynelken", "filler"]} />
         </aside>
 
         <section

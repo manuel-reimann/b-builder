@@ -1,7 +1,7 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import { v4 as uuidv4 } from "uuid";
 
-type ItemType = "flower" | "sprayrose" | "gypsophilla" | "srilanka" | "plug" | "chrysanthemum" | "lilien" | "filler" | "sleeve" | "background";
+type ItemType = "flower" | "sprayrose" | "gypsophilla" | "srilanka" | "plug" | "chrysanthemum" | "lilien" | "hortensien" | "spraynelken" | "filler" | "sleeve" | "background";
 type DataItem = {
   label: string;
   src: string;
@@ -331,9 +331,25 @@ const data: Data = {
     { label: "Lila Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum" },
   ],
   Lilien: [
-    { label: "Weisse Chrysantheme", src: "/img/lilien/dunkelviolett.webp", type: "lilien" },
-    { label: "Lila Chrysantheme", src: "/img/lilien/weiss.webp", type: "lilien" },
-    { label: "Lila Chrysantheme", src: "/img/lilien/weisspink.webp", type: "lilien" },
+    { label: "Dunkelviolett", src: "/img/lilien/dunkelviolett.webp", type: "lilien" },
+    { label: "Weiss", src: "/img/lilien/weiss.webp", type: "lilien" },
+    { label: "Weisspink", src: "/img/lilien/weisspink.webp", type: "lilien" },
+  ],
+  Hortensien: [
+    { label: "Dunkelviolett", src: "/img/hortensien/hotpink.webp", type: "hortensien" },
+    { label: "Pink", src: "/img/hortensien/pink.webp", type: "hortensien" },
+    { label: "Pink-Grün", src: "/img/hortensien/pinkgruen.webp", type: "hortensien" },
+    { label: "Fake-Rot", src: "/img/hortensien/rot_fake.webp", type: "hortensien" },
+    { label: "Violett", src: "/img/hortensien/violett.webp", type: "hortensien" },
+    { label: "Violett hell", src: "/img/hortensien/violetthell.webp", type: "hortensien" },
+    { label: "Weiss-Pink", src: "/img/hortensien/weisspink.webp", type: "hortensien" },
+  ],
+  Spraynelken: [
+    { label: "Rot", src: "/img/spraynelken/spraynelke_rot.webp", type: "spraynelken" },
+    { label: "Hellrot", src: "/img/spraynelken/hellrot.webp", type: "spraynelken" },
+    { label: "Orange-Gelb", src: "/img/spraynelken/spraynelke_orange_gelb.webp", type: "spraynelken" },
+    { label: "Violett", src: "/img/spraynelken/spraynelke_violett.webp", type: "spraynelken" },
+    { label: "Weiss", src: "/img/spraynelken/spraynelke_weiss.webp", type: "spraynelken" },
   ],
   Filler: [
     { label: "Johanniskraut", src: "/img/filler/hypericum.webp", type: "filler", promptAddition: "Preserve the natural clusters of Hypericum berries; do not alter their color or size.", stackable: true },
