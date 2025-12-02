@@ -331,8 +331,9 @@ const data: Data = {
     { label: "Lila Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum" },
   ],
   Lilien: [
-    { label: "Weisse Chrysantheme", src: "/img/chrysanthemums/dunkelviolett.webp", type: "lilien" },
-    { label: "Lila Chrysantheme", src: "/img/chrysanthemums/dunkelviolett.webp", type: "lilien" },
+    { label: "Weisse Chrysantheme", src: "/img/lilien/dunkelviolett.webp", type: "lilien" },
+    { label: "Lila Chrysantheme", src: "/img/lilien/weiss.webp", type: "lilien" },
+    { label: "Lila Chrysantheme", src: "/img/lilien/weisspink.webp", type: "lilien" },
   ],
   Filler: [
     { label: "Johanniskraut", src: "/img/filler/hypericum.webp", type: "filler", promptAddition: "Preserve the natural clusters of Hypericum berries; do not alter their color or size.", stackable: true },
