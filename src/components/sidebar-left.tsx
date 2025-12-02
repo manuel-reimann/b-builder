@@ -346,7 +346,7 @@ const data: Data = {
   ],
   Spraynelken: [
     { label: "Rot", src: "/img/spraynelken/spraynelke_rot.webp", type: "spraynelken" },
-    { label: "Hellrot", src: "/img/spraynelken/hellrot.webp", type: "spraynelken" },
+    { label: "Hellrot", src: "/img/spraynelken/spraynelke_hellrot.webp", type: "spraynelken" },
     { label: "Orange-Gelb", src: "/img/spraynelken/spraynelke_orange_gelb.webp", type: "spraynelken" },
     { label: "Violett", src: "/img/spraynelken/spraynelke_violett.webp", type: "spraynelken" },
     { label: "Weiss", src: "/img/spraynelken/spraynelke_weiss.webp", type: "spraynelken" },
