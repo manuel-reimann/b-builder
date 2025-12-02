@@ -1,7 +1,7 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import { v4 as uuidv4 } from "uuid";
 
-type ItemType = "flower" | "sprayrose" | "gypsophilla" | "srilanka" | "plug" | "chrysanthemum" | "filler" | "sleeve" | "background";
+type ItemType = "flower" | "sprayrose" | "gypsophilla" | "srilanka" | "plug" | "chrysanthemum" | "lilien" | "filler" | "sleeve" | "background";
 type DataItem = {
   label: string;
   src: string;
@@ -330,6 +330,10 @@ const data: Data = {
     { label: "Weisse Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_white.webp", type: "chrysanthemum" },
     { label: "Lila Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum" },
   ],
+  Lilien: [
+    { label: "Weisse Chrysantheme", src: "/img/chrysanthemums/dunkelviolett.webp", type: "lilien" },
+    { label: "Lila Chrysantheme", src: "/img/chrysanthemums/dunkelviolett.webp", type: "lilien" },
+  ],
   Filler: [
     { label: "Johanniskraut", src: "/img/filler/hypericum.webp", type: "filler", promptAddition: "Preserve the natural clusters of Hypericum berries; do not alter their color or size.", stackable: true },
     { label: "Eukalyptus", src: "/img/filler/eucalyptus.webp", type: "filler", promptAddition: "You may adjust the angle of the Eucalyptus for enhanced realism.", stackable: true },
@@ -358,6 +362,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   "Sri Lanka": "Sri Lanka Grün",
   "Flower Plugs": "Stecker",
   Chrysanthemums: "Chrysanthemen",
+  Lilien: "Lilien",
   Filler: "Füllmaterial",
 };
 

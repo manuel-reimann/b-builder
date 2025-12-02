@@ -29,6 +29,7 @@ export interface CanvasItem {
     | "Sri Lanka" // Special foliage category
     | "plug" // Flower plugs or accessories
     | "chrysanthemum" // Chrysanthemums
+    | "lilien" // Lilien
     | "filler" // Generic filler greens
     | "background"; // Optional background image
   sleeveSrc: string; // Optional separate sleeve source (only used for sleeve-type)
