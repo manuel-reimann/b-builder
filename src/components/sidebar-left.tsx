@@ -345,7 +345,7 @@ const data: Data = {
     { label: "Weiss-Pink", src: "/img/hortensien/weisspink.webp", type: "hortensien" },
   ],
   Spraynelken: [
-    { label: "Rot", src: "/img/spraynelken/spraynelke_rot.webp", type: "spraynelken" },
+    { label: "Dunkelrot", src: "/img/spraynelken/spraynelke_dunkelrot.webp", type: "spraynelken" },
     { label: "Hellrot", src: "/img/spraynelken/spraynelke_hellrot.webp", type: "spraynelken" },
     { label: "Orange-Gelb", src: "/img/spraynelken/spraynelke_orange_gelb.webp", type: "spraynelken" },
     { label: "Violett", src: "/img/spraynelken/spraynelke_violett.webp", type: "spraynelken" },
