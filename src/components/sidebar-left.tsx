@@ -225,6 +225,27 @@ const data: Data = {
       promptAddition: "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent rose-heads. Use only rose leaves; do not add any background greenery or scenery, and do not place any leaves outside or behind the paper wrap.",
       stackable: false,
     },
+    {
+      label: "Mondial",
+      src: "/img/roses/mondial.webp",
+      type: "flower",
+      promptAddition: "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent rose-heads. Use only rose leaves; do not add any background greenery or scenery, and do not place any leaves outside or behind the paper wrap.",
+      stackable: false,
+    },
+    {
+      label: "Moody Blues",
+      src: "/img/roses/moody_blues.webp",
+      type: "flower",
+      promptAddition: "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent rose-heads. Use only rose leaves; do not add any background greenery or scenery, and do not place any leaves outside or behind the paper wrap.",
+      stackable: false,
+    },
+    {
+      label: "Free Spirit",
+      src: "/img/roses/free_spirit.webp",
+      type: "flower",
+      promptAddition: "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent rose-heads. Use only rose leaves; do not add any background greenery or scenery, and do not place any leaves outside or behind the paper wrap.",
+      stackable: false,
+    },
   ],
   Sprayroses: [
     { label: "Fire Up", src: "/img/sprayroses/fireup.webp", type: "sprayrose" },
