@@ -265,8 +265,11 @@ const data: Data = {
   ],
   Gypsophilla: [
     { label: "Gypsophilla Weiss", src: "/img/gyps/white.webp", type: "gypsophilla" },
-    { label: "Gypsophilla Rosa", src: "/img/gyps/pink.webp", type: "gypsophilla" },
+    { label: "Gypsophilla Coral", src: "/img/gyps/coral.webp", type: "gypsophilla" },
     { label: "Gypsophilla Weiss-Gelb", src: "/img/gyps/yellow-white.webp", type: "gypsophilla" },
+    { label: "Gypsophilla Hot Pink", src: "/img/gyps/hot_pink.webp", type: "gypsophilla" },
+    { label: "Gypsophilla Light Pink", src: "/img/gyps/light_pink.webp", type: "gypsophilla" },
+    { label: "Gypsophilla Rot", src: "/img/gyps/rot.webp", type: "gypsophilla" },
   ],
   "Sri Lanka": [
     {
@@ -378,6 +381,9 @@ const data: Data = {
     { label: "Rittersporn", src: "/img/filler/delphinium.webp", type: "filler", promptAddition: "You may adjust the size of the Delphinium for a better overall look", stackable: true },
     { label: "Lillie", src: "/img/filler/lillie.webp", type: "filler", promptAddition: "Keep the lilies’ petals and stamens intact; adjust only minor petal positioning for realism.", stackable: true },
     { label: "Veronica", src: "/img/filler/veronica.webp", type: "filler", promptAddition: "Preserve the slender Veronica spikes and delicate blooms; do not recolor or reshape their form.", stackable: true },
+    { label: "Ammi Majus", src: "/img/filler/ammi.webp", type: "filler", stackable: false },
+    { label: "Eryginum", src: "/img/filler/eryginum.webp", type: "filler", stackable: false },
+    { label: "Stadizie", src: "/img/filler/stadizie.webp", type: "filler", stackable: false },
   ],
 };
 
