@@ -25,13 +25,19 @@ export interface CanvasItem {
     | "sleeve" // The background sleeve layer
     | "roses" // Main roses
     | "sprayrose" // Spray roses
+    | "pfingsrosen" // Pfingsrosen -----
     | "gypsophilla" // Gypsophilla flowers
     | "Sri Lanka" // Special foliage category
     | "plug" // Flower plugs or accessories
     | "chrysanthemum" // Chrysanthemums
+    | "deko chrysi" // Deko Chrysanthemums ----
     | "lilien" // Lilien
+    | "alstromerien" // Alstromerien ---
+    | "limonium" // Limonium ---
+    | "lisianthus" // Lisianthus ----
     | "hortensien" // Hortensien
     | "spraynelken" // Spraynelken
+    | "nelken" // Nelken ---
     | "filler" // Generic filler greens
     | "background"; // Optional background image
   sleeveSrc: string; // Optional separate sleeve source (only used for sleeve-type)

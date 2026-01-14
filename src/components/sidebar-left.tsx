@@ -1,7 +1,8 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import { v4 as uuidv4 } from "uuid";
 
-type ItemType = "flower" | "sprayrose" | "gypsophilla" | "srilanka" | "plug" | "chrysanthemum" | "lilien" | "hortensien" | "spraynelken" | "filler" | "sleeve" | "background";
+type ItemType = "flower" | "sprayrose" | "gypsophilla" | "srilanka" | "plug" | "chrysanthemum" | "lilien" | "hortensien" | "spraynelken" | "filler" | "sleeve" | "background" | "alstromerien" | "deko-chrysi" | "limonium" | "lisianthus" | "nelken" | "pfingstrosen";
+
 type DataItem = {
   label: string;
   src: string;
@@ -262,6 +263,16 @@ const data: Data = {
     { label: "Ilse", src: "/img/sprayroses/Ilse.webp", type: "sprayrose" },
     { label: "Be Amazing", src: "/img/sprayroses/be_amazing.webp", type: "sprayrose" },
     { label: "Sweet Dreams", src: "/img/sprayroses/sweet_dreams.webp", type: "sprayrose" },
+    { label: "Silver Shadow", src: "/img/sprayroses/silver_shadow.webp", type: "sprayrose" },
+    { label: "Verona", src: "/img/sprayroses/verona.webp", type: "sprayrose" },
+  ],
+
+  Pfingstrosen: [
+    {
+      label: "Pfingstrose Beispiel",
+      src: "/img/dummy/pfingstrose.webp",
+      type: "pfingstrosen",
+    },
   ],
   Gypsophilla: [
     { label: "Gypsophilla Weiss", src: "/img/gyps/white.webp", type: "gypsophilla" },
@@ -354,6 +365,13 @@ const data: Data = {
     { label: "Weisse Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_white.webp", type: "chrysanthemum" },
     { label: "Lila Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum" },
   ],
+  "Deko Chrysis": [
+    {
+      label: "Deko Chrysantheme Beispiel",
+      src: "/img/dummy/deko_chrysi.webp",
+      type: "deko-chrysi",
+    },
+  ],
   Lilien: [
     { label: "Dunkelviolett", src: "/img/lilien/dunkelviolett.webp", type: "lilien" },
     { label: "Weiss", src: "/img/lilien/weiss.webp", type: "lilien" },
@@ -374,6 +392,35 @@ const data: Data = {
     { label: "Orange-Gelb", src: "/img/spraynelken/spraynelke_orange_gelb.webp", type: "spraynelken" },
     { label: "Violett", src: "/img/spraynelken/spraynelke_violett.webp", type: "spraynelken" },
     { label: "Weiss", src: "/img/spraynelken/spraynelke_weiss.webp", type: "spraynelken" },
+  ],
+  Nelken: [
+    {
+      label: "Nelke Beispiel",
+      src: "/img/dummy/nelke.webp",
+      type: "nelken",
+    },
+  ],
+  Alstromerien: [
+    {
+      label: "Alstromerie Beispiel",
+      src: "/img/dummy/alstromerie.webp",
+      type: "alstromerien",
+    },
+  ],
+  Lisianthus: [
+    {
+      label: "Lisianthus Beispiel",
+      src: "/img/dummy/lisianthus.webp",
+      type: "lisianthus",
+    },
+  ],
+
+  Limonium: [
+    {
+      label: "Limonium Beispiel",
+      src: "/img/dummy/limonium.webp",
+      type: "limonium",
+    },
   ],
   Filler: [
     { label: "Johanniskraut", src: "/img/filler/hypericum.webp", type: "filler", promptAddition: "Preserve the natural clusters of Hypericum berries; do not alter their color or size.", stackable: true },
@@ -402,11 +449,17 @@ const CATEGORY_LABELS: Record<string, string> = {
   Sleeves: "Sleeves",
   Roses: "Rosen",
   Sprayroses: "Sprayrosen",
+  Pfingstrosen: "Pfingstrosen",
   Gypsophilla: "Schleierkraut",
   "Sri Lanka": "Sri Lanka Grün",
   "Flower Plugs": "Stecker",
   Chrysanthemums: "Chrysanthemen",
+  "Deko Chrysis": "Deko Chrysanthemen",
   Lilien: "Lilien",
+  Alstromerien: "Alstromerien",
+  Nelken: "Nelken",
+  Lisianthus: "Lisianthus",
+  Limonium: "Limonium",
   Filler: "Füllmaterial",
 };
 
