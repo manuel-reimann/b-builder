@@ -269,8 +269,18 @@ const data: Data = {
 
   Pfingstrosen: [
     {
-      label: "Pfingstrose Beispiel",
-      src: "/img/dummy/pfingstrose.webp",
+      label: "Pfingstrose Rosa",
+      src: "/img/pfingstrosen/pfingstrose_rosa.webp",
+      type: "pfingstrosen",
+    },
+    {
+      label: "Pfingstrose Rot",
+      src: "/img/pfingstrosen/pfingstrose_rot.webp",
+      type: "pfingstrosen",
+    },
+    {
+      label: "Pfingstrose Weiss",
+      src: "/img/pfingstrosen/pfingstrose_weiss.webp",
       type: "pfingstrosen",
     },
   ],
@@ -367,8 +377,28 @@ const data: Data = {
   ],
   "Deko Chrysis": [
     {
-      label: "Deko Chrysantheme Beispiel",
-      src: "/img/dummy/deko_chrysi.webp",
+      label: "Deko Chrysantheme Rot",
+      src: "/img/deko_chrysi/rot.webp",
+      type: "deko-chrysi",
+    },
+    {
+      label: "Deko Chrysantheme Gelb",
+      src: "/img/deko_chrysi/gelb.webp",
+      type: "deko-chrysi",
+    },
+    {
+      label: "Deko Chrysantheme Orange",
+      src: "/img/deko_chrysi/orange.webp",
+      type: "deko-chrysi",
+    },
+    {
+      label: "Deko Chrysantheme Pink",
+      src: "/img/deko_chrysi/pink.webp",
+      type: "deko-chrysi",
+    },
+    {
+      label: "Deko Chrysantheme Weiss",
+      src: "/img/deko_chrysi/weiss.webp",
       type: "deko-chrysi",
     },
   ],
@@ -395,30 +425,95 @@ const data: Data = {
   ],
   Nelken: [
     {
-      label: "Nelke Beispiel",
-      src: "/img/dummy/nelke.webp",
+      label: "Nelke Hotpink",
+      src: "/img/nelken/hotpink.webp",
+      type: "nelken",
+    },
+    {
+      label: "Nelke Orange",
+      src: "/img/nelken/orange.webp",
+      type: "nelken",
+    },
+    {
+      label: "Nelke Rosa",
+      src: "/img/nelken/rosa.webp",
+      type: "nelken",
+    },
+    {
+      label: "Nelke Rot",
+      src: "/img/nelken/rot.webp",
+      type: "nelken",
+    },
+    {
+      label: "Nelke Weiss",
+      src: "/img/nelken/weiss.webp",
       type: "nelken",
     },
   ],
   Alstromerien: [
     {
-      label: "Alstromerie Beispiel",
-      src: "/img/dummy/alstromerie.webp",
+      label: "Alstromerie Gelb",
+      src: "/img/alstromerien/alstro_gelb.webp",
+      type: "alstromerien",
+    },
+    {
+      label: "Alstromerie Orange",
+      src: "/img/alstromerien/alstro_orange.webp",
+      type: "alstromerien",
+    },
+    {
+      label: "Alstromerie Rosa",
+      src: "/img/alstromerien/alstro_rosa.webp",
+      type: "alstromerien",
+    },
+    {
+      label: "Alstromerie Rot",
+      src: "/img/alstromerien/alstro_rot.webp",
+      type: "alstromerien",
+    },
+    {
+      label: "Alstromerie Weiss",
+      src: "/img/alstromerien/alstro_weiss.webp",
       type: "alstromerien",
     },
   ],
   Lisianthus: [
     {
-      label: "Lisianthus Beispiel",
-      src: "/img/dummy/lisianthus.webp",
+      label: "Lisianthus Rosa",
+      src: "/img/lisianthus/lisianthus_rosa.webp",
+      type: "lisianthus",
+    },
+    {
+      label: "Lisianthus Violett",
+      src: "/img/lisianthus/lisianthus_violett.webp",
+      type: "lisianthus",
+    },
+    {
+      label: "Lisianthus Weiss",
+      src: "/img/lisianthus/lisianthus_weiss.webp",
       type: "lisianthus",
     },
   ],
 
   Limonium: [
     {
-      label: "Limonium Beispiel",
-      src: "/img/dummy/limonium.webp",
+      label: "Limonium Gelb seitlich",
+      src: "/img/limonium/limonium_gelb_seitlich.webp",
+      type: "limonium",
+    },
+    {
+      label: "Limonium Violett seitlich",
+      src: "/img/limonium/limonium_violett_seitlich.webp",
+      type: "limonium",
+    },
+    {
+      label: "Limonium Gelb",
+      src: "/img/limonium/limonium_gelb.webp",
+      type: "limonium",
+    },
+    {
+      label: "Limonium Violett",
+      src: "/img/limonium/limonium_violett.webp",
       type: "limonium",
     },
   ],
