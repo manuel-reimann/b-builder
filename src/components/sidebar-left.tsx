@@ -526,7 +526,7 @@ const data: Data = {
     { label: "Ammi Majus", src: "/img/filler/ammi.webp", type: "filler", stackable: false },
     { label: "Eryginum", src: "/img/filler/eryginum.webp", type: "filler", stackable: false },
     { label: "Stadizie", src: "/img/filler/stadizie.webp", type: "filler", stackable: false },
-    { label: "Kangurupfote", src: "/img/filler/kangurupfote.webp", type: "filler", stackable: false },
+    { label: "Kangurupfote", src: "/img/filler/kaengurupfote.webp", type: "filler", stackable: false },
   ],
 };
 
