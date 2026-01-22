@@ -370,6 +370,7 @@ const data: Data = {
     { label: "Osterhase", src: "/img/flowerplugs/ostern.webp", type: "plug" },
     { label: "Silvester", src: "/img/flowerplugs/silvester.webp", type: "plug" },
     { label: "Silvester 2", src: "/img/flowerplugs/silvester2.webp", type: "plug" },
+    { label: "Tannzapfen", src: "/img/flowerplugs/tannzapfen.webp", type: "plug" },
   ],
   Chrysanthemums: [
     { label: "Weisse Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_white.webp", type: "chrysanthemum" },
