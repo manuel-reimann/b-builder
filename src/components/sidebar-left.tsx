@@ -526,6 +526,7 @@ const data: Data = {
     { label: "Ammi Majus", src: "/img/filler/ammi.webp", type: "filler", stackable: false },
     { label: "Eryginum", src: "/img/filler/eryginum.webp", type: "filler", stackable: false },
     { label: "Stadizie", src: "/img/filler/stadizie.webp", type: "filler", stackable: false },
+    { label: "Kangurupfote", src: "/img/filler/kangurupfote.webp", type: "filler", stackable: false },
   ],
 };
 
@@ -596,8 +597,8 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
           prev.map((item) =>
             item.type === "sleeve"
               ? { ...item, src, label } // src & label replace
-              : item
-          )
+              : item,
+          ),
         );
       }
       // If a background is selected, update CSS background image dynamically
