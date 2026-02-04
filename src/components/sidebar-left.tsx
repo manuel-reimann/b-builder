@@ -9,6 +9,7 @@ type DataItem = {
   type: ItemType;
   promptAddition?: string;
   stackable?: boolean;
+  maxHeight?: number; //newhere
 };
 type Data = Record<string, DataItem[]>;
 const data: Data = {
@@ -98,6 +99,7 @@ const data: Data = {
       type: "flower",
       promptAddition: "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent rose-heads. Use only rose leaves; do not add any background greenery or scenery, and do not place any leaves outside or behind the paper wrap.",
       stackable: false,
+      maxHeight: 250,
     },
     {
       label: "Lady in Red",
@@ -105,6 +107,7 @@ const data: Data = {
       type: "flower",
       promptAddition: "Add a small amount of rose foliage confined to the interior of the bouquet: short stem segments and small serrated rose leaflets partially occluded by petals in the gaps between adjacent rose-heads. Use only rose leaves; do not add any background greenery or scenery, and do not place any leaves outside or behind the paper wrap.",
       stackable: false,
+      maxHeight: 150,
     },
     {
       label: "Bit More",
@@ -561,13 +564,14 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroundSrc, canvasContainerRef }: { setCanvasItems: Function; setSleeveSrc: React.Dispatch<React.SetStateAction<string>>; setBackgroundSrc: React.Dispatch<React.SetStateAction<string | null>>; canvasContainerRef: React.RefObject<HTMLDivElement | null>; showOnly?: string[] }) {
-  const handleAddImage = (src: string, label: string, type: ItemType = "flower", promptAddition?: string, stackable: boolean = true) => {
+  const handleAddImage = (src: string, label: string, type: ItemType = "flower", promptAddition?: string, stackable: boolean = true, maxHeightOverride?: number) => {
     const img = new window.Image();
     img.src = src;
 
     img.onload = () => {
       // Dynamically set maxHeight depending on type to ensure sleeves appear larger
-      const maxHeight = type === "sleeve" ? 280 : 150;
+      const baseMaxHeight = type === "sleeve" ? 280 : 150;
+      const maxHeight = maxHeightOverride ?? baseMaxHeight; // <- use per-item if given
       // Calculate scale so that image fits within maxHeight constraint
       const scale = Math.min(1, maxHeight / img.height);
       // Apply random offset so new items don’t stack at same position
@@ -598,8 +602,8 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
           prev.map((item) =>
             item.type === "sleeve"
               ? { ...item, src, label } // src & label replace
-              : item,
-          ),
+              : item
+          )
         );
       }
       // If a background is selected, update CSS background image dynamically
@@ -617,7 +621,7 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
     };
   };
 
-  function renderAccordionItem(category: string, items: DataItem[], handleAddImage: (src: string, label: string, type: ItemType, promptAddition?: string, stackable?: boolean) => void) {
+  function renderAccordionItem(category: string, items: DataItem[], handleAddImage: (src: string, label: string, type: ItemType, promptAddition?: string, stackable?: boolean, maxHeightOverride?: number) => void) {
     return (
       <AccordionItem value={category} key={category} className="rounded-lg transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] overflow-hidden bg-white">
         <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group">
@@ -629,15 +633,15 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
         </AccordionTrigger>
         <AccordionContent className="transition-all duration-300 ease-in-out">
           <div className="grid grid-cols-2 gap-3 mt-2">
-            {items.map(({ label, src, type, promptAddition, stackable }) => (
+            {items.map(({ label, src, type, promptAddition, stackable, maxHeight }) => (
               <div
                 key={label}
-                onClick={() => handleAddImage(src, label, type, promptAddition, stackable ?? true)}
+                onClick={() => handleAddImage(src, label, type, promptAddition, stackable ?? true, maxHeight)}
                 draggable={type !== "background" && type !== "sleeve"}
                 onDragStart={(e) => {
                   if (type === "background" || type === "sleeve") return;
 
-                  e.dataTransfer.setData("application/json", JSON.stringify({ src, label, type }));
+                  e.dataTransfer.setData("application/json", JSON.stringify({ src, label, type, maxHeight }));
 
                   const img = new Image();
                   img.src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";

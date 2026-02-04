@@ -352,7 +352,7 @@ export default function Canvas({
         const data = e.dataTransfer.getData("application/json");
         if (!data) return;
 
-        const { src, label, type } = JSON.parse(data);
+        const { src, label, type, maxHeight } = JSON.parse(data);
 
         const boundingRect = containerRef.current?.getBoundingClientRect();
         if (!boundingRect) return;
@@ -373,8 +373,10 @@ export default function Canvas({
         img.src = src;
 
         img.onload = () => {
-          const maxHeight = 150;
-          const scaleFactor = Math.min(1, maxHeight / img.height);
+          const baseMaxHeight = 150;
+          const effectiveMaxHeight = maxHeight ?? baseMaxHeight;
+
+          const scaleFactor = Math.min(1, effectiveMaxHeight / img.height);
           const scaledWidth = img.width * scaleFactor;
           const scaledHeight = img.height * scaleFactor;
 
@@ -390,8 +392,8 @@ export default function Canvas({
             y,
             rotation: 0,
             scale: scaleFactor,
-            maxWidth: maxHeight,
-            maxHeight,
+            maxWidth: effectiveMaxHeight,
+            maxHeight: effectiveMaxHeight,
             type,
             sleeveSrc: "",
           };
