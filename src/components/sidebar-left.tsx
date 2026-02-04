@@ -287,8 +287,8 @@ const data: Data = {
   ],
   Gypsophilla: [
     { label: "Gypsophilla Weiss", src: "/img/gyps/white.webp", type: "gypsophilla", maxHeight: 320 },
-    { label: "Gypsophilla Coral", src: "/img/gyps/coral.webp", type: "gypsophilla" },
-    { label: "Gypsophilla Weiss-Gelb", src: "/img/gyps/yellow-white.webp", type: "gypsophilla" },
+    { label: "Gypsophilla Coral", src: "/img/gyps/coral.webp", type: "gypsophilla", maxHeight: 320 },
+    { label: "Gypsophilla Weiss-Gelb", src: "/img/gyps/yellow-white.webp", type: "gypsophilla", maxHeight: 320 },
     { label: "Gypsophilla Hot Pink", src: "/img/gyps/hot_pink.webp", type: "gypsophilla", maxHeight: 320 },
     { label: "Gypsophilla Light Pink", src: "/img/gyps/light_pink.webp", type: "gypsophilla", maxHeight: 320 },
     { label: "Gypsophilla Rot", src: "/img/gyps/rot.webp", type: "gypsophilla", maxHeight: 320 },
@@ -324,7 +324,7 @@ const data: Data = {
       type: "srilanka",
       promptAddition: "Preserve the natural texture and surface characteristics of the foliage exactly; do not recolor, replace, or simplify any leaf surfaces.",
       stackable: false,
-      maxHeight: 400,
+      maxHeight: 420,
     },
     {
       label: "Polyscias scutellaria",
@@ -340,7 +340,7 @@ const data: Data = {
       type: "srilanka",
       promptAddition: "Preserve the natural texture and surface characteristics of the foliage exactly; do not recolor, replace, or simplify any leaf surfaces.",
       stackable: false,
-      maxHeight: 300,
+      maxHeight: 400,
     },
     {
       label: "Cordyline fruticosa Red",
@@ -384,8 +384,8 @@ const data: Data = {
     { label: "Tannzapfen", src: "/img/flowerplugs/tannzapfen.webp", type: "plug", maxHeight: 225 },
   ],
   Chrysanthemums: [
-    { label: "Weisse Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_white.webp", type: "chrysanthemum", maxHeight: 200 },
-    { label: "Lila Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum", maxHeight: 200 },
+    { label: "Weisse Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_white.webp", type: "chrysanthemum", maxHeight: 250 },
+    { label: "Lila Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum", maxHeight: 250 },
   ],
   "Deko Chrysis": [
     {
