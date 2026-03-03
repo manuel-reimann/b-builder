@@ -1,7 +1,7 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import { v4 as uuidv4 } from "uuid";
 
-type ItemType = "flower" | "sprayrose" | "gypsophilla" | "srilanka" | "plug" | "chrysanthemum" | "lilien" | "hortensien" | "spraynelken" | "filler" | "sleeve" | "background" | "alstromerien" | "deko-chrysi" | "limonium" | "lisianthus" | "nelken" | "pfingstrosen";
+type ItemType = "flower" | "sprayrose" | "gypsophilla" | "srilanka" | "plug" | "chrysanthemum" | "lilien" | "hortensien" | "orchideen" | "spraynelken" | "filler" | "sleeve" | "background" | "alstromerien" | "deko-chrysi" | "limonium" | "lisianthus" | "nelken" | "pfingstrosen";
 
 type DataItem = {
   label: string;
@@ -426,6 +426,10 @@ const data: Data = {
     { label: "Violett hell", src: "/img/hortensien/violetthell.webp", type: "hortensien", maxHeight: 300 },
     { label: "Weiss-Pink", src: "/img/hortensien/weisspink.webp", type: "hortensien", maxHeight: 300 },
   ],
+  Orchideen: [
+    { label: "Ara Anne Black", src: "/img/orchids/Ara.Anne_Black_AB(L).webp", type: "orchideen", maxHeight: 250 },
+    { label: "Ara Azima AZ", src: "/img/orchids/ARA.AZIMA_AZ(L).webp", type: "orchideen", maxHeight: 250 },
+  ],
   Spraynelken: [
     { label: "Dunkelrot", src: "/img/spraynelken/spraynelke_dunkelrot.webp", type: "spraynelken", maxHeight: 175 },
     { label: "Hellrot", src: "/img/spraynelken/spraynelke_hellrot.webp", type: "spraynelken", maxHeight: 175 },
@@ -590,6 +594,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   "Deko Chrysis": "Deko Chrysanthemen",
   Lilien: "Lilien",
   Alstromerien: "Alstromerien",
+  Hortensien: "Hortensien",
+  Orchideen: "Orchideen",
   Nelken: "Nelken",
   Lisianthus: "Lisianthus",
   Limonium: "Limonium",
@@ -715,11 +721,14 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
         {/* Werkstoff-Überkategorien mit ihren Unterkategorien als eigene Buttons */}
         {Object.entries(MATERIAL_GROUPS).map(([groupLabel, childCategories]) => (
           <AccordionItem key={groupLabel} value={groupLabel} className="rounded-lg border border-gray-200 transition-all duration-300 overflow-hidden bg-transparent">
-            <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group">
-              <span>{groupLabel}</span>
+            <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group data-[state=open]:bg-blue-50/40">
+              <div className="flex items-center gap-2">
+                {data[childCategories[0]] && data[childCategories[0]][0] && <img src={data[childCategories[0]][0].src} alt={`${groupLabel} icon`} className="object-contain w-5 h-5" />}
+                <span>{groupLabel}</span>
+              </div>
               <span className="ml-auto transition-transform duration-300 group-data-[state=open]:rotate-180">⌄</span>
             </AccordionTrigger>
-            <AccordionContent className="transition-all duration-300 ease-in-out">
+            <AccordionContent className="transition-all duration-300 ease-in-out bg-gray-50/80 shadow-inner">
               <Accordion type="single" collapsible className="flex flex-col gap-2 mt-2">
                 {childCategories.map((category) => renderAccordionItem(category, data[category], handleAddImage))}
               </Accordion>
