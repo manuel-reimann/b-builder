@@ -566,8 +566,18 @@ export const sleeveAssets: DataItem[] = data.Sleeves;
 // Combined list of all assets for hydrating and prompt additions
 export const allAssets: DataItem[] = Object.values(data).flat();
 
+// High-level groups used to keep the "Design" section separate
 const DESIGN_CATEGORIES = ["Backgrounds", "Sleeves"];
 
+// Logical Werkstoff-Überkategorien mit zugehörigen Unterkategorien
+const MATERIAL_GROUPS: Record<string, string[]> = {
+  Rosen: ["Roses", "Sprayroses", "Pfingstrosen"],
+  Chrysanthemen: ["Chrysanthemums", "Deko Chrysis"],
+  Nelken: ["Nelken", "Spraynelken"],
+  Komponenten: ["Alstromerien", "Lisianthus", "Limonium", "Filler"],
+};
+
+// Mapping von technischen Kategorienamen zu deutschsprachigen Labels im UI
 const CATEGORY_LABELS: Record<string, string> = {
   Backgrounds: "Hintergründe",
   Sleeves: "Sleeves",
@@ -587,7 +597,9 @@ const CATEGORY_LABELS: Record<string, string> = {
   Filler: "Füllmaterial",
 };
 
+// Linke Sidebar mit allen auswählbaren Assets (Hintergründe, Sleeves, Werkstoffe)
 export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroundSrc, canvasContainerRef }: { setCanvasItems: Function; setSleeveSrc: React.Dispatch<React.SetStateAction<string>>; setBackgroundSrc: React.Dispatch<React.SetStateAction<string | null>>; canvasContainerRef: React.RefObject<HTMLDivElement | null>; showOnly?: string[] }) {
+  // Fügt ein Bild (Asset) auf der Zeichenfläche hinzu oder aktualisiert Hintergrund/Sleeve
   const handleAddImage = (src: string, label: string, type: ItemType = "flower", promptAddition?: string, stackable: boolean = true, maxHeightOverride?: number) => {
     const img = new window.Image();
     img.src = src;
@@ -645,6 +657,7 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
     };
   };
 
+  // Rendert eine einzelne Kategorie als eigenen Accordion-Eintrag
   function renderAccordionItem(category: string, items: DataItem[], handleAddImage: (src: string, label: string, type: ItemType, promptAddition?: string, stackable?: boolean, maxHeightOverride?: number) => void) {
     return (
       <AccordionItem value={category} key={category} className="rounded-lg transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] overflow-hidden bg-white">
@@ -688,6 +701,42 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
     );
   }
 
+  // Rendert eine Unterkategorie innerhalb einer Werkstoff-Überkategorie (ohne eigenes Accordion)
+  function renderCategorySection(category: string, items: DataItem[], handleAddImage: (src: string, label: string, type: ItemType, promptAddition?: string, stackable?: boolean, maxHeightOverride?: number) => void) {
+    return (
+      <div key={category} className="mb-4">
+        <h3 className="mb-1 text-sm font-medium">{CATEGORY_LABELS[category] || category}</h3>
+        <div className="grid grid-cols-2 gap-3 mt-1">
+          {items.map(({ label, src, type, promptAddition, stackable, maxHeight }) => (
+            <div
+              key={label}
+              onClick={() => handleAddImage(src, label, type, promptAddition, stackable ?? true, maxHeight)}
+              draggable={type !== "background" && type !== "sleeve"}
+              onDragStart={(e) => {
+                if (type === "background" || type === "sleeve") return;
+
+                e.dataTransfer.setData("application/json", JSON.stringify({ src, label, type, maxHeight }));
+
+                const img = new Image();
+                img.src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
+                img.style.position = "absolute";
+                img.style.top = "-1000px";
+                document.body.appendChild(img);
+                setTimeout(() => {
+                  document.body.removeChild(img);
+                }, 0);
+              }}
+              className="flex flex-col items-center w-full p-3 text-center transition-all duration-300 rounded-lg cursor-pointer hover:bg-gray-100 hover:backdrop-blur-sm"
+            >
+              <img src={src} alt={label} className="object-contain w-16 h-16 mb-1" />
+              <span className="text-sm">{label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <h2 className="mb-2 text-xl font-semibold">Setze die Stimmung</h2>
@@ -699,8 +748,26 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
 
       <h2 className="mb-2 text-xl font-semibold">Werkstoffe</h2>
       <Accordion type="single" collapsible className="flex flex-col gap-2">
+        {/* Werkstoff-Überkategorien mit ihren Unterkategorien */}
+        {Object.entries(MATERIAL_GROUPS).map(([groupLabel, childCategories]) => (
+          <AccordionItem key={groupLabel} value={groupLabel} className="rounded-lg transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] overflow-hidden bg-white">
+            <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group">
+              <span>{groupLabel}</span>
+              <span className="ml-auto transition-transform duration-300 group-data-[state=open]:rotate-180">⌄</span>
+            </AccordionTrigger>
+            <AccordionContent className="transition-all duration-300 ease-in-out">
+              <div className="flex flex-col gap-3 mt-2">{childCategories.map((category) => renderCategorySection(category, data[category], handleAddImage))}</div>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+
+        {/* Alle weiteren Werkstoffkategorien, die keiner Überkategorie zugeordnet sind */}
         {Object.entries(data)
-          .filter(([category]) => !DESIGN_CATEGORIES.includes(category))
+          .filter(([category]) => {
+            if (DESIGN_CATEGORIES.includes(category)) return false;
+            const groupedNames = new Set(Object.values(MATERIAL_GROUPS).flat());
+            return !groupedNames.has(category);
+          })
           .map(([category, items]) => renderAccordionItem(category, items, handleAddImage))}
       </Accordion>
     </>
