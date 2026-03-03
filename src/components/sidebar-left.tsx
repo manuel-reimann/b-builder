@@ -701,42 +701,6 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
     );
   }
 
-  // Rendert eine Unterkategorie innerhalb einer Werkstoff-Überkategorie (ohne eigenes Accordion)
-  function renderCategorySection(category: string, items: DataItem[], handleAddImage: (src: string, label: string, type: ItemType, promptAddition?: string, stackable?: boolean, maxHeightOverride?: number) => void) {
-    return (
-      <div key={category} className="mb-4">
-        <h3 className="mb-1 text-sm font-medium">{CATEGORY_LABELS[category] || category}</h3>
-        <div className="grid grid-cols-2 gap-3 mt-1">
-          {items.map(({ label, src, type, promptAddition, stackable, maxHeight }) => (
-            <div
-              key={label}
-              onClick={() => handleAddImage(src, label, type, promptAddition, stackable ?? true, maxHeight)}
-              draggable={type !== "background" && type !== "sleeve"}
-              onDragStart={(e) => {
-                if (type === "background" || type === "sleeve") return;
-
-                e.dataTransfer.setData("application/json", JSON.stringify({ src, label, type, maxHeight }));
-
-                const img = new Image();
-                img.src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
-                img.style.position = "absolute";
-                img.style.top = "-1000px";
-                document.body.appendChild(img);
-                setTimeout(() => {
-                  document.body.removeChild(img);
-                }, 0);
-              }}
-              className="flex flex-col items-center w-full p-3 text-center transition-all duration-300 rounded-lg cursor-pointer hover:bg-gray-100 hover:backdrop-blur-sm"
-            >
-              <img src={src} alt={label} className="object-contain w-16 h-16 mb-1" />
-              <span className="text-sm">{label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
       <h2 className="mb-2 text-xl font-semibold">Setze die Stimmung</h2>
@@ -748,15 +712,17 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
 
       <h2 className="mb-2 text-xl font-semibold">Werkstoffe</h2>
       <Accordion type="single" collapsible className="flex flex-col gap-2">
-        {/* Werkstoff-Überkategorien mit ihren Unterkategorien */}
+        {/* Werkstoff-Überkategorien mit ihren Unterkategorien als eigene Buttons */}
         {Object.entries(MATERIAL_GROUPS).map(([groupLabel, childCategories]) => (
-          <AccordionItem key={groupLabel} value={groupLabel} className="rounded-lg transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] overflow-hidden bg-white">
+          <AccordionItem key={groupLabel} value={groupLabel} className="rounded-lg border border-gray-200 transition-all duration-300 overflow-hidden bg-transparent">
             <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group">
               <span>{groupLabel}</span>
               <span className="ml-auto transition-transform duration-300 group-data-[state=open]:rotate-180">⌄</span>
             </AccordionTrigger>
             <AccordionContent className="transition-all duration-300 ease-in-out">
-              <div className="flex flex-col gap-3 mt-2">{childCategories.map((category) => renderCategorySection(category, data[category], handleAddImage))}</div>
+              <Accordion type="single" collapsible className="flex flex-col gap-2 mt-2">
+                {childCategories.map((category) => renderAccordionItem(category, data[category], handleAddImage))}
+              </Accordion>
             </AccordionContent>
           </AccordionItem>
         ))}
