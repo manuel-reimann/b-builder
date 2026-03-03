@@ -375,14 +375,6 @@ const data: Data = {
       maxHeight: 200,
     },
   ],
-  "Flower Plugs": [
-    { label: "Herzstecker", src: "/img/flowerplugs/herz_glaenzend.webp", type: "plug", maxHeight: 225 },
-    { label: "Love", src: "/img/flowerplugs/love.webp", type: "plug", maxHeight: 225 },
-    { label: "Osterhase", src: "/img/flowerplugs/ostern.webp", type: "plug", maxHeight: 225 },
-    { label: "Silvester", src: "/img/flowerplugs/silvester.webp", type: "plug", maxHeight: 225 },
-    { label: "Silvester 2", src: "/img/flowerplugs/silvester2.webp", type: "plug", maxHeight: 225 },
-    { label: "Tannzapfen", src: "/img/flowerplugs/tannzapfen.webp", type: "plug", maxHeight: 225 },
-  ],
   Chrysanthemums: [
     { label: "Weisse Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_white.webp", type: "chrysanthemum", maxHeight: 250 },
     { label: "Lila Chrysantheme", src: "/img/chrysanthemums/chrysanthemums_purple.webp", type: "chrysanthemum", maxHeight: 250 },
@@ -545,6 +537,14 @@ const data: Data = {
       type: "limonium",
       maxHeight: 250,
     },
+  ],
+  "Flower Plugs": [
+    { label: "Herzstecker", src: "/img/flowerplugs/herz_glaenzend.webp", type: "plug", maxHeight: 225 },
+    { label: "Love", src: "/img/flowerplugs/love.webp", type: "plug", maxHeight: 225 },
+    { label: "Osterhase", src: "/img/flowerplugs/ostern.webp", type: "plug", maxHeight: 225 },
+    { label: "Silvester", src: "/img/flowerplugs/silvester.webp", type: "plug", maxHeight: 225 },
+    { label: "Silvester 2", src: "/img/flowerplugs/silvester2.webp", type: "plug", maxHeight: 225 },
+    { label: "Tannzapfen", src: "/img/flowerplugs/tannzapfen.webp", type: "plug", maxHeight: 225 },
   ],
   Filler: [
     { label: "Johanniskraut", src: "/img/filler/hypericum.webp", type: "filler", promptAddition: "Preserve the natural clusters of Hypericum berries; do not alter their color or size.", stackable: true, maxHeight: 300 },
