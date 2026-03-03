@@ -427,8 +427,8 @@ const data: Data = {
     { label: "Weiss-Pink", src: "/img/hortensien/weisspink.webp", type: "hortensien", maxHeight: 300 },
   ],
   Orchideen: [
-    { label: "Ara Anne Black", src: "/img/orchids/Ara.Anne_Black_AB(L).webp", type: "orchideen", maxHeight: 250 },
-    { label: "Ara Azima AZ", src: "/img/orchids/ARA.AZIMA_AZ(L).webp", type: "orchideen", maxHeight: 250 },
+    { label: "Ara Anne Black", src: "/img/orchids/Ara.Anne_Black_AB(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Ara Azima AZ", src: "/img/orchids/ARA.AZIMA_AZ(L).webp", type: "orchideen", maxHeight: 350 },
   ],
   Spraynelken: [
     { label: "Dunkelrot", src: "/img/spraynelken/spraynelke_dunkelrot.webp", type: "spraynelken", maxHeight: 175 },
@@ -720,9 +720,9 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
       <Accordion type="single" collapsible className="flex flex-col gap-2">
         {/* Werkstoff-Überkategorien mit ihren Unterkategorien als eigene Buttons */}
         {Object.entries(MATERIAL_GROUPS).map(([groupLabel, childCategories]) => (
-          <AccordionItem key={groupLabel} value={groupLabel} className="rounded-lg border border-gray-200 transition-all duration-300 overflow-hidden bg-transparent">
+          <AccordionItem key={groupLabel} value={groupLabel} className="rounded-lg border border-gray-200 transition-all duration-300 overflow-hidden bg-white">
             <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group data-[state=open]:bg-blue-50/40">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2  data-[state=open]:bg-blue-50/40">
                 {data[childCategories[0]] && data[childCategories[0]][0] && <img src={data[childCategories[0]][0].src} alt={`${groupLabel} icon`} className="object-contain w-5 h-5" />}
                 <span>{groupLabel}</span>
               </div>
