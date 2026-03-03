@@ -576,7 +576,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   Pfingstrosen: "Pfingstrosen",
   Gypsophilla: "Schleierkraut",
   "Sri Lanka": "Sri Lanka Grün",
-  "Flower Plugs": "Stecker",
   Chrysanthemums: "Chrysanthemen",
   "Deko Chrysis": "Deko Chrysanthemen",
   Lilien: "Lilien",
@@ -584,6 +583,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   Nelken: "Nelken",
   Lisianthus: "Lisianthus",
   Limonium: "Limonium",
+  "Flower Plugs": "Stecker",
   Filler: "Füllmaterial",
 };
 
