@@ -429,6 +429,24 @@ const data: Data = {
   Orchideen: [
     { label: "Ara Anne Black", src: "/img/orchids/Ara.Anne_Black_AB(L).webp", type: "orchideen", maxHeight: 350 },
     { label: "Ara Azima AZ", src: "/img/orchids/ARA.AZIMA_AZ(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Den Red Blue", src: "/img/orchids/DEN_RED_BLUE_RB(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Den Be Love Pink", src: "/img/orchids/DEN.BELOVE_PINK_BL(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Den Big White", src: "/img/orchids/DEN.BIG_WHITE_W(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Den Burana Jade", src: "/img/orchids/DEN.Burana_JadeBJ(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Den Missteen MT", src: "/img/orchids/DEN.MISSTEEN_MT(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Den Sonia S", src: "/img/orchids/DEN.SONIA_S(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Den Sonia White", src: "/img/orchids/DEN.SONIA_WHITE_SW(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Den Spash Pink", src: "/img/orchids/DEN.SPASH_PINK_SPP(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Den Sulee Peach", src: "/img/orchids/DEN.SULEE_PEACH_PH(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Mok Blue", src: "/img/orchids/MOK.BLUE_MB(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Mok Calipso", src: "/img/orchids/MOK.CALIPSO_CL(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Mok Orange", src: "/img/orchids/MOK.ORANGE_MO(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Mok Pink", src: "/img/orchids/MOK.PINK_MP(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Mok Red", src: "/img/orchids/MOK.RED_MR(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Mok Yellow", src: "/img/orchids/MOK.YELLOW_MY(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Onc Golden Shower", src: "/img/orchids/ONC.GOLDEN_SHOWER_ON(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Vanda Blue", src: "/img/orchids/VANDA_BLUE_VB(L).webp", type: "orchideen", maxHeight: 350 },
+    { label: "Vanda Red", src: "/img/orchids/Vanda_Red_VR(L).webp", type: "orchideen", maxHeight: 350 },
   ],
   Spraynelken: [
     { label: "Dunkelrot", src: "/img/spraynelken/spraynelke_dunkelrot.webp", type: "spraynelken", maxHeight: 175 },
@@ -721,8 +739,8 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
         {/* Werkstoff-Überkategorien mit ihren Unterkategorien als eigene Buttons */}
         {Object.entries(MATERIAL_GROUPS).map(([groupLabel, childCategories]) => (
           <AccordionItem key={groupLabel} value={groupLabel} className="rounded-lg border border-gray-200 transition-all duration-300 overflow-hidden bg-white">
-            <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group data-[state=open]:bg-blue-50/40">
-              <div className="flex items-center gap-2  data-[state=open]:bg-blue-50/40">
+            <AccordionTrigger className="flex items-center justify-between w-full gap-2 py-2 text-lg text-left group">
+              <div className="flex items-center gap-2">
                 {data[childCategories[0]] && data[childCategories[0]][0] && <img src={data[childCategories[0]][0].src} alt={`${groupLabel} icon`} className="object-contain w-5 h-5" />}
                 <span>{groupLabel}</span>
               </div>
