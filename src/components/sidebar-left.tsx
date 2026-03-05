@@ -570,7 +570,8 @@ const data: Data = {
   ],
   Filler: [
     { label: "Johanniskraut", src: "/img/filler/hypericum.webp", type: "filler", promptAddition: "Preserve the natural clusters of Hypericum berries; do not alter their color or size.", stackable: true, maxHeight: 300 },
-    { label: "Eukalyptus", src: "/img/filler/eucalyptus.webp", type: "filler", promptAddition: "You may adjust the angle of the Eucalyptus for enhanced realism.", stackable: true, maxHeight: 250 },
+    { label: "Eukalyptus", src: "/img/filler/eucalyptus.webp", type: "filler", stackable: true, maxHeight: 250 },
+    { label: "Eukalyptus 2", src: "/img/filler/eucalyptus2.webp", type: "filler", stackable: true, maxHeight: 250 },
     { label: "Rittersporn", src: "/img/filler/delphinium.webp", type: "filler", promptAddition: "You may adjust the size of the Delphinium for a better overall look", stackable: true, maxHeight: 250 },
     { label: "Veronica", src: "/img/filler/veronica.webp", type: "filler", promptAddition: "Preserve the slender Veronica spikes and delicate blooms; do not recolor or reshape their form.", stackable: true, maxHeight: 200 },
     { label: "Ammi Majus", src: "/img/filler/ammi.webp", type: "filler", stackable: false, maxHeight: 200 },
