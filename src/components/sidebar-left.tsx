@@ -91,6 +91,10 @@ const data: Data = {
     { label: "VM 968", src: "/img/sleeves/vm968_v2.webp", type: "sleeve", promptAddition: "Do not modify the light-brown paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
     { label: "VM 1029", src: "/img/sleeves/vm1029_v2.webp", type: "sleeve", promptAddition: "Do not modify the green paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
     { label: "VM 1033", src: "/img/sleeves/vm1033_v2.webp", type: "sleeve", promptAddition: "Do not modify the pink paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
+    { label: "VM 810", src: "/img/sleeves/vm810.webp", type: "sleeve", promptAddition: "Do not modify the pink-brown paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
+    { label: "VM 976", src: "/img/sleeves/vm976.webp", type: "sleeve", promptAddition: "Do not modify the paper wrap or its handles — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
+    { label: "VM 1064", src: "/img/sleeves/vm1064.webp", type: "sleeve", promptAddition: "Do not modify the gray-brown paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
+    { label: "VM 1206", src: "/img/sleeves/vm1206.webp", type: "sleeve", promptAddition: "Do not modify the brown paper wrap — keep its shape, color, material, folds and seams exactly as in the image.", stackable: false },
   ],
   Roses: [
     {
@@ -663,8 +667,8 @@ export default function SidebarLeft({ setCanvasItems, setSleeveSrc, setBackgroun
           prev.map((item) =>
             item.type === "sleeve"
               ? { ...item, src, label } // src & label replace
-              : item
-          )
+              : item,
+          ),
         );
       }
       // If a background is selected, update CSS background image dynamically
